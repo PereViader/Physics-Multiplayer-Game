@@ -56,4 +56,5 @@ MonoBehaviour:
   - GiveControlToPlayer
   - RegisterPlayer
   - RegisterAndInitialize
+  - NetworkAddRandomHability
   DisableAutoOpenWizard: 1

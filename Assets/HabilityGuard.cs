@@ -4,17 +4,15 @@ using System.Collections;
 public class HabilityGuard : Photon.MonoBehaviour {
 
     [SerializeField]
-    private float guardDuration;
+    private float guardDuration = 1.4f;
 
     [SerializeField]
-    private float cooldown;
+    private float cooldown = 4f;
 
     private bool isBlocked = false;
     private bool isGuarding = false;
     private bool onCooldown = false;
     private float currentCooldown = 0;
-
-    private int habilityNumber = 2;
 
     private Rigidbody rb;
     private string virtualKeyName;
@@ -22,9 +20,12 @@ public class HabilityGuard : Photon.MonoBehaviour {
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        virtualKeyName = "Hability" + habilityNumber;
     }
 
+    public void SetVirtualKey(string virtualKeyName)
+    {
+        this.virtualKeyName = virtualKeyName;
+    }
 
     void Update()
     {

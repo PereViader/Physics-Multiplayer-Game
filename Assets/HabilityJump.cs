@@ -4,19 +4,15 @@ using System.Collections;
 public class HabilityJump : Photon.MonoBehaviour {
 
     [SerializeField]
-    private float jumpForce;
+    private float jumpForce = 6f;
 
     [SerializeField]
-    private float cooldown;
+    private float cooldown = 2f;
 
     private bool isBlocked = false;
     private bool isJumping = false;
     private bool onCooldown = false;
     private float currentCooldown = 0;
-
-    
-
-    private int habilityNumber = 1;
 
     private Rigidbody rb;
     private string virtualKeyName;
@@ -24,9 +20,12 @@ public class HabilityJump : Photon.MonoBehaviour {
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        virtualKeyName = "Hability" + habilityNumber;
     }
 
+    public void SetVirtualKey(string virtualKeyName)
+    {
+        this.virtualKeyName = virtualKeyName;
+    }
 
     void Update()
     {

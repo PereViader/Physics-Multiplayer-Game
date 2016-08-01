@@ -144,8 +144,7 @@ public class CaptureGameController : Photon.MonoBehaviour
     {
         GameObject player = PhotonView.Find(playerViewId).gameObject;
         player.GetComponent<PlayerControllerPast>().SetOwnPlayer(true);
-        player.GetComponent<HabilityJump>().enabled = true;
-        player.GetComponent<HabilityGuard>().enabled = true;
+        player.GetComponent<HabilityManager>().ActivateInputCaptureForHabilities();
 
         GameObject playerFollower = (GameObject)Instantiate((GameObject)Resources.Load("PlayerFollower"), player.transform.position, player.transform.rotation);
         playerFollower.GetComponent<PlayerFollower>().setPlayer(player);

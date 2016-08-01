@@ -17,8 +17,7 @@ GameObject:
   - 114: {fileID: 11433866}
   - 114: {fileID: 11436216}
   - 114: {fileID: 11437850}
-  - 114: {fileID: 11477790}
-  - 114: {fileID: 11450238}
+  - 114: {fileID: 11499438}
   m_Layer: 0
   m_Name: PlayInThePastPlayer
   m_TagString: Player
@@ -172,32 +171,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
---- !u!114 &11450238
+--- !u!114 &11499438
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 173028}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a14cce361dcd754ea0d7b6c03ca26fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 949af520f72c80d40b046d25386fbdad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guardDuration: 1.23
-  cooldown: 3
---- !u!114 &11477790
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 173028}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83e479c88dc2d1c4780aa7a327fa0242, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpForce: 7
-  cooldown: 2
 --- !u!136 &13671742
 CapsuleCollider:
   m_ObjectHideFlags: 1
