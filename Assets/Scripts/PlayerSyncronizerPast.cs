@@ -22,7 +22,7 @@ public class PlayerSyncronizerPast : MonoBehaviour
     void FixedUpdate()
     {
         if ( !PhotonNetwork.isMasterClient) {
-            Vector3 currentDone = Vector3.Lerp(Vector3.zero, currentGoal, lerpFactor);
+            Vector3 currentDone = Vector3.Lerp(Vector3.zero, currentGoal, lerpFactor*Time.fixedDeltaTime*currentGoal.magnitude);
             currentGoal -= currentDone;
             transform.position = transform.position + currentDone;
         }

@@ -69,7 +69,11 @@ public class HabilityPush : Photon.MonoBehaviour {
                 int otherTeam = (int)other.GetComponent<PhotonPlayerOwner>().GetOwner().customProperties["Team"];
                 if ( hit.transform.gameObject.tag == "Player" && playerTeam != otherTeam)
                 {
-                    Vector3 pushVector = ((other.transform.position - transform.position).normalized) * pushForce;
+                    Vector3 pushVector = other.transform.position - transform.position;
+                    pushVector.y = 0;
+                    pushVector.Normalize();
+                    pushVector *= pushForce;
+                   
                     other.GetComponent<PlayerControllerPast>().ShootPlayer(pushVector);
                 }
             }

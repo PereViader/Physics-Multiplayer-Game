@@ -143,8 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0b2c96b56d8b8e4dac34db5cde8bb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpFactor: 0.05
-  teleportThreshold: 6
+  lerpFactor: 0.5
+  teleportThreshold: 10
 --- !u!114 &11436216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -159,6 +159,7 @@ MonoBehaviour:
   speed: 55
   _timeBetweenShoots: 0.4
   timeBeforeShoots: 0
+  isOwnPlayer: 0
 --- !u!114 &11466962
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -170,6 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfaeac40d8a764f489f2f8a6eb218432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: 0
 --- !u!114 &11499438
 MonoBehaviour:
   m_ObjectHideFlags: 1
