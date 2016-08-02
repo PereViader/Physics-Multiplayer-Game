@@ -37,7 +37,7 @@ public class CaptureGameController : Photon.MonoBehaviour
         team1PlayersL = new List<GameObject>();
         team2PlayersL = new List<GameObject>();
 
-        Random.seed = ((int)System.DateTime.Now.Ticks) + ((int)Time.time);
+        Random.seed = ((int)System.DateTime.Now.Ticks) + ((int)Time.time) + Time.frameCount;
 
         GameObject container = GameObject.Find("Map/CapturePositions");
         capturePositions = new Transform[container.transform.childCount];
