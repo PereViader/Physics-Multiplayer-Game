@@ -56,7 +56,7 @@ public class CaptureZoneController : Photon.MonoBehaviour {
     public void SetNumberOfTeams(int amount)
     {
         captureDictionary.Clear();
-        for ( int i = 0; i<amount; i++)
+        for ( int i = 1; i<=amount; i++)
             captureDictionary.Add(i, new TeamCapture());
         
     }
@@ -125,8 +125,10 @@ public class CaptureZoneController : Photon.MonoBehaviour {
     {
         if (PhotonNetwork.isMasterClient && other.tag == "Player")
         {
-            MatchOptions playerInfo = other.GetComponent<MatchOptions>();
-            int playerTeam = playerInfo.GetTeam();
+            //MatchOptions playerInfo = other.GetComponent<MatchOptions>();
+            //int playerTeam = playerInfo.GetTeam();
+            PhotonPlayer player = other.GetComponent<PhotonPlayerOwner>().GetOwner();
+            int playerTeam = (int)player.customProperties["Team"];
             TeamCapture tc = captureDictionary[playerTeam];
             tc.currentInside += 1;
             if (tc.currentInside == 1)
@@ -139,8 +141,8 @@ public class CaptureZoneController : Photon.MonoBehaviour {
     {
         if (PhotonNetwork.isMasterClient && other.tag == "Player")
         {
-            MatchOptions playerInfo = other.GetComponent<MatchOptions>();
-            int playerTeam = playerInfo.GetTeam();
+            PhotonPlayer player = other.GetComponent<PhotonPlayerOwner>().GetOwner();
+            int playerTeam = (int)player.customProperties["Team"];
             TeamCapture tc = captureDictionary[playerTeam];
             tc.currentInside -= 1;
         }

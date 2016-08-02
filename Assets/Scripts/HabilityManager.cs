@@ -13,11 +13,12 @@ public class HabilityManager : MonoBehaviour {
 
     void AddRandomHabilities()
     {
-        int randomHability1 = Random.Range(0, 2);
+        int randomHability1 = Random.Range(0, 3);
+        randomHability1 = 2;
         int randomHability2;
         do
         {
-            randomHability2 = Random.Range(0, 2);
+            randomHability2 = Random.Range(0, 3);
         } while (randomHability2 == randomHability1);
 
         GetComponent<PhotonView>().RPC("NetworkAddRandomHability", PhotonTargets.AllBuffered, randomHability1,randomHability2);
@@ -44,11 +45,17 @@ public class HabilityManager : MonoBehaviour {
                 jump.enabled = false;
                 break;
             case 1:
-            default:
                 HabilityGuard guard = gameObject.AddComponent<HabilityGuard>();
                 c = guard;
                 guard.SetVirtualKey(habilityVirtualKey);
                 guard.enabled = false;
+                break;
+            case 2:
+            default:
+                HabilityPush push = gameObject.AddComponent<HabilityPush>();
+                c = push;
+                push.SetVirtualKey(habilityVirtualKey);
+                push.enabled = false;
                 break;
         }
         return c;

@@ -98,7 +98,7 @@ public class CaptureGameController : Photon.MonoBehaviour
     [PunRPC]
     public void TeamScored(int team)
     {
-        if (team == 0)
+        if (team == 1)
             team1Points++;
         else
             team2Points++;
@@ -127,17 +127,22 @@ public class CaptureGameController : Photon.MonoBehaviour
         int team;
         int spawnIndex;
         GetValuesForNewPlayer(out team, out spawnIndex);
+        Debug.Log("team: " + team);
         Transform spawn = GetSpawn(team, spawnIndex);
         GameObject playerGameObject = PhotonNetwork.Instantiate("PlayInThePastPlayer", spawn.position, spawn.rotation, 0);
         int playerViewId = playerGameObject.GetComponent<PhotonView>().viewID;
-        photonView.RPC("RegisterAndInitialize", PhotonTargets.AllBuffered, playerViewId, team);
-        photonView.RPC("GiveControlToPlayer", player, playerViewId);
+        ExitGames.Client.Photon.Hashtable properties = player.customProperties;
+        properties.Add("Team", team);
+        player.SetCustomProperties(properties);
+        photonView.RPC("RegisterAndInitialize", PhotonTargets.AllBuffered, player.ID, playerViewId, team);
+        if ( player != null)
+            photonView.RPC("GiveControlToPlayer", player, playerViewId);
     }
-
+    /*
     public void InitializePlayerObject(GameObject player, int team)
     {
         player.GetComponent<PhotonView>().RPC("SetTeam", PhotonTargets.AllBuffered, team);
-    }
+    }*/
 
     [PunRPC]
     public void GiveControlToPlayer(int playerViewId)
@@ -156,25 +161,51 @@ public class CaptureGameController : Photon.MonoBehaviour
     }
 
     [PunRPC]
-    public void RegisterAndInitialize(int playerViewId, int playerTeam)
+    public void RegisterAndInitialize(int playerId, int playerViewId, int playerTeam)
     {
         GameObject player = PhotonView.Find(playerViewId).gameObject;
+        player.GetComponent<PhotonPlayerOwner>().SetOwner(playerId);
         AddPlayer(player, playerTeam);
-        player.GetComponent<MatchOptions>().SetTeam(playerTeam);
     }
 
     void AddPlayer(GameObject player, int playerTeam)
     {
-        if (playerTeam == 0)
+        if (playerTeam == 1)
             team1PlayersL.Add(player);
         else
             team2PlayersL.Add(player);
     }
 
+    public List<GameObject> GetPlayers(int team)
+    {
+        switch (team)
+        {
+            case 1:
+                return team1PlayersL;
+            case 2:
+                return team2PlayersL;
+            default:
+                return null;
+        }
+    }
+
+    public List<GameObject> GetOtherTeamsPlayers(int team)
+    {
+        switch (team)
+        {
+            case 1:
+                return team2PlayersL;
+            case 2:
+                return team1PlayersL;
+            default:
+                return null;
+        }
+    }
+
     Transform GetSpawn(int team, int spawnIndex)
     {
         Transform transform;
-        if (team == 0)
+        if (team == 1)
             transform = team1Spawns[spawnIndex];
         else
             transform = team2Spawns[spawnIndex];
@@ -183,36 +214,27 @@ public class CaptureGameController : Photon.MonoBehaviour
 
     public void GetValuesForNewPlayer(out int team, out int spawnIndex)
     {
-        int newPlayersTeam = -1;
-
         if (team1PlayersL.Count > team2PlayersL.Count)
-        {
-            newPlayersTeam = 1;
-        }
+            team = 2;
         else if (team1PlayersL.Count < team2PlayersL.Count)
-        {
-            newPlayersTeam = 0;
-        }
+            team = 1;
         else // team1Players == team2Playersw
-            newPlayersTeam = Random.Range(0, 2);
+            team = Random.Range(1, 3);
 
-        if (newPlayersTeam == 0)
-            GetValuesForNewTeam1Player(out team, out spawnIndex);
+        if (team == 1)
+            spawnIndex = GetTeam1SpawnIndex();
         else
-            GetValuesForNewTeam2Player(out team, out spawnIndex);
-
+            spawnIndex = GetTeam2SpawnIndex();
     }
 
-    void GetValuesForNewTeam1Player(out int team, out int spawnIndex)
+    int GetTeam1SpawnIndex()
     {
-        team = 0;
-        spawnIndex = Random.Range(0, team1Spawns.Length);
+        return Random.Range(0, team1Spawns.Length);
     }
 
-    void GetValuesForNewTeam2Player(out int team, out int spawnIndex)
+    int GetTeam2SpawnIndex()
     {
-        team = 1;
-        spawnIndex = Random.Range(0, team2Spawns.Length);
+        return Random.Range(0, team2Spawns.Length);
     }
 
 

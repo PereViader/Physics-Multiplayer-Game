@@ -33,7 +33,11 @@ public class HabilityJump : Photon.MonoBehaviour {
         {
             currentCooldown -= Time.deltaTime;
             if (currentCooldown <= 0f)
-                onCooldown = false; 
+            {
+                onCooldown = false;
+                currentCooldown = 0f;
+            }
+                
         } else if (!isBlocked && Input.GetButtonDown(virtualKeyName))
         {
             isBlocked = true;
@@ -67,5 +71,10 @@ public class HabilityJump : Photon.MonoBehaviour {
             rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY ;
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         }
+    }
+
+    void OnGUI()
+    {
+        GUI.Box(new Rect(0f, 400f, 130, 20), "Jump: " + currentCooldown);
     }
 }

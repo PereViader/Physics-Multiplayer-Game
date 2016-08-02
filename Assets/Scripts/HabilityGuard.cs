@@ -33,7 +33,10 @@ public class HabilityGuard : Photon.MonoBehaviour {
         {
             currentCooldown -= Time.deltaTime;
             if (currentCooldown <= 0f)
+            {
                 onCooldown = false;
+                currentCooldown = 0f;
+            }
         }
         else if (!isBlocked && Input.GetButtonDown(virtualKeyName))
         {
@@ -65,5 +68,10 @@ public class HabilityGuard : Photon.MonoBehaviour {
         GetComponent<MeshRenderer>().material.color = Color.white;
         isGuarding = false;
         rb.isKinematic = false;
+    }
+
+    void OnGUI()
+    {
+        GUI.Box(new Rect(0f, 430f, 130, 20), "Guard: " + currentCooldown);
     }
 }

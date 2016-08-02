@@ -18,7 +18,7 @@ public class PlayerControllerPast : Photon.MonoBehaviour
 
     private Vector3 currentMovementForce;
 
-    private bool isOwnPlayer = false;
+    public bool isOwnPlayer = false;
     private bool isShooting = false;
     private bool isInputEnabled = true;
 
@@ -32,6 +32,7 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     {
         if (isOwnPlayer)
         {
+            
             if (!isShooting && Input.GetAxis("Fire1") > 0 && isInputEnabled)
             {
                 StartCoroutine(CaptureInputAndShoodPlayer());
@@ -73,10 +74,5 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     public void SetOwnPlayer(bool isOwn)
     {
         isOwnPlayer = isOwn;
-    }
-
-    public void ExecuteHabilityJump()
-    {
-        
     }
 }

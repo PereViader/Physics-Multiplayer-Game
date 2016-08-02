@@ -12,11 +12,11 @@ GameObject:
   - 114: {fileID: 11406898}
   - 33: {fileID: 3374770}
   - 23: {fileID: 2372964}
-  - 54: {fileID: 5478748}
   - 114: {fileID: 11409404}
+  - 114: {fileID: 11466962}
+  - 54: {fileID: 5478748}
   - 114: {fileID: 11433866}
   - 114: {fileID: 11436216}
-  - 114: {fileID: 11437850}
   - 114: {fileID: 11499438}
   m_Layer: 0
   m_Name: PlayInThePastPlayer
@@ -32,7 +32,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 173028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.069057, y: 0.192, z: -17.484959}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.3, y: 0.3, z: 1.3}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -159,7 +159,7 @@ MonoBehaviour:
   speed: 55
   _timeBetweenShoots: 0.4
   timeBeforeShoots: 0
---- !u!114 &11437850
+--- !u!114 &11466962
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -167,10 +167,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 173028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d91ade2331b5924bb550d7d5e40728c, type: 3}
+  m_Script: {fileID: 11500000, guid: bfaeac40d8a764f489f2f8a6eb218432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: -1
 --- !u!114 &11499438
 MonoBehaviour:
   m_ObjectHideFlags: 1

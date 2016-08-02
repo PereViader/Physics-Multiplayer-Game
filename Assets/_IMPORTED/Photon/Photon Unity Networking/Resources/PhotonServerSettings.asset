@@ -57,4 +57,7 @@ MonoBehaviour:
   - RegisterPlayer
   - RegisterAndInitialize
   - NetworkAddRandomHability
+  - SetOwner
+  - ExecutePush
+  - ExecutePushServer
   DisableAutoOpenWizard: 1
