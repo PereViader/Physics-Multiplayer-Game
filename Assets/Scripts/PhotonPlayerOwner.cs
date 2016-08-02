@@ -7,10 +7,12 @@ public class PhotonPlayerOwner : MonoBehaviour {
     PhotonPlayer player;
     int pos;
     [SerializeField]
-    int team; 
+    int team;
 
+    bool hasBeenSet = false;
     public void SetOwner(int id)
     {
+        hasBeenSet = true;
         Debug.Log("id"+id);
         photonPlayerId = id;
         player = PhotonPlayer.Find(id);
@@ -19,6 +21,10 @@ public class PhotonPlayerOwner : MonoBehaviour {
         pos = Random.Range(0, 6);
     }
 
+    public bool HasBeenSet()
+    {
+        return hasBeenSet;
+    }
 
 
     public int GetOwnerId()

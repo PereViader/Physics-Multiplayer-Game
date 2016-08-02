@@ -10,7 +10,7 @@ public class HabilityPush : Photon.MonoBehaviour {
     float pushRange = 7f;
 
     [SerializeField]
-    float pushForce = 30f;
+    float pushForce = 35f;
 
     [SerializeField]
     private float currentCooldown;
@@ -21,9 +21,15 @@ public class HabilityPush : Photon.MonoBehaviour {
     private string virtualKeyName;
 
     CaptureGameController gameManager;
-    PhotonPlayer photonPlayer;
+    PhotonPlayerOwner photonPlayerOwner;
 
     // Update is called once per frame
+    void Awake()
+    {
+        photonPlayerOwner = GetComponent<PhotonPlayerOwner>();
+        gameManager = GameObject.Find("GameManager(Clone)").GetComponent<CaptureGameController>();
+    }
+
     void Update () {
         if (onCooldown)
         {
@@ -50,27 +56,14 @@ public class HabilityPush : Photon.MonoBehaviour {
     [PunRPC]
     void ExecutePush()
     {
-        Debug.Log("Execute Push");
         currentCooldown = cooldown;
-        photonPlayer = GetComponent<PhotonPlayerOwner>().GetOwner();
         onCooldown = true;
         isBlocked = false;
-        if (photonPlayer== null)
+        int playerTeam = (int)photonPlayerOwner.GetOwner().customProperties["Team"];
+        foreach (GameObject other in gameManager.GetOtherTeamsPlayers(playerTeam))
         {
-            Debug.Log("PhotonPlayer null");
-            return;
-        }
-        int playerTeam = (int)photonPlayer.customProperties["Team"];
-        Debug.Log("Own Player team" + playerTeam);
-        List<GameObject> otherTeamPlayers = GameObject.Find("GameManager(Clone)").GetComponent<CaptureGameController>().GetOtherTeamsPlayers(playerTeam);
-
-        foreach (GameObject other in otherTeamPlayers)
-        {
-            Debug.Log("Team other:" + (int)other.GetComponent<PhotonPlayerOwner>().GetOwner().customProperties["Team"]);
-            Debug.Log("Player: "+other.transform.position);
             RaycastHit hit;
             bool hasHit = Physics.Raycast(transform.position, other.transform.position - transform.position, out hit, pushRange);
-            Debug.Log("Has HIt: " + hasHit);
             if ( hasHit )
             {
                 int otherTeam = (int)other.GetComponent<PhotonPlayerOwner>().GetOwner().customProperties["Team"];
