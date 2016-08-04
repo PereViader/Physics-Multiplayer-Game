@@ -13,11 +13,10 @@ public class PhotonPlayerOwner : MonoBehaviour {
     public void SetOwner(int id)
     {
         hasBeenSet = true;
-        Debug.Log("id"+id);
         photonPlayerId = id;
         player = PhotonPlayer.Find(id);
         if (player == null)
-            Debug.Log("Set owner did not work");
+            Debug.LogWarning("Set owner did not work");
         pos = Random.Range(0, 6);
     }
 

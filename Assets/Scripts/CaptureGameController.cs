@@ -151,7 +151,9 @@ public class CaptureGameController : Photon.MonoBehaviour
         player.GetComponent<PlayerControllerPast>().SetOwnPlayer(true);
         player.GetComponent<HabilityManager>().ActivateInputCaptureForHabilities();
 
-        GameObject playerFollower = (GameObject)Instantiate((GameObject)Resources.Load("PlayerFollower"), player.transform.position, player.transform.rotation);
+        GameObject playerFollower = GameObject.Find("PlayerFollower(Clone)");
+        if ( playerFollower == null )
+            playerFollower = (GameObject)Instantiate((GameObject)Resources.Load("PlayerFollower"), player.transform.position, player.transform.rotation);
         playerFollower.GetComponent<PlayerFollower>().setPlayer(player);
 
         cameraFollow.SetFollowingObject(playerFollower);

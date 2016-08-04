@@ -8,9 +8,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 413696}
-  - 114: {fileID: 11407424}
   - 33: {fileID: 3353756}
   - 23: {fileID: 2388076}
+  - 64: {fileID: 6479594}
   - 114: {fileID: 11465040}
   - 114: {fileID: 11406576}
   - 54: {fileID: 5413584}
@@ -84,8 +84,20 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!64 &6479594
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165164}
+  m_Material: {fileID: 13400000, guid: b09f2b6676014794c9ae8c6fc75182c6, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 1
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &11400932
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -109,27 +121,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
---- !u!114 &11407424
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 165164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60470c39afac159468af8061204f5375, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.5
-  height: 2
-  boxCount: 13
-  widthScale: 1.584
-  capTop: 0
-  capBottom: 0
-  alwaysDrawGizmo: 0
-  isTrigger: 0
-  material: {fileID: 13400000, guid: b09f2b6676014794c9ae8c6fc75182c6, type: 2}
-  colliderParent: {fileID: 0}
 --- !u!114 &11465040
 MonoBehaviour:
   m_ObjectHideFlags: 1

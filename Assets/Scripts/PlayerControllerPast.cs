@@ -32,7 +32,6 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     {
         if (isOwnPlayer)
         {
-            
             if (!isShooting && Input.GetAxis("Fire1") > 0 && isInputEnabled)
             {
                 StartCoroutine(CaptureInputAndShoodPlayer());
@@ -76,13 +75,12 @@ public class PlayerControllerPast : Photon.MonoBehaviour
         isOwnPlayer = isOwn;
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-        if ( other.tag == "Floor")
+        if (other.gameObject.tag == "Floor")
         {
-            Vector3 groundLeveledPosition = new Vector3(transform.position.x, other.transform.position.y+transform.localScale.y, transform.position.z);
-            transform.position = groundLeveledPosition;
-            rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+            Debug.Log("enter");
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         }
     }
 }

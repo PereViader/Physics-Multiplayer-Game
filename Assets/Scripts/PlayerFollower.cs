@@ -12,7 +12,7 @@ public class PlayerFollower : MonoBehaviour {
     void FixedUpdate()
     {
         if (player)
-            transform.position = Vector3.Lerp(transform.position, player.position, lerpFactor);
+            transform.position = Vector3.Lerp(transform.position, player.position, lerpFactor*Time.fixedDeltaTime);
         else
             Debug.Log("Player is null");
     }
