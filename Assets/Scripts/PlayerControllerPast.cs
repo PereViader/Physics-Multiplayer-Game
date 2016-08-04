@@ -75,4 +75,14 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     {
         isOwnPlayer = isOwn;
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if ( other.tag == "Floor")
+        {
+            Vector3 groundLeveledPosition = new Vector3(transform.position.x, other.transform.position.y+transform.localScale.y, transform.position.z);
+            transform.position = groundLeveledPosition;
+            rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+        }
+    }
 }

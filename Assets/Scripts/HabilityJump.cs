@@ -62,17 +62,6 @@ public class HabilityJump : Photon.MonoBehaviour {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
-    void OnCollisionEnter(Collision other)
-    {
-        if ( isJumping && other.gameObject.name == "Floor")
-        {
-            isJumping = false;
-            transform.position = new Vector3(transform.position.x, -0.15f, transform.position.z);
-            rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY ;
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        }
-    }
-
     void OnGUI()
     {
         GUI.Box(new Rect(0f, 400f, 130, 20), "Jump: " + currentCooldown);
