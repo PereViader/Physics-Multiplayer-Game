@@ -8,7 +8,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 413696}
-  - 136: {fileID: 13611104}
   - 114: {fileID: 11407424}
   - 33: {fileID: 3353756}
   - 23: {fileID: 2388076}
@@ -18,10 +17,9 @@ GameObject:
   - 114: {fileID: 11473852}
   - 114: {fileID: 11483396}
   - 114: {fileID: 11400932}
-  - 65: {fileID: 6572588}
-  - 65: {fileID: 6550974}
+  - 114: {fileID: 11480662}
   m_Layer: 0
-  m_Name: PlayInThePastPlayer original 1
+  m_Name: PlayInThePastPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,30 +86,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!65 &6550974
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 165164}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.25, y: 2, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &6572588
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 165164}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 0.25}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11400932
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -178,8 +152,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11473852}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 1
-  instantiationId: 1
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
 --- !u!114 &11473852
 MonoBehaviour:
@@ -194,6 +168,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lerpFactor: 0.5
   teleportThreshold: 10
+--- !u!114 &11480662
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b583dd3c1d747d841859058403bbba0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11483396
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -209,19 +194,6 @@ MonoBehaviour:
   _timeBetweenShoots: 0.4
   timeBeforeShoots: 0
   isOwnPlayer: 0
---- !u!136 &13611104
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 165164}
-  m_Material: {fileID: 13400000, guid: b09f2b6676014794c9ae8c6fc75182c6, type: 2}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

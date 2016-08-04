@@ -127,12 +127,12 @@ public class CaptureGameController : Photon.MonoBehaviour
         int team;
         int spawnIndex;
         GetValuesForNewPlayer(out team, out spawnIndex);
-        Debug.Log("team: " + team);
         Transform spawn = GetSpawn(team, spawnIndex);
         GameObject playerGameObject = PhotonNetwork.Instantiate("PlayInThePastPlayer", spawn.position, spawn.rotation, 0);
         int playerViewId = playerGameObject.GetComponent<PhotonView>().viewID;
         ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
         properties.Add("Team", team);
+        properties.Add("Object", playerViewId);
         player.SetCustomProperties(properties);
         photonView.RPC("RegisterAndInitialize", PhotonTargets.AllBuffered, player.ID, playerViewId, team);
         if ( player != null)
@@ -238,6 +238,46 @@ public class CaptureGameController : Photon.MonoBehaviour
     }
 
 
+    // -------------------------------- Player Killing and respawning
+
+    public void KillPlayer(GameObject playerObject)
+    {
+        PhotonView playerView = playerObject.GetComponent<PhotonView>();
+        if (playerView == null || playerObject.tag != "Player")
+            Debug.LogWarning("Object does not have photon View or is no player at CaptureGameController.KillPlayer(GameObject)");
+
+        photonView.RPC("NotifyPlayerKilledAndQueueRespawn", PhotonTargets.MasterClient, PhotonNetwork.player.ID);
+    }
+
+    [PunRPC]
+    void NotifyPlayerKilledAndQueueRespawn(int playerID)
+    {
+        PhotonPlayer player = PhotonPlayer.Find(playerID);
+        if (player == null)
+            Debug.Log("Player Disconnected");
+        else
+        {
+            PhotonView playerObjectView = PhotonView.Find((int)player.customProperties["Object"]);
+            if (playerObjectView == null)
+                Debug.LogWarning("No player object out, something went wrong!");
+            else
+            {
+                PhotonNetwork.Destroy(playerObjectView);
+                StartCoroutine(RespawnPlayer(playerID));
+            }
+        }
+    }
+
+    IEnumerator RespawnPlayer(int playerID)
+    {
+        yield return new WaitForSeconds(3f);
+        PhotonPlayer player = PhotonPlayer.Find(playerID);
+        if (player == null)
+            Debug.Log("Player Disconnected");
+        else {
+            SpawnPlayer(player);
+        }
+    }
 
     // ----------------------------- Others
 

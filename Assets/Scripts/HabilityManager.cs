@@ -26,7 +26,6 @@ public class HabilityManager : MonoBehaviour {
     [PunRPC]
     public void NetworkAddRandomHability(int hability1Index, int hability2Index)
     {
-        Debug.Log("Set Habilities");
         string habilityVirtualKey = "Hability" + 1;
         hability1 = AddHability(habilityVirtualKey,hability1Index);
         habilityVirtualKey = "Hability" + 2;

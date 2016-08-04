@@ -60,4 +60,5 @@ MonoBehaviour:
   - SetOwner
   - ExecutePush
   - ExecutePushServer
+  - NotifyPlayerKilledAndQueueRespawn
   DisableAutoOpenWizard: 1
