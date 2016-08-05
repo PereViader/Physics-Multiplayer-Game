@@ -10,6 +10,8 @@ public class PhotonPlayerOwner : MonoBehaviour {
     int team;
 
     bool hasBeenSet = false;
+
+    [PunRPC]
     public void SetOwner(int id)
     {
         hasBeenSet = true;

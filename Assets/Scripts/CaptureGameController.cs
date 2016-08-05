@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class CaptureGameController : Photon.MonoBehaviour
 {
+    public static CaptureGameController captureGameController;
+
     private CameraFollowSmooth cameraFollow;
     private PauseMenuManager pauseManager;
 
@@ -31,6 +33,8 @@ public class CaptureGameController : Photon.MonoBehaviour
 
     void Awake()
     {
+        captureGameController = this;
+
         cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraFollowSmooth>();
         pauseManager = GameObject.Find("Pause Menu Manager").GetComponent<PauseMenuManager>();
 
@@ -70,8 +74,7 @@ public class CaptureGameController : Photon.MonoBehaviour
             InstantiateNewRandomCapture();
         }
     }
-
-
+    
 //----------------------------------------------- Capture Zones
     void InstantiateNewRandomCapture()
     {
@@ -119,7 +122,23 @@ public class CaptureGameController : Photon.MonoBehaviour
     void OnPhotonPlayerConnected(PhotonPlayer newPlayer) // spawn d'un jugador nou que acaba de conectar
     {
         if (PhotonNetwork.isMasterClient)
+        {
             SpawnPlayer(newPlayer);
+            SendGameState(newPlayer);
+        }
+    }
+
+    void SendGameState(PhotonPlayer player)
+    {
+        foreach ( PhotonPlayer other in PhotonNetwork.playerList)
+        {
+            if ( other != player )
+            {
+                int playerObjectViewID = (int)other.customProperties["Object"];
+                int playerTeam = (int)other.customProperties["Team"];
+                photonView.RPC("RegisterPlayer", player, playerObjectViewID, playerTeam);
+            }
+        }
     }
 
     void SpawnPlayer(PhotonPlayer player)
@@ -134,15 +153,10 @@ public class CaptureGameController : Photon.MonoBehaviour
         properties.Add("Team", team);
         properties.Add("Object", playerViewId);
         player.SetCustomProperties(properties);
-        photonView.RPC("RegisterAndInitialize", PhotonTargets.AllBuffered, player.ID, playerViewId, team);
-        if ( player != null)
-            photonView.RPC("GiveControlToPlayer", player, playerViewId);
+        playerGameObject.GetComponent<PhotonView>().RPC("SetOwner", PhotonTargets.AllBuffered, player.ID);
+        photonView.RPC("RegisterPlayer", PhotonTargets.All, playerViewId, team);
+        photonView.RPC("GiveControlToPlayer", player, playerViewId);
     }
-    /*
-    public void InitializePlayerObject(GameObject player, int team)
-    {
-        player.GetComponent<PhotonView>().RPC("SetTeam", PhotonTargets.AllBuffered, team);
-    }*/
 
     [PunRPC]
     public void GiveControlToPlayer(int playerViewId)
@@ -151,9 +165,7 @@ public class CaptureGameController : Photon.MonoBehaviour
         player.GetComponent<PlayerControllerPast>().SetOwnPlayer(true);
         player.GetComponent<HabilityManager>().ActivateInputCaptureForHabilities();
 
-        GameObject playerFollower = GameObject.Find("PlayerFollower(Clone)");
-        if ( playerFollower == null )
-            playerFollower = (GameObject)Instantiate((GameObject)Resources.Load("PlayerFollower"), player.transform.position, player.transform.rotation);
+        GameObject playerFollower = (GameObject)Instantiate((GameObject)Resources.Load("PlayerFollower"), player.transform.position, player.transform.rotation);
         playerFollower.GetComponent<PlayerFollower>().setPlayer(player);
 
         cameraFollow.SetFollowingObject(playerFollower);
@@ -163,11 +175,23 @@ public class CaptureGameController : Photon.MonoBehaviour
     }
 
     [PunRPC]
-    public void RegisterAndInitialize(int playerId, int playerViewId, int playerTeam)
+    void RegisterPlayer(int playerObjectViewId, int playerTeam)
     {
-        GameObject player = PhotonView.Find(playerViewId).gameObject;
-        player.GetComponent<PhotonPlayerOwner>().SetOwner(playerId);
-        AddPlayer(player, playerTeam);
+        PhotonView playerObjectView = PhotonView.Find(playerObjectViewId);
+        if (playerObjectView == null)
+            Debug.Log("playerObjectView Is null");
+        else
+            AddPlayer(playerObjectView.gameObject, playerTeam);
+    }
+
+    [PunRPC]
+    void UnregisterPlayer(int playerObjectViewID, int playerTeam)
+    {
+        PhotonView playerObjectView = PhotonView.Find(playerObjectViewID);
+        if (playerObjectView == null)
+            Debug.Log("playerObjectView Is null");
+        else
+            RemovePlayer(playerObjectView.gameObject, playerTeam);
     }
 
     void AddPlayer(GameObject player, int playerTeam)
@@ -176,6 +200,14 @@ public class CaptureGameController : Photon.MonoBehaviour
             team1PlayersL.Add(player);
         else
             team2PlayersL.Add(player);
+    }
+
+    void RemovePlayer(GameObject player, int playerTeam)
+    {
+        if (playerTeam == 1)
+            team1PlayersL.Remove(player);
+        else
+            team2PlayersL.Remove(player);
     }
 
     public List<GameObject> GetPlayers(int team)
@@ -229,6 +261,16 @@ public class CaptureGameController : Photon.MonoBehaviour
             spawnIndex = GetTeam2SpawnIndex();
     }
 
+    public int GetSpawnIndex(int team)
+    {
+        int spawnIndex;
+        if (team == 1)
+            spawnIndex = GetTeam1SpawnIndex();
+        else
+            spawnIndex = GetTeam2SpawnIndex();
+        return spawnIndex;
+    }
+
     int GetTeam1SpawnIndex()
     {
         return Random.Range(0, team1Spawns.Length);
@@ -244,12 +286,19 @@ public class CaptureGameController : Photon.MonoBehaviour
 
     public void KillPlayer(GameObject playerObject)
     {
-        PhotonView playerView = playerObject.GetComponent<PhotonView>();
-        if (playerView == null || playerObject.tag != "Player")
-            Debug.LogWarning("Object does not have photon View or is no player at CaptureGameController.KillPlayer(GameObject)");
-
-        photonView.RPC("NotifyPlayerKilledAndQueueRespawn", PhotonTargets.MasterClient, PhotonNetwork.player.ID);
+        PhotonPlayer player = playerObject.GetComponent<PhotonPlayerOwner>().GetOwner();
+        photonView.RPC("NotifyPlayerKilledAndQueueRespawn", PhotonTargets.MasterClient, player.ID);
     }
+
+    void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
+    {
+        int playerTeam = (int)otherPlayer.customProperties["Team"];
+        PhotonView playerObjectView = PhotonView.Find((int)otherPlayer.customProperties["Object"]);
+        photonView.RPC("UnregisterPlayer", PhotonTargets.All, playerObjectView.viewID, playerTeam);
+        PhotonNetwork.Destroy(playerObjectView);
+    }
+
+
 
     [PunRPC]
     void NotifyPlayerKilledAndQueueRespawn(int playerID)
@@ -264,22 +313,46 @@ public class CaptureGameController : Photon.MonoBehaviour
                 Debug.LogWarning("No player object out, something went wrong!");
             else
             {
+                photonView.RPC("UnregisterPlayer", PhotonTargets.All,playerObjectView.viewID,player.customProperties["Team"]);
                 PhotonNetwork.Destroy(playerObjectView);
-                StartCoroutine(RespawnPlayer(playerID));
+                StartCoroutine(WaitAndRespawnPlayer(playerID));
             }
         }
     }
 
-    IEnumerator RespawnPlayer(int playerID)
+    IEnumerator WaitAndRespawnPlayer(int playerID)
     {
         yield return new WaitForSeconds(3f);
         PhotonPlayer player = PhotonPlayer.Find(playerID);
         if (player == null)
             Debug.Log("Player Disconnected");
         else {
-            SpawnPlayer(player);
+            RespawnPlayer(player);
         }
     }
+
+    void RespawnPlayer(PhotonPlayer player)
+    {
+        if ( player == null )
+        {
+            Debug.Log("Player disconnected when trying to respawn");
+        } else
+        {
+            int team = (int)player.customProperties["Team"];
+            int spawnIndex = GetSpawnIndex(team);
+            Transform spawn = GetSpawn(team, spawnIndex);
+            GameObject playerGameObject = PhotonNetwork.Instantiate("PlayInThePastPlayer", spawn.position, spawn.rotation, 0);
+            int playerViewId = playerGameObject.GetComponent<PhotonView>().viewID;
+            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+            properties.Add("Object", playerViewId);
+            player.SetCustomProperties(properties);
+            playerGameObject.GetComponent<PhotonView>().RPC("SetOwner", PhotonTargets.AllBuffered, player.ID);
+            photonView.RPC("RegisterPlayer", PhotonTargets.All, playerViewId, team);
+            photonView.RPC("GiveControlToPlayer", player, playerViewId);
+        }
+    }
+
+
 
     // ----------------------------- Others
 
@@ -287,6 +360,7 @@ public class CaptureGameController : Photon.MonoBehaviour
     void OnGUI()
     {
         GUI.Box(new Rect(300, 0, 200, 40), "Team1: " + team1Points + "  || Team2: " + team2Points);
+        GUI.Box(new Rect(500, 0, 200, 40),"Players = Team1: "+ team1PlayersL.Count+ " Team2: "+team2PlayersL.Count);
     }
 
     public int getTeamsInMatch()

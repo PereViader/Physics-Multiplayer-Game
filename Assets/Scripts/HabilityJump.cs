@@ -62,6 +62,9 @@ public class HabilityJump : Photon.MonoBehaviour {
 
     void OnGUI()
     {
-        GUI.Box(new Rect(0f, 400f, 130, 20), "Jump: " + currentCooldown);
+        if (virtualKeyName == "Hability1")
+            GUI.Box(new Rect(0f, 400f, 130, 20), "Jump: " + currentCooldown);
+        else
+            GUI.Box(new Rect(0f, 430f, 130, 20), "Jump: " + currentCooldown);
     }
 }

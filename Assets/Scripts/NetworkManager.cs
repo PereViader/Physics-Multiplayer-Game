@@ -6,6 +6,11 @@ public class NetworkManager : MonoBehaviour {
 
     private string gameVersion = "1";
 
+    void Awake()
+    {
+        PhotonNetwork.isMessageQueueRunning = true;
+    }
+
     void Start()
     {
         if (!PhotonNetwork.connected) // obrir la escena directament per fer proves rapidament

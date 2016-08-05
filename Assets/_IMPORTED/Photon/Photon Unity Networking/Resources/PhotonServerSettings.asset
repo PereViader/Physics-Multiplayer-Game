@@ -61,4 +61,5 @@ MonoBehaviour:
   - ExecutePush
   - ExecutePushServer
   - NotifyPlayerKilledAndQueueRespawn
+  - UnregisterPlayer
   DisableAutoOpenWizard: 1

@@ -15,7 +15,6 @@ public class GameModeController : MonoBehaviour {
 
     public void OnPlayButtonPressed()
     {
-        Debug.Log("Play");
         networkRoomController.joinGameOrCreate(gameMode);
     }
 }

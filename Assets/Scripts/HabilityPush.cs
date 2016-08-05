@@ -87,6 +87,9 @@ public class HabilityPush : Photon.MonoBehaviour {
 
     void OnGUI()
     {
-        GUI.Box(new Rect(0f, 460f, 130, 20), "Push: " + currentCooldown);
+        if (virtualKeyName == "Hability1")
+            GUI.Box(new Rect(0f, 400f, 130, 20), "Push: " + currentCooldown);
+        else
+            GUI.Box(new Rect(0f, 430f, 130, 20), "Push: " + currentCooldown);
     }
 }

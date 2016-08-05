@@ -41,7 +41,6 @@ public class NetworkRoomController : MonoBehaviour {
         currentGameMode = gameMode;
         expectedProperties.Clear();
         expectedProperties.Add(RoomProperty.Mode, gameMode);
-        Debug.Log("Connected and ready" + PhotonNetwork.connectedAndReady);
 
         if (PhotonNetwork.inRoom)
         {
@@ -102,6 +101,11 @@ public class NetworkRoomController : MonoBehaviour {
     void OnJoinedRoom()
     {
         roomPanelController.DisplayWaitingText();
+    }
+
+    void OnLevelWasLoaded(int level)
+    {
+        PhotonNetwork.isMessageQueueRunning = true;
     }
 
     void OnConnectedToMaster()

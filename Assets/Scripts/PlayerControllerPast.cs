@@ -18,9 +18,9 @@ public class PlayerControllerPast : Photon.MonoBehaviour
 
     private Vector3 currentMovementForce;
 
-    public bool isOwnPlayer = false;
-    private bool isShooting = false;
-    private bool isInputEnabled = true;
+    bool isOwnPlayer = false;
+    bool isShooting = false;
+    bool isInputEnabled = true;
 
     void Awake()
     {
@@ -79,7 +79,6 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     {
         if (other.gameObject.tag == "Floor")
         {
-            Debug.Log("enter");
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         }
     }
