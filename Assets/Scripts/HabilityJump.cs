@@ -56,7 +56,6 @@ public class HabilityJump : Photon.MonoBehaviour {
         onCooldown = true;
         currentCooldown = cooldown;
         isBlocked = false;
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 

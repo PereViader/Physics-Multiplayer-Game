@@ -9,7 +9,7 @@ public class PauseMenuManager : MonoBehaviour {
     private GameObject pausePanel;
 
     private PlayerControllerPast playerController;
-    private CameraFollowSmooth cameraController;
+    private CameraFollow cameraController;
 
     private bool isPausePanelVisible = false;
 
@@ -18,7 +18,6 @@ public class PauseMenuManager : MonoBehaviour {
         if (Input.GetButtonDown("Pause"))
         {
             if (playerController != null) {
-                Debug.Log("Paused " + !isPausePanelVisible);
                 playerController.SetInput(isPausePanelVisible);
                 cameraController.SetInput(isPausePanelVisible);
                 isPausePanelVisible = !isPausePanelVisible;
@@ -43,7 +42,7 @@ public class PauseMenuManager : MonoBehaviour {
         playerController = player;
     }
 
-    public void SetCamera(CameraFollowSmooth camera)
+    public void SetCamera(CameraFollow camera)
     {
         cameraController = camera;
     }

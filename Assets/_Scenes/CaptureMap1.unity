@@ -1863,21 +1863,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1104597901}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4cc17b9267556d4dab3f93e90cf46d9, type: 3}
+  m_Script: {fileID: 11500000, guid: c619ca43f1eafb04891f4d6753101b43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cameraLerpFactor: 0.055
-  _following: {fileID: 0}
-  _maxDistanceFromObject: 12
-  _invertVertical: -1
-  _invertHorizontal: -1
-  _rotationHorizontalStep: 200
-  _rotationVerticalStep: 300
-  _minimumVerticalAngle: 25
-  _maximumVerticalAngle: 40
-  _rotationHorizontal: 0
-  _rotationVertical: 30
-  _smooth: 0.2
+  objectToFollow: {fileID: 0}
+  distanceFromObject: 10
+  startingRotation: 45
+  horizontalSensitivity: 7
+  verticalSensitivity: 5
+  lerpFactor: 5
+  maximumVerticalAngle: 50
+  minimumVerticalAngle: 0
+  invertHorizontal: 1
+  invertVertical: -1
 --- !u!81 &1104597905
 AudioListener:
   m_ObjectHideFlags: 0
@@ -3486,31 +3484,31 @@ Prefab:
     m_Modifications:
     - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1095.5808
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -1932.2415
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 8121.628
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
       propertyPath: m_LocalRotation.x
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0.5000001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.49999994
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
       propertyPath: m_RootOrder
@@ -3520,26 +3518,6 @@ Prefab:
       propertyPath: pausePanel
       value: 
       objectReference: {fileID: 566425583}
-    - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 106.99023
-      objectReference: {fileID: 0}
-    - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 106.99023
-      objectReference: {fileID: 0}
-    - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 106.99023
-      objectReference: {fileID: 0}
-    - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 412640, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -90
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5de01569e2e973a4fb00afe0ec793210, type: 2}
   m_IsPrefabParent: 0

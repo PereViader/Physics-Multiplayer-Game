@@ -1,103 +1,80 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraFollow : MonoBehaviour {
+public class CameraFollow : MonoBehaviour
+{
 
-	private Transform _following;
+    [SerializeField]
+    Transform objectToFollow;
 
-	[SerializeField] 
-		private float speed;
-	[SerializeField]
-	private float rotationHorizontalStep;
-	[SerializeField]
-	private float rotationVerticalStep;
-	[SerializeField]
-	private float minimumVerticalAngle;
-	[SerializeField]
-	private float maximumVerticalAngle;
-	[SerializeField]
-	private Vector2 initialAngleXY;
-	[SerializeField]
-	private Vector3 positionDelta;
-	[SerializeField]
-	private float cameraSpeed;
+    [SerializeField]
+    float distanceFromObject;
 
-	private float rotationHorizontal = 0;
-	private float rotationVertical = 0;
+    [SerializeField]
+    float startingRotation;
 
-	private Vector3 currentPositionDelta;
+    [SerializeField]
+    float horizontalSensitivity;
 
+    [SerializeField]
+    float verticalSensitivity;
 
+    [SerializeField]
+    float lerpFactor;
 
-	private bool hasObjectRequestedMove;
-	private bool hasProvidedMoveRequest = true;
-	private bool isCameraAnchored;
+    [SerializeField]
+    float maximumVerticalAngle;
 
-	void Awake() {
-		currentPositionDelta = positionDelta;
-	}
+    [SerializeField]
+    float minimumVerticalAngle;
 
-	public void SetFollowingObject (GameObject following) {
-		_following = following.transform;
-		rotationVertical = initialAngleXY.x;
-		rotationHorizontal = initialAngleXY.y;
-		currentPositionDelta = Quaternion.Euler(rotationVertical, rotationHorizontal, 0) * positionDelta;
-		transform.position = _following.position+currentPositionDelta;
-		transform.LookAt(_following.position);
+    [SerializeField]
+    float invertHorizontal;
+    [SerializeField]
+    float invertVertical;
 
-	}
+    float currentHorizontalRotation;
+    float currentVerticalRotation;
 
-	public void ObjectHasMoved() {
-		hasObjectRequestedMove = true;
-	}
+    bool isInputEnabled;
 
-	void FixedUpdate () {
-		if (_following == null)
-			return;
+    void Awake()
+    {
+        isInputEnabled = true;
+    }
 
+    void FixedUpdate()
+    {
+        if (objectToFollow && isInputEnabled)
+        {
+            float horizontal = horizontalSensitivity * Input.GetAxis("CameraHorizontal");
+            float vertical = verticalSensitivity * Input.GetAxis("CameraVertical");
 
-		float horizontal = -Input.GetAxis ("CameraHorizontal");
-		float vertical = -Input.GetAxis ("CameraVertical");
+            currentVerticalRotation += (invertVertical * vertical) % 360.0f;
+            currentHorizontalRotation += (invertHorizontal * horizontal) % 360.0f;
 
+            currentVerticalRotation = Mathf.Clamp(currentVerticalRotation, minimumVerticalAngle, maximumVerticalAngle);
 
-		bool hasChanged = false;
+            Vector3 desiredPositionFromObject = Quaternion.Euler(currentVerticalRotation, currentHorizontalRotation, 0f) * (Vector3.back * distanceFromObject);
+            transform.position = Vector3.Lerp(transform.position, objectToFollow.position + desiredPositionFromObject, lerpFactor * Time.fixedDeltaTime);
+        }
+    }
 
-		if (!Mathf.Approximately (horizontal, 0.0f) ) {
-			rotationHorizontal = (rotationHorizontal + horizontal * rotationHorizontalStep * Time.deltaTime) % 360.0f;
-			hasChanged = true;
-		}
+    void Update()
+    {
+        if (objectToFollow && isInputEnabled)
+            transform.LookAt(objectToFollow);
+    }
 
-		if ( !Mathf.Approximately (vertical, 0.0f) ) {
-			float calculatedRotation = (rotationVertical + vertical * rotationVerticalStep * Time.deltaTime);
+    public void SetObjectToFollow(GameObject toFollow)
+    {
+        objectToFollow = toFollow.transform;
+        currentHorizontalRotation = toFollow.transform.rotation.eulerAngles.y;
+        currentVerticalRotation = startingRotation;
+    }
 
-			if (calculatedRotation < minimumVerticalAngle)
-				rotationVertical = minimumVerticalAngle;
-			else if (calculatedRotation > maximumVerticalAngle)
-				rotationVertical = maximumVerticalAngle;
-			else
-				rotationVertical = calculatedRotation;
-			
-			hasChanged = true;
-		}
-
-		if ( hasChanged )
-		{
-			currentPositionDelta = Quaternion.Euler(rotationVertical, rotationHorizontal, 0) * positionDelta;
-		}
-
-
-		bool cameraIsInItsPosition = Vector3.Distance (transform.position, _following.position+positionDelta) < positionDelta.magnitude + 0.1f;
-		if (hasObjectRequestedMove) {
-			if (!hasProvidedMoveRequest && !cameraIsInItsPosition) { // fins que no sigui fora de la seva posicio no haura proporcionat el moviment
-				hasProvidedMoveRequest = true;
-			} else if (hasProvidedMoveRequest && cameraIsInItsPosition) { // un cop ha proporcionat el moviment fins que no torni a estar al seu lloc no acaba la peticio de moviment
-				hasObjectRequestedMove = false;
-			}
-		}
-
-		transform.position = Vector3.Lerp( transform.position, _following.position + currentPositionDelta , 0.25f);
-
-		Debug.DrawRay (_following.position, currentPositionDelta);
-		transform.LookAt(_following.position);
-	}
+    public void SetInput(bool state)
+    {
+        isInputEnabled = state;
+    }
 }

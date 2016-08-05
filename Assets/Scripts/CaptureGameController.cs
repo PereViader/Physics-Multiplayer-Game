@@ -6,7 +6,7 @@ public class CaptureGameController : Photon.MonoBehaviour
 {
     public static CaptureGameController captureGameController;
 
-    private CameraFollowSmooth cameraFollow;
+    private CameraFollow cameraFollow;
     private PauseMenuManager pauseManager;
 
     private Transform[] capturePositions;
@@ -35,7 +35,7 @@ public class CaptureGameController : Photon.MonoBehaviour
     {
         captureGameController = this;
 
-        cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraFollowSmooth>();
+        cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraFollow>();
         pauseManager = GameObject.Find("Pause Menu Manager").GetComponent<PauseMenuManager>();
 
         team1PlayersL = new List<GameObject>();
@@ -168,10 +168,10 @@ public class CaptureGameController : Photon.MonoBehaviour
         GameObject playerFollower = (GameObject)Instantiate((GameObject)Resources.Load("PlayerFollower"), player.transform.position, player.transform.rotation);
         playerFollower.GetComponent<PlayerFollower>().setPlayer(player);
 
-        cameraFollow.SetFollowingObject(playerFollower);
+        cameraFollow.SetObjectToFollow(playerFollower);
 
         pauseManager.SetPlayer(player.GetComponent<PlayerControllerPast>());
-        pauseManager.SetCamera(GameObject.Find("Main Camera").GetComponent<CameraFollowSmooth>());
+        pauseManager.SetCamera(GameObject.Find("Main Camera").GetComponent<CameraFollow>());
     }
 
     [PunRPC]
