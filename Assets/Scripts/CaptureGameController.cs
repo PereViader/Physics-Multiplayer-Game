@@ -11,7 +11,7 @@ public class CaptureGameController : Photon.MonoBehaviour
 
     private Transform[] capturePositions;
 
-    private CaptureZoneController currentCapture;
+    private GameObject currentCapture;
     private int currentCaptureIndex = -1;
 
     [SerializeField]
@@ -84,8 +84,8 @@ public class CaptureGameController : Photon.MonoBehaviour
         }
 
         currentCaptureIndex = getDiferentRandomCapturePosition();
-        GameObject captureZoneGameObject = (GameObject)PhotonNetwork.Instantiate("Capture Zone", capturePositions[currentCaptureIndex].position, Quaternion.identity, 0);
-        currentCapture = captureZoneGameObject.GetComponent<CaptureZoneController>();
+        currentCapture = (GameObject)PhotonNetwork.Instantiate("Capture Zone", capturePositions[currentCaptureIndex].position, Quaternion.identity, 0);
+        currentCapture.GetComponent<AreaController>().SetGameManager(this);
     }
 
     int getDiferentRandomCapturePosition()

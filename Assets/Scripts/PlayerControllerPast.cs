@@ -41,15 +41,14 @@ public class PlayerControllerPast : Photon.MonoBehaviour
 
     IEnumerator CaptureInputAndShoodPlayer()
     {
-        if (!shootingController.activate())
-            yield break;
-
+        shootingController.SetActive(true);
         isShooting = true;
 
         while (Input.GetAxis("Fire1") > 0)
             yield return null;
 
         float power = shootingController.getPower();
+        shootingController.SetActive(false);
 
         Vector3 force = InputGetter.GetDirection() * power * speed;
 
@@ -61,7 +60,6 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     [PunRPC]
     public void ShootPlayer(Vector3 force)
     {
-        rb.velocity = Vector3.zero;
         rb.AddForce(force, ForceMode.Impulse);
     }
 
@@ -75,11 +73,9 @@ public class PlayerControllerPast : Photon.MonoBehaviour
         isOwnPlayer = isOwn;
     }
 
-    void OnCollisionEnter(Collision other)
+    void OnDestroy()
     {
-        if (other.gameObject.tag == "Floor")
-        {
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        }
+
+        shootingController.SetActive(false);
     }
 }

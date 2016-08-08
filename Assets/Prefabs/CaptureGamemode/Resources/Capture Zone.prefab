@@ -11,6 +11,7 @@ GameObject:
   - 136: {fileID: 13616550}
   - 114: {fileID: 11477410}
   - 114: {fileID: 11402406}
+  - 114: {fileID: 11476428}
   m_Layer: 0
   m_Name: Capture Zone
   m_TagString: Untagged
@@ -101,7 +102,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 105946}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8271701d761fb85469d3fdc52878e37f, type: 3}
   m_Name: 
@@ -110,6 +111,21 @@ MonoBehaviour:
   basicIncreaseRate: 3
   extraIncreaseRate: 1
   timeBeforeUncaptureStarts: 1
+  uncaptureDecreaseRate: 1
+--- !u!114 &11476428
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98258f121e3b4b4195fe694a56a8573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  captureToDo: 10
+  basicIncreaseRate: 3
+  extraIncreaseRate: 1
   uncaptureDecreaseRate: 1
 --- !u!114 &11477410
 MonoBehaviour:

@@ -8,10 +8,17 @@ public class PauseMenuManager : MonoBehaviour {
     [SerializeField]
     private GameObject pausePanel;
 
+    MouseController mouseController;
+
     private PlayerControllerPast playerController;
     private CameraFollow cameraController;
 
     private bool isPausePanelVisible = false;
+
+    void Awake()
+    {
+        mouseController = GetComponent<MouseController>();
+    }
 
     void Update()
     {
@@ -20,6 +27,8 @@ public class PauseMenuManager : MonoBehaviour {
             if (playerController != null) {
                 playerController.SetInput(isPausePanelVisible);
                 cameraController.SetInput(isPausePanelVisible);
+                mouseController.SetCursorHidden(isPausePanelVisible);
+
                 isPausePanelVisible = !isPausePanelVisible;
                 pausePanel.SetActive(isPausePanelVisible);
             }
