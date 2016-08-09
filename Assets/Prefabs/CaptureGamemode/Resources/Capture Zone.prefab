@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 466118}
   - 136: {fileID: 13616550}
   - 114: {fileID: 11477410}
-  - 114: {fileID: 11402406}
   - 114: {fileID: 11476428}
   m_Layer: 0
   m_Name: Capture Zone
@@ -96,22 +95,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 126040}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &11402406
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 105946}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8271701d761fb85469d3fdc52878e37f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  captureToDo: 10
-  basicIncreaseRate: 3
-  extraIncreaseRate: 1
-  timeBeforeUncaptureStarts: 1
-  uncaptureDecreaseRate: 1
 --- !u!114 &11476428
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -142,12 +125,12 @@ MonoBehaviour:
   group: 0
   prefixBackup: -1
   observed: {fileID: 0}
-  synchronization: 3
+  synchronization: 2
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 11402406}
+  - {fileID: 11476428}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1

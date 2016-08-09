@@ -15,7 +15,7 @@ public class AreaController : MonoBehaviour {
     float uncaptureDecreaseRate;
 
     List<GameObject> playersInside;
-    SerializableDictionary<int, float> captureDone;
+    Dictionary<int, float> captureDone;
 
     CaptureGameController gameManager;
 
@@ -28,7 +28,7 @@ public class AreaController : MonoBehaviour {
         teamWhoCaptured = -1;
 
         playersInside = new List<GameObject>();
-        captureDone = new SerializableDictionary<int, float>();
+        captureDone = new Dictionary<int, float>();
         captureDone.Add(1, 0f);
         captureDone.Add(2, 0f);
     }
@@ -120,7 +120,7 @@ public class AreaController : MonoBehaviour {
         }
         else
         {
-            captureDone = (SerializableDictionary<int,float>)stream.ReceiveNext();
+            captureDone = (Dictionary<int, float>)stream.ReceiveNext();
         }
     }
 

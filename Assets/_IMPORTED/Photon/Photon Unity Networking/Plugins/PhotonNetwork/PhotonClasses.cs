@@ -1233,6 +1233,22 @@ public class PhotonStream
             }
         }
     }
+
+    internal void Serialize(ref Dictionary<int, object> obj)
+    {
+        if (write)
+        {
+            this.writeData.Enqueue(obj);
+        }
+        else
+        {
+            if (this.readData.Length > currentItem)
+            {
+                obj = (Dictionary<int, object>)this.readData[currentItem];
+                currentItem++;
+            }
+        }
+    }
 }
 
 
