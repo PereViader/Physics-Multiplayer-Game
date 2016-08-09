@@ -19,6 +19,7 @@ GameObject:
   - 114: {fileID: 11423822}
   - 114: {fileID: 11421672}
   - 114: {fileID: 11452582}
+  - 114: {fileID: 11486772}
   m_Layer: 0
   m_Name: PlayInThePastPlayer
   m_TagString: Player
@@ -161,7 +162,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfaeac40d8a764f489f2f8a6eb218432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 0
 --- !u!114 &11452582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -247,6 +247,19 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
+--- !u!114 &11486772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 111892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2392d99153f66e54a912377dd511f15f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerIncrement: 1
+  timeToDisappear: 0.4
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

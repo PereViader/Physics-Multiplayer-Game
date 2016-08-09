@@ -24,7 +24,7 @@ public class PlayerControllerPast : Photon.MonoBehaviour
 
     void Awake()
     {
-        shootingController = GameObject.Find("Canvas/ShootingController").GetComponent<ShootingController>();
+        shootingController = GetComponent<ShootingController>();
         rb = GetComponent<Rigidbody>();
     }
 

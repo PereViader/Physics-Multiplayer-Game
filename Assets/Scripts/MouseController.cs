@@ -7,12 +7,12 @@ public class MouseController : MonoBehaviour {
 
 	void Awake()
     {
-        //SetCursorHidden(true);
+        SetCursorHidden(true);
     }
 
     public void SetCursorHidden(bool state)
     {
-        /*if (state)
+        if (state)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -21,6 +21,5 @@ public class MouseController : MonoBehaviour {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
         }
-        */
     }
 }

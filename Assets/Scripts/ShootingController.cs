@@ -4,11 +4,9 @@ using System.Collections;
 
 public class ShootingController : MonoBehaviour {
 
-	[SerializeField]
-	private Image fill;
+    GameObject shootingControllerUI;
 
-	[SerializeField]
-	private GameObject gFill;
+	private Image movingBar;
 
     [SerializeField]
     private int powerIncrement;
@@ -20,14 +18,18 @@ public class ShootingController : MonoBehaviour {
     private bool isActive = false;
 	private float currentPower;
 
-
+    void Awake()
+    {
+        shootingControllerUI = GameObject.Find("Canvas").transform.Find("PowerBar").gameObject;
+        movingBar = shootingControllerUI.transform.GetChild(0).GetComponent<Image>();
+    }
 
 	public void SetActive(bool state) {
         if (state != isActive)
         {
             isActive = state;
             if (state)
-                gFill.SetActive(true);
+                shootingControllerUI.SetActive(true);
             else
             {
                 currentPower = 0f;
@@ -44,13 +46,13 @@ public class ShootingController : MonoBehaviour {
         if ( isActive )
         {
             currentPower = Mathf.Clamp(currentPower + powerIncrement * Time.deltaTime, 0f, 1f);
-            fill.fillAmount = currentPower;
+            movingBar.fillAmount = currentPower;
         }
     }
 
 	IEnumerator delayedDisappear() {
 		yield return new WaitForSeconds (timeToDisappear);
-        gFill.SetActive(false);
+        shootingControllerUI.SetActive(false);
     }
 
 	public float getPower() {

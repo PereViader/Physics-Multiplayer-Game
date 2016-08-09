@@ -38,7 +38,7 @@ public class CaptureGameController : Photon.MonoBehaviour
         captureGameController = this;
 
         cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraFollow>();
-        pauseManager = GameObject.Find("Pause Menu Manager").GetComponent<PauseMenuManager>();
+        pauseManager = GameObject.Find("Manager").GetComponent<PauseMenuManager>();
 
         team1PlayersL = new List<GameObject>();
         team2PlayersL = new List<GameObject>();
