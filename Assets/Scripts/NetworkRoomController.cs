@@ -85,14 +85,12 @@ public class NetworkRoomController : MonoBehaviour {
         roomOptions.customRoomProperties = expectedProperties;
         roomOptions.maxPlayers = 2;
         PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
-        Debug.Log("Created room");
     }
 
     void OnPhotonPlayerConnected()
     {
         if (PhotonNetwork.isMasterClient && PhotonNetwork.playerList.Length == 2)
         {
-            Debug.Log("Load level");
             PhotonNetwork.LoadLevel(LevelProvider.GetRandomMap(currentGameMode));
         } 
 

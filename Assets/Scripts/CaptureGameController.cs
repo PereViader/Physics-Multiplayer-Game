@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class CaptureGameController : Photon.MonoBehaviour
 {
@@ -29,7 +30,8 @@ public class CaptureGameController : Photon.MonoBehaviour
     private int team1Points;
     private int team2Points;
 
-
+    Text redScore;
+    Text greenScore;
 
     void Awake()
     {
@@ -40,6 +42,9 @@ public class CaptureGameController : Photon.MonoBehaviour
 
         team1PlayersL = new List<GameObject>();
         team2PlayersL = new List<GameObject>();
+
+        redScore = GameObject.Find("Canvas/Marcador/RedScore").GetComponent<Text>();
+        greenScore = GameObject.Find("Canvas/Marcador/GreenScore").GetComponent<Text>();
 
         Random.seed = ((int)System.DateTime.Now.Ticks) + ((int)Time.time) + Time.frameCount;
 
@@ -101,13 +106,21 @@ public class CaptureGameController : Photon.MonoBehaviour
     [PunRPC]
     public void TeamScored(int team)
     {
-        if (team == 1)
+        if (team == 1) 
             team1Points++;
         else
             team2Points++;
 
+        UpdateScoreUI();
+
         if (PhotonNetwork.isMasterClient)
             InstantiateNewRandomCapture();
+    }
+
+    void UpdateScoreUI()
+    {
+        redScore.text = team1Points.ToString();
+        greenScore.text = team2Points.ToString();
     }
 
 //------------------------------------------------- Player Spawning
@@ -355,13 +368,6 @@ public class CaptureGameController : Photon.MonoBehaviour
 
 
     // ----------------------------- Others
-
-
-    void OnGUI()
-    {
-        GUI.Box(new Rect(300, 0, 200, 40), "Team1: " + team1Points + "  || Team2: " + team2Points);
-        GUI.Box(new Rect(500, 0, 200, 40),"Players = Team1: "+ team1PlayersL.Count+ " Team2: "+team2PlayersL.Count);
-    }
 
     public int getTeamsInMatch()
     {

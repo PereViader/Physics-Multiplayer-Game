@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class AreaController : MonoBehaviour {
 
@@ -22,10 +23,16 @@ public class AreaController : MonoBehaviour {
     bool isCaptured;
     int teamWhoCaptured;
 
+    Image redCapture;
+    Image greenCapture;
+
     void Awake()
     {
         isCaptured = false;
         teamWhoCaptured = -1;
+
+        redCapture = GameObject.Find("Canvas/CaptureUI/RedCapture/Inside").GetComponent<Image>();
+        greenCapture = GameObject.Find("Canvas/CaptureUI/GreenCapture/Inside").GetComponent<Image>();
 
         playersInside = new List<GameObject>();
         captureDone = new Dictionary<int, float>();
@@ -40,6 +47,29 @@ public class AreaController : MonoBehaviour {
             UpdateCapture();
             CheckIfAreaIsCaptured();
         }
+    }
+
+    void LateUpdate()
+    {
+        UpdateCaptureUI();
+    }
+
+    void UpdateCaptureUI()
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            redCapture.fillAmount = captureDone[1] / 10f;
+            greenCapture.fillAmount = captureDone[2] / 10f;
+        } else
+        {
+            //lerp
+        }
+    }
+
+    void ResetCaptureUI()
+    {
+        redCapture.fillAmount = 0f;
+        greenCapture.fillAmount = 0f;
     }
 
     void UpdateCapture()
@@ -127,13 +157,5 @@ public class AreaController : MonoBehaviour {
     public void SetGameManager(CaptureGameController gameManager)
     {
         this.gameManager = gameManager;
-    }
-
-    void OnGUI()
-    {
-        string message = "";
-        foreach (var team in captureDone)
-            message += team.Key + ": " + team.Value + "\n";
-        GUI.Box(new Rect(0, 120, 150, 60), message);
     }
 }

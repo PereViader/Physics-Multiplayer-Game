@@ -5,8 +5,6 @@ public class PhotonPlayerOwner : MonoBehaviour {
 
     int photonPlayerId;
     PhotonPlayer player;
-    int pos;
-    [SerializeField]
     int team;
 
     bool hasBeenSet = false;
@@ -19,7 +17,6 @@ public class PhotonPlayerOwner : MonoBehaviour {
         player = PhotonPlayer.Find(id);
         if (player == null)
             Debug.LogWarning("Set owner did not work");
-        pos = Random.Range(0, 6);
     }
 
     public bool HasBeenSet()
@@ -38,14 +35,9 @@ public class PhotonPlayerOwner : MonoBehaviour {
         return player;
     }
 
-    void OnGUI()
+    public int GetTeam()
     {
-        if ( player != null)
-        {
-            team = (int)player.customProperties["Team"];
-            GUI.Box(new Rect(350 + 60 * pos, 40, 60, 25), "Team: " +team);
-
-        }
-
+        return team;
     }
+
 }
