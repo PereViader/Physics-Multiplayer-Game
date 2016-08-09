@@ -110,6 +110,7 @@ MonoBehaviour:
   basicIncreaseRate: 3
   extraIncreaseRate: 1
   uncaptureDecreaseRate: 1
+  fillSpeed: 3.1
 --- !u!114 &11477410
 MonoBehaviour:
   m_ObjectHideFlags: 1

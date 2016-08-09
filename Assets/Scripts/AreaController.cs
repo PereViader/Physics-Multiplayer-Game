@@ -54,6 +54,13 @@ public class AreaController : MonoBehaviour {
         UpdateCaptureUI();
     }
 
+
+    float lastRedCaptureValue;
+    float lastGreenCaptureValue;
+
+
+    [SerializeField]
+    float fillSpeed;
     void UpdateCaptureUI()
     {
         if (PhotonNetwork.isMasterClient)
@@ -63,6 +70,13 @@ public class AreaController : MonoBehaviour {
         } else
         {
             //lerp
+            float newRedValue = Mathf.Lerp(lastRedCaptureValue, captureDone[1] / 10f, fillSpeed * Time.deltaTime);
+            redCapture.fillAmount = newRedValue;
+            lastRedCaptureValue = newRedValue;
+
+            float newGreenValue = Mathf.Lerp(lastGreenCaptureValue, captureDone[2] / 10f, fillSpeed * Time.deltaTime);
+            greenCapture.fillAmount = newGreenValue;
+            lastGreenCaptureValue = newGreenValue;
         }
     }
 
@@ -70,6 +84,8 @@ public class AreaController : MonoBehaviour {
     {
         redCapture.fillAmount = 0f;
         greenCapture.fillAmount = 0f;
+        lastRedCaptureValue = 0f;
+        lastGreenCaptureValue = 0f;
     }
 
     void UpdateCapture()
