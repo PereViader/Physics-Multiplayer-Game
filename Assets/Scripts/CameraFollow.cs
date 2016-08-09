@@ -38,17 +38,29 @@ public class CameraFollow : MonoBehaviour
 
     bool isInputEnabled;
 
+    Vector3 lastPosition;
+    bool hasLastPositionBeenSet;
+
     void Awake()
     {
+        hasLastPositionBeenSet = false;
         isInputEnabled = true;
     }
 
     void FixedUpdate()
     {
-        if (objectToFollow && isInputEnabled)
+        if (objectToFollow || hasLastPositionBeenSet )
         {
-            float horizontal = horizontalSensitivity * Input.GetAxis("CameraHorizontal");
-            float vertical = verticalSensitivity * Input.GetAxis("CameraVertical");
+            Vector3 position = objectToFollow != null ? objectToFollow.position : lastPosition;
+
+            float horizontal = 0f;
+            float vertical = 0f;
+            if ( isInputEnabled )
+            {
+                horizontal = horizontalSensitivity * Input.GetAxis("CameraHorizontal");
+                vertical = verticalSensitivity * Input.GetAxis("CameraVertical");
+            }
+                
 
             currentVerticalRotation += (invertVertical * vertical) % 360.0f;
             currentHorizontalRotation += (invertHorizontal * horizontal) % 360.0f;
@@ -56,14 +68,17 @@ public class CameraFollow : MonoBehaviour
             currentVerticalRotation = Mathf.Clamp(currentVerticalRotation, minimumVerticalAngle, maximumVerticalAngle);
 
             Vector3 desiredPositionFromObject = Quaternion.Euler(currentVerticalRotation, currentHorizontalRotation, 0f) * (Vector3.back * distanceFromObject);
-            transform.position = Vector3.Lerp(transform.position, objectToFollow.position + desiredPositionFromObject, lerpFactor * Time.fixedDeltaTime);
+            transform.position = Vector3.Lerp(transform.position, position + desiredPositionFromObject, lerpFactor * Time.fixedDeltaTime);
+            lastPosition = position;
         }
     }
 
     void Update()
     {
-        if (objectToFollow && isInputEnabled)
-            transform.LookAt(objectToFollow);
+
+
+        if (objectToFollow || hasLastPositionBeenSet)
+            transform.LookAt(lastPosition);
     }
 
     public void SetObjectToFollow(GameObject toFollow)
@@ -71,6 +86,8 @@ public class CameraFollow : MonoBehaviour
         objectToFollow = toFollow.transform;
         currentHorizontalRotation = toFollow.transform.rotation.eulerAngles.y;
         currentVerticalRotation = startingRotation;
+        lastPosition = toFollow.transform.position;
+        hasLastPositionBeenSet = true;
     }
 
     public void SetInput(bool state)
