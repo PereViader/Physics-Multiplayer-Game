@@ -66,20 +66,18 @@ public class CameraFollow : MonoBehaviour
                 
 
             currentVerticalRotation += (invertVertical * vertical) % 360.0f;
-            currentHorizontalRotation += (invertHorizontal * horizontal) % 360.0f;
-
             currentVerticalRotation = Mathf.Clamp(currentVerticalRotation, minimumVerticalAngle, maximumVerticalAngle);
 
+            currentHorizontalRotation += (invertHorizontal * horizontal) % 360.0f;
+
             Vector3 desiredPositionFromObject = Quaternion.Euler(currentVerticalRotation, currentHorizontalRotation, 0f) * (Vector3.back * distanceFromObject);
-            transform.position = Vector3.Lerp(transform.position, position + desiredPositionFromObject, lerpFactor * Time.fixedDeltaTime);
+            transform.position = Vector3.Slerp(transform.position, position + desiredPositionFromObject, lerpFactor * Time.fixedDeltaTime);
             lastPosition = position;
         }
     }
 
     void Update()
     {
-
-
         if (objectToFollow || hasLastPositionBeenSet)
             transform.LookAt(lastPosition + lookAtOffset);
     }

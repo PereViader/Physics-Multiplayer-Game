@@ -61,6 +61,6 @@ public class NetworkManager : MonoBehaviour {
 
     void OnGUI()
     {
-        GUI.Box(new Rect(0, 0, 150, 100), PhotonNetwork.connectionStateDetailed + "\n Ping: " + PhotonNetwork.GetPing() + "\n Time: "+PhotonNetwork.time.ToString());
+        GUI.Box(new Rect(0, 0, 160, 40), PhotonNetwork.connectionStateDetailed + "\n Ping: " + PhotonNetwork.GetPing());
     }
 }
