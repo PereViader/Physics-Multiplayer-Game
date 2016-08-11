@@ -71,7 +71,8 @@ public class CameraFollow : MonoBehaviour
             currentHorizontalRotation += (invertHorizontal * horizontal) % 360.0f;
 
             Vector3 desiredPositionFromObject = Quaternion.Euler(currentVerticalRotation, currentHorizontalRotation, 0f) * (Vector3.back * distanceFromObject);
-            transform.position = Vector3.Slerp(transform.position, position + desiredPositionFromObject, lerpFactor * Time.fixedDeltaTime);
+            Vector3 currentPositionFromObject = transform.position - position;
+            transform.position = Vector3.Slerp(currentPositionFromObject, desiredPositionFromObject, lerpFactor * Time.fixedDeltaTime) + position;
             lastPosition = position;
         }
     }
