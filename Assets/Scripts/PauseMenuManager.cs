@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class PauseMenuManager : MonoBehaviour {
 
-
-    [SerializeField]
     private GameObject pausePanel;
 
     MouseController mouseController;
@@ -18,6 +18,10 @@ public class PauseMenuManager : MonoBehaviour {
     void Awake()
     {
         mouseController = GetComponent<MouseController>();
+        pausePanel = GameObject.Find("Canvas").transform.Find("PausePanel").gameObject;
+        if (!pausePanel)
+            Debug.Log("Pause Panel reference not found!");
+        pausePanel.transform.Find("MainMenuButton").gameObject.GetComponent<Button>().onClick.AddListener(new UnityAction(OnMainMenuButtonPressed));
     }
 
     void Update()
@@ -39,11 +43,12 @@ public class PauseMenuManager : MonoBehaviour {
     {
         PhotonNetwork.automaticallySyncScene = false;
         PhotonNetwork.LeaveRoom();
+        Debug.Log("Main Menu Button pressed");
     }
 
     public void OnLeftRoom()
     {
-        PhotonNetwork.LoadLevel(0);
+        SceneManager.LoadScene(0);
     }
 
     public void SetPlayer(PlayerControllerPast player)

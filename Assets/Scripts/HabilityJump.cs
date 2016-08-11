@@ -1,17 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HabilityJump : Photon.MonoBehaviour {
+public class HabilityJump : Hability {
 
     [SerializeField]
-    private float jumpForce = 6f;
-
-    [SerializeField]
-    private float cooldown = 2f;
+    private float jumpForce = 100f;
 
     private bool isBlocked = false;
-    private bool onCooldown = false;
-    private float currentCooldown = 0;
 
     private Rigidbody rb;
     private string virtualKeyName;
@@ -19,25 +14,13 @@ public class HabilityJump : Photon.MonoBehaviour {
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        cooldown = 0.5f;
     }
 
-    public void SetVirtualKey(string virtualKeyName)
+    protected override void Update()
     {
-        this.virtualKeyName = virtualKeyName;
-    }
-
-    void Update()
-    {
-        if ( onCooldown )
-        {
-            currentCooldown -= Time.deltaTime;
-            if (currentCooldown <= 0f)
-            {
-                onCooldown = false;
-                currentCooldown = 0f;
-            }
-                
-        } else if (!isBlocked && Input.GetButtonDown(virtualKeyName))
+        base.Update();
+        if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
         {
             isBlocked = true;
             photonView.RPC("ExecuteJumpServer", PhotonTargets.MasterClient);
@@ -53,17 +36,13 @@ public class HabilityJump : Photon.MonoBehaviour {
     [PunRPC]
     void ExecuteJump()
     {
-        onCooldown = true;
-        currentCooldown = cooldown;
+        SetOnCooldown();
         isBlocked = false;
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
-    void OnGUI()
+    public override string GetHabilityName()
     {
-        if (virtualKeyName == "Hability1")
-            GUI.Box(new Rect(0f, 400f, 130, 20), "Jump: " + currentCooldown);
-        else
-            GUI.Box(new Rect(0f, 430f, 130, 20), "Jump: " + currentCooldown);
+        return "Jump";
     }
 }

@@ -12,7 +12,7 @@ public class MouseController : MonoBehaviour {
 
     public void SetCursorHidden(bool state)
     {
-        if (state)
+        if (state && !Application.isEditor)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

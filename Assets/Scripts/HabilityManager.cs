@@ -1,14 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class HabilityManager : MonoBehaviour {
 
-    private MonoBehaviour hability1;
-    private MonoBehaviour hability2;
+    private Hability[] habilities;
+
+    private Text[] habilityName;
+    private Text[] habilityCooldown;
 
 	void Awake () {
+        habilities = new Hability[2];
+        habilityName = new Text[2];
+        habilityCooldown = new Text[2];
+        GameObject habilitiesUI = GameObject.Find("Canvas").transform.Find("HabilitiesUI").gameObject;
+        for ( int i = 0; i < habilities.Length; i++)
+        {
+            GameObject habilityUI = habilitiesUI.transform.GetChild(i).gameObject;
+            habilityName[i] = habilityUI.transform.Find("Name").GetComponent<Text>();
+            habilityCooldown[i] = habilityUI.transform.Find("Cooldown").GetComponent<Text>();
+        }
+        
         if (PhotonNetwork.isMasterClient)
             AddRandomHabilities();
+
+    }
+
+    void Update()
+    {
+        for (int i = 0; i < habilities.Length; i++)
+        {
+            habilityCooldown[i].text = (habilities[i].GetCurrentCooldown()).ToString("0.0");
+        }
     }
 
     void AddRandomHabilities()
@@ -26,43 +49,40 @@ public class HabilityManager : MonoBehaviour {
     [PunRPC]
     public void NetworkAddRandomHability(int hability1Index, int hability2Index)
     {
-        string habilityVirtualKey = "Hability" + 1;
-        hability1 = AddHability(habilityVirtualKey,hability1Index);
-        habilityVirtualKey = "Hability" + 2;
-        hability2 = AddHability(habilityVirtualKey,hability2Index);
+        habilities[0] = AddHability("Hability" + 1, hability1Index);
+        habilities[1] = AddHability("Hability" + 2, hability2Index);
+        for (int i = 0; i<habilities.Length; i++)
+        {
+            habilityName[i].text = habilities[i].GetHabilityName();
+        }
     }
 
-    MonoBehaviour AddHability (string habilityVirtualKey, int hability)
+    Hability AddHability (string habilityVirtualKey, int habilityNumber)
     {
-        MonoBehaviour c;
-        switch (hability)
+        Hability hability; 
+        switch (habilityNumber)
         {
             case 0:
-                HabilityJump jump = gameObject.AddComponent<HabilityJump>();
-                c = jump;
-                jump.SetVirtualKey(habilityVirtualKey);
-                jump.enabled = false;
+                hability = gameObject.AddComponent<HabilityJump>();
                 break;
             case 1:
-                HabilityGuard guard = gameObject.AddComponent<HabilityGuard>();
-                c = guard;
-                guard.SetVirtualKey(habilityVirtualKey);
-                guard.enabled = false;
+                hability = gameObject.AddComponent<HabilityGuard>();
                 break;
             case 2:
             default:
-                HabilityPush push = gameObject.AddComponent<HabilityPush>();
-                c = push;
-                push.SetVirtualKey(habilityVirtualKey);
-                push.enabled = false;
+                hability = gameObject.AddComponent<HabilityPush>();
                 break;
         }
-        return c;
+        hability.SetVirtualKey(habilityVirtualKey);
+        hability.enabled = false;
+        return hability;
     }
 
     public void ActivateInputCaptureForHabilities()
     {
-        hability1.enabled = true;
-        hability2.enabled = true;
+        foreach ( Hability hability in habilities)
+        {
+            hability.enabled = true;
+        }
     }
 }

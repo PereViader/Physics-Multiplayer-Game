@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class HabilityPush : Photon.MonoBehaviour {
-
-    [SerializeField]
-    float cooldown = 1f;
+public class HabilityPush : Hability {
 
     [SerializeField]
     float pushRange = 7f;
@@ -12,13 +9,7 @@ public class HabilityPush : Photon.MonoBehaviour {
     [SerializeField]
     float pushForce = 35f;
 
-    [SerializeField]
-    private float currentCooldown;
-    [SerializeField]
-    private bool onCooldown = false;
-    [SerializeField]
     private bool isBlocked = false;
-    private string virtualKeyName;
 
     CaptureGameController gameManager;
     PhotonPlayerOwner photonPlayerOwner;
@@ -28,19 +19,12 @@ public class HabilityPush : Photon.MonoBehaviour {
     {
         photonPlayerOwner = GetComponent<PhotonPlayerOwner>();
         gameManager = GameObject.Find("GameManager(Clone)").GetComponent<CaptureGameController>();
+        cooldown = 1f;
     }
 
-    void Update () {
-        if (onCooldown)
-        {
-            currentCooldown -= Time.deltaTime;
-            if (currentCooldown <= 0f)
-            {
-                onCooldown = false;
-                currentCooldown = 0f;
-            }
-        }
-        else if (!isBlocked && Input.GetButtonDown(virtualKeyName))
+    protected override void Update () {
+        base.Update();
+        if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
         {
             isBlocked = true;
             photonView.RPC("ExecutePushServer", PhotonTargets.MasterClient);
@@ -80,16 +64,8 @@ public class HabilityPush : Photon.MonoBehaviour {
         }
     }
 
-    public void SetVirtualKey(string virtualKeyName)
+    public override string GetHabilityName()
     {
-        this.virtualKeyName = virtualKeyName;
-    }
-
-    void OnGUI()
-    {
-        if (virtualKeyName == "Hability1")
-            GUI.Box(new Rect(0f, 400f, 130, 20), "Push: " + currentCooldown);
-        else
-            GUI.Box(new Rect(0f, 430f, 130, 20), "Push: " + currentCooldown);
+        return "Push";
     }
 }

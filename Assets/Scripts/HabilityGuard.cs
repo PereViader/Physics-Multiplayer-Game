@@ -1,44 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HabilityGuard : Photon.MonoBehaviour {
+public class HabilityGuard : Hability {
 
     [SerializeField]
     private float guardDuration = 1.4f;
 
-    [SerializeField]
-    private float cooldown = 4f;
-
     private bool isBlocked = false;
-    private bool isGuarding = false;
-    private bool onCooldown = false;
-    private float currentCooldown = 0;
+    //private bool isGuarding = false;
 
     private Rigidbody rb;
-    private string virtualKeyName;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        cooldown = 4f;
     }
 
-    public void SetVirtualKey(string virtualKeyName)
+    protected override void Update()
     {
-        this.virtualKeyName = virtualKeyName;
-    }
-
-    void Update()
-    {
-        if (onCooldown && !isGuarding)
-        {
-            currentCooldown -= Time.deltaTime;
-            if (currentCooldown <= 0f)
-            {
-                onCooldown = false;
-                currentCooldown = 0f;
-            }
-        }
-        else if (!isBlocked && Input.GetButtonDown(virtualKeyName))
+        base.Update();
+        if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
         {
             isBlocked = true;
             photonView.RPC("ExecuteGuardServer", PhotonTargets.MasterClient);
@@ -57,7 +39,7 @@ public class HabilityGuard : Photon.MonoBehaviour {
         onCooldown = true;
         currentCooldown = cooldown;
         isBlocked = false;
-        isGuarding = true;
+        //isGuarding = true;
         rb.isKinematic = true;
         GetComponent<MeshRenderer>().material.color = Color.black;
         Invoke("EndHability", guardDuration);
@@ -66,16 +48,12 @@ public class HabilityGuard : Photon.MonoBehaviour {
     private void EndHability()
     {
         GetComponent<MeshRenderer>().material.color = Color.white;
-        isGuarding = false;
+        //isGuarding = false;
         rb.isKinematic = false;
     }
 
-    void OnGUI()
+    public override string GetHabilityName()
     {
-        if (virtualKeyName == "Hability1")
-            GUI.Box(new Rect(0f, 400f, 130, 20), "Guard: " + currentCooldown);
-        else
-            GUI.Box(new Rect(0f, 430f, 130, 20), "Guard: " + currentCooldown);
-
+        return "Guard";
     }
 }

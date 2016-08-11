@@ -17,6 +17,7 @@ public class PhotonPlayerOwner : MonoBehaviour {
         player = PhotonPlayer.Find(id);
         if (player == null)
             Debug.LogWarning("Set owner did not work");
+        team = (int)player.customProperties["Team"];
     }
 
     public bool HasBeenSet()

@@ -33,6 +33,9 @@ public class CameraFollow : MonoBehaviour
     [SerializeField]
     float invertVertical;
 
+    [SerializeField]
+    Vector3 lookAtOffset;
+
     float currentHorizontalRotation;
     float currentVerticalRotation;
 
@@ -78,7 +81,7 @@ public class CameraFollow : MonoBehaviour
 
 
         if (objectToFollow || hasLastPositionBeenSet)
-            transform.LookAt(lastPosition);
+            transform.LookAt(lastPosition + lookAtOffset);
     }
 
     public void SetObjectToFollow(GameObject toFollow)
