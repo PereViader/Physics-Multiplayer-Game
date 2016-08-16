@@ -9,7 +9,6 @@ public class HabilityJump : Hability {
     private bool isBlocked = false;
 
     private Rigidbody rb;
-    private string virtualKeyName;
 
     void Awake()
     {

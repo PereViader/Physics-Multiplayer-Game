@@ -33,6 +33,18 @@ public class CaptureGameController : Photon.MonoBehaviour
     Text redScore;
     Text greenScore;
 
+    Text distanceText;
+    GameObject localPlayerGameObject;
+    
+    void FixedUpdate()
+    {
+
+        if ( localPlayerGameObject )
+            distanceText.text = Mathf.Clamp(Vector3.Distance(currentCapture.transform.position, localPlayerGameObject.transform.position)-5f,0f,1000f).ToString("0");
+        else
+            distanceText.gameObject.SetActive(false);
+    }
+
     void Awake()
     {
         captureGameController = this;
@@ -68,11 +80,12 @@ public class CaptureGameController : Photon.MonoBehaviour
         {
             team2Spawns[i] = container.transform.GetChild(i);
         }
+
+        distanceText = GameObject.Find("Canvas").transform.Find("DistanceText").GetComponent<Text>();
     }
 
     void Start()
     {
-        //InitializePlayer();
         if (PhotonNetwork.isMasterClient)
         {
             SpawnPlayers();
@@ -174,7 +187,9 @@ public class CaptureGameController : Photon.MonoBehaviour
     [PunRPC]
     public void GiveControlToPlayer(int playerViewId)
     {
+        distanceText.gameObject.SetActive(true);
         GameObject player = PhotonView.Find(playerViewId).gameObject;
+        localPlayerGameObject = player;
         player.GetComponent<PlayerControllerPast>().SetOwnPlayer(true);
         player.GetComponent<HabilityManager>().ActivateInputCaptureForHabilities();
 

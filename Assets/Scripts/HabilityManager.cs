@@ -34,13 +34,17 @@ public class HabilityManager : MonoBehaviour {
         }
     }
 
+    int GetRandomHabilityID()
+    {
+        return Random.Range(0, 4);
+    }
+
     void AddRandomHabilities()
     {
-        int randomHability1 = Random.Range(0, 3);
+        int randomHability1 = GetRandomHabilityID();
         int randomHability2;
-        do
-        {
-            randomHability2 = Random.Range(0, 3);
+        do{
+            randomHability2 = GetRandomHabilityID();
         } while (randomHability2 == randomHability1);
 
         GetComponent<PhotonView>().RPC("NetworkAddRandomHability", PhotonTargets.AllBuffered, randomHability1,randomHability2);
@@ -69,8 +73,11 @@ public class HabilityManager : MonoBehaviour {
                 hability = gameObject.AddComponent<HabilityGuard>();
                 break;
             case 2:
-            default:
                 hability = gameObject.AddComponent<HabilityPush>();
+                break;
+            default:
+            case 3:
+                hability = gameObject.AddComponent<HabilityShrink>();
                 break;
         }
         hability.SetVirtualKey(habilityVirtualKey);
