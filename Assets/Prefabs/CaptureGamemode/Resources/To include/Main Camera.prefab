@@ -98,7 +98,7 @@ MonoBehaviour:
   horizontalSensitivity: 7
   verticalSensitivity: 5
   lerpFactor: 5
-  maximumVerticalAngle: 50
+  maximumVerticalAngle: 80
   minimumVerticalAngle: 0
   invertHorizontal: 1
   invertVertical: -1
