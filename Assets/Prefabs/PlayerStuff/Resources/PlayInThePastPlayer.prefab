@@ -80,7 +80,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 111892}
   serializedVersion: 2
-  m_Mass: 10
+  m_Mass: 70
   m_Drag: 1
   m_AngularDrag: 0.68
   m_UseGravity: 1
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbffe27f2ce643a42a810d629e42d6bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 400
+  speed: 3000
   _timeBetweenShoots: 0.4
   timeBeforeShoots: 19.18
 --- !u!114 &11432974

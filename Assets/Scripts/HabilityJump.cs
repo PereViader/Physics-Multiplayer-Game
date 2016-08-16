@@ -4,7 +4,7 @@ using System.Collections;
 public class HabilityJump : Hability {
 
     [SerializeField]
-    private float jumpForce = 100f;
+    private float jumpForce = 600f;
 
     private bool isBlocked = false;
 
