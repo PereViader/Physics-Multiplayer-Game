@@ -173,7 +173,7 @@ public class CaptureGameController : Photon.MonoBehaviour
         int spawnIndex;
         GetValuesForNewPlayer(out team, out spawnIndex);
         Transform spawn = GetSpawn(team, spawnIndex);
-        GameObject playerGameObject = PhotonNetwork.Instantiate("PlayInThePastPlayer", spawn.position, spawn.rotation, 0);
+        GameObject playerGameObject = PhotonNetwork.Instantiate(/*"PlayInThePastPlayer"*/"PlayerBall", spawn.position, spawn.rotation, 0);
         int playerViewId = playerGameObject.GetComponent<PhotonView>().viewID;
         ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
         properties.Add("Team", team);

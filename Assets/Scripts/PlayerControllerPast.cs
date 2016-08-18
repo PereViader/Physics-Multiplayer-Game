@@ -44,8 +44,11 @@ public class PlayerControllerPast : Photon.MonoBehaviour
         shootingController.SetActive(true);
         isShooting = true;
 
+
         while (Input.GetAxis("Fire1") > 0)
+        {
             yield return null;
+        }
 
         float power = shootingController.getPower();
         shootingController.SetActive(false);
