@@ -16,6 +16,7 @@ public class PauseMenuManager : MonoBehaviour {
 
     void Awake()
     {
+        isPausePanelActive = false;
         if (pauseMenuManager == null)
             pauseMenuManager = this;
         else

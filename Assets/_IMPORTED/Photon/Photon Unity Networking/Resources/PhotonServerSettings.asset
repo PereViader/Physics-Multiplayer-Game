@@ -66,4 +66,5 @@ MonoBehaviour:
   - RPC_ScorePoint
   - RPC_SetScore
   - ExecuteStop
+  - RPC_SetHabilities
   DisableAutoOpenWizard: 1

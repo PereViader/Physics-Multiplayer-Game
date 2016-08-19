@@ -27,6 +27,11 @@ public class CaptureScoreManager : Photon.MonoBehaviour {
         CaptureEvents.OnTeamScored += ScorePoint;
     }
 
+    void OnDestroy()
+    {
+        CaptureEvents.OnTeamScored -= ScorePoint;
+    }
+
     
 
     public void ScorePoint(int team)

@@ -13,12 +13,12 @@ public class HabilityManager : MonoBehaviour {
         habilities = new Hability[2];
         habilityName = new Text[2];
         habilityCooldown = new Text[2];
-        GameObject habilitiesUI = GameObject.Find("Canvas").transform.Find("HabilitiesUI").gameObject;
+        Transform habilitiesUI = GameObject.Find("Canvas").transform.Find("HabilitiesUI");
         for ( int i = 0; i < habilities.Length; i++)
         {
-            GameObject habilityUI = habilitiesUI.transform.GetChild(i).gameObject;
-            habilityName[i] = habilityUI.transform.Find("Name").GetComponent<Text>();
-            habilityCooldown[i] = habilityUI.transform.Find("Cooldown").GetComponent<Text>();
+            Transform habilityUI = habilitiesUI.GetChild(i);
+            habilityName[i] = habilityUI.Find("Name").GetComponent<Text>();
+            habilityCooldown[i] = habilityUI.Find("Cooldown").GetComponent<Text>();
         }
         
         if (PhotonNetwork.isMasterClient)
@@ -47,11 +47,11 @@ public class HabilityManager : MonoBehaviour {
             randomHability2 = GetRandomHabilityID();
         } while (randomHability2 == randomHability1);
 
-        GetComponent<PhotonView>().RPC("NetworkAddRandomHability", PhotonTargets.AllBuffered, randomHability1,randomHability2);
+        GetComponent<PhotonView>().RPC("RPC_SetHabilities", PhotonTargets.AllBuffered, randomHability1,randomHability2);
     }
 
     [PunRPC]
-    public void NetworkAddRandomHability(int hability1Index, int hability2Index)
+    public void RPC_SetHabilities(int hability1Index, int hability2Index)
     {
         habilities[0] = AddHability("Hability" + 1, hability1Index);
         habilities[1] = AddHability("Hability" + 2, hability2Index);
