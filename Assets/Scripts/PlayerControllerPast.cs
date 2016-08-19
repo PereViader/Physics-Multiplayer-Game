@@ -15,7 +15,6 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     private ShootingController shootingController;
     private Rigidbody rb;
 
-
     private Vector3 currentMovementForce;
 
     bool isOwnPlayer = false;
@@ -30,7 +29,7 @@ public class PlayerControllerPast : Photon.MonoBehaviour
 
     void Update()
     {
-        if (isOwnPlayer)
+        if (isOwnPlayer && !PauseMenuManager.isPausePanelActive)
         {
             if (!isShooting && Input.GetAxis("Fire1") > 0 && isInputEnabled)
             {
@@ -45,19 +44,28 @@ public class PlayerControllerPast : Photon.MonoBehaviour
         isShooting = true;
 
 
-        while (Input.GetAxis("Fire1") > 0)
+        while (Input.GetAxis("Fire1") > 0 && !(Input.GetAxis("Fire2")>0))
         {
             yield return null;
         }
 
-        float power = shootingController.getPower();
-        shootingController.SetActive(false);
 
-        Vector3 force = InputGetter.GetDirection() * power * speed;
+        if (Input.GetAxis("Fire2") > 0)
+        {
+            shootingController.SetActive(false);
+            yield return new WaitForSeconds(_timeBetweenShoots);
+            isShooting = false;
+        } else
+        {
+            float power = shootingController.getPower();
+            shootingController.SetActive(false);
 
-        GetComponent<PhotonView>().RPC("ShootPlayer", PhotonTargets.MasterClient, force);
-        yield return new WaitForSeconds(_timeBetweenShoots);
-        isShooting = false;
+            Vector3 force = InputGetter.GetDirection() * power * speed;
+
+            GetComponent<PhotonView>().RPC("ShootPlayer", PhotonTargets.MasterClient, force);
+            yield return new WaitForSeconds(_timeBetweenShoots);
+            isShooting = false;
+        }
     }
 
     [PunRPC]
@@ -74,11 +82,11 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     public void SetOwnPlayer(bool isOwn)
     {
         isOwnPlayer = isOwn;
+        GetComponent<HabilityManager>().ActivateInputCaptureForHabilities();
     }
 
     void OnDestroy()
     {
-
         shootingController.SetActive(false);
     }
 }

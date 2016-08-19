@@ -6,17 +6,20 @@ using UnityEngine.Events;
 
 public class PauseMenuManager : MonoBehaviour {
 
+    public static PauseMenuManager pauseMenuManager;
+
     private GameObject pausePanel;
 
     MouseController mouseController;
 
-    private PlayerControllerPast playerController;
-    private CameraFollow cameraController;
-
-    private bool isPausePanelVisible = false;
+    public static bool isPausePanelActive = false;
 
     void Awake()
     {
+        if (pauseMenuManager == null)
+            pauseMenuManager = this;
+        else
+            Debug.Log("There should be only one pause menu manager");
         mouseController = GetComponent<MouseController>();
         pausePanel = GameObject.Find("Canvas").transform.Find("PausePanel").gameObject;
         if (!pausePanel)
@@ -28,14 +31,9 @@ public class PauseMenuManager : MonoBehaviour {
     {
         if (Input.GetButtonDown("Pause"))
         {
-            if (playerController != null) {
-                playerController.SetInput(isPausePanelVisible);
-                cameraController.SetInput(isPausePanelVisible);
-                mouseController.SetCursorHidden(isPausePanelVisible);
-
-                isPausePanelVisible = !isPausePanelVisible;
-                pausePanel.SetActive(isPausePanelVisible);
-            }
+            mouseController.SetCursorHidden(isPausePanelActive);
+            isPausePanelActive = !isPausePanelActive;
+            pausePanel.SetActive(isPausePanelActive);
         }
     }
 
@@ -49,15 +47,5 @@ public class PauseMenuManager : MonoBehaviour {
     public void OnLeftRoom()
     {
         SceneManager.LoadScene(0);
-    }
-
-    public void SetPlayer(PlayerControllerPast player)
-    {
-        playerController = player;
-    }
-
-    public void SetCamera(CameraFollow camera)
-    {
-        cameraController = camera;
     }
 }

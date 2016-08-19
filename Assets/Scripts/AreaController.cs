@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class AreaController : MonoBehaviour {
+public class AreaController : MonoBehaviour
+{
 
-    
+
 
     [SerializeField]
     float captureToDo;
@@ -15,29 +16,32 @@ public class AreaController : MonoBehaviour {
     [SerializeField]
     float uncaptureDecreaseRate;
 
-    List<GameObject> playersInside;
-    Dictionary<int, float> captureDone;
+    [SerializeField]
+    float fillSpeed;
 
+    List<GameObject> playersInside;
+    float[] captureDone;
     CaptureGameController gameManager;
 
     bool isCaptured;
     int teamWhoCaptured;
 
-    Image redCapture;
-    Image greenCapture;
+    Image[] capture;
+    float[] lastCaptureValue;
+
 
     void Awake()
     {
         isCaptured = false;
         teamWhoCaptured = -1;
 
-        redCapture = GameObject.Find("Canvas/CaptureUI/RedCapture/Inside").GetComponent<Image>();
-        greenCapture = GameObject.Find("Canvas/CaptureUI/GreenCapture/Inside").GetComponent<Image>();
+        capture = new Image[2];
+        lastCaptureValue = new float[2];
+        capture[0] = GameObject.Find("Canvas/CaptureUI/RedCapture/Inside").GetComponent<Image>();
+        capture[1] = GameObject.Find("Canvas/CaptureUI/GreenCapture/Inside").GetComponent<Image>();
 
         playersInside = new List<GameObject>();
-        captureDone = new Dictionary<int, float>();
-        captureDone.Add(1, 0f);
-        captureDone.Add(2, 0f);
+        captureDone = new float[2];
     }
 
     void Update()
@@ -54,38 +58,33 @@ public class AreaController : MonoBehaviour {
         UpdateCaptureUI();
     }
 
-
-    float lastRedCaptureValue;
-    float lastGreenCaptureValue;
-
-
-    [SerializeField]
-    float fillSpeed;
     void UpdateCaptureUI()
     {
-        if (PhotonNetwork.isMasterClient)
-        {
-            redCapture.fillAmount = captureDone[1] / 10f;
-            greenCapture.fillAmount = captureDone[2] / 10f;
-        } else
-        {
-            //lerp
-            float newRedValue = Mathf.Lerp(lastRedCaptureValue, captureDone[1] / 10f, fillSpeed * Time.deltaTime);
-            redCapture.fillAmount = newRedValue;
-            lastRedCaptureValue = newRedValue;
-
-            float newGreenValue = Mathf.Lerp(lastGreenCaptureValue, captureDone[2] / 10f, fillSpeed * Time.deltaTime);
-            greenCapture.fillAmount = newGreenValue;
-            lastGreenCaptureValue = newGreenValue;
-        }
+        if (!isCaptured)
+            if (PhotonNetwork.isMasterClient)
+            {
+                for (int i = 0; i < capture.Length; i++)
+                    capture[i].fillAmount = captureDone[i] / 10f;
+            }
+            else
+            {
+                //lerp
+                for (int i = 0; i < capture.Length; i++)
+                {
+                    float newValue = Mathf.Lerp(lastCaptureValue[i], captureDone[i] / 10f, fillSpeed * Time.deltaTime);
+                    capture[i].fillAmount = newValue;
+                    lastCaptureValue[i] = newValue;
+                }
+            }
     }
 
     void ResetCaptureUI()
     {
-        redCapture.fillAmount = 0f;
-        greenCapture.fillAmount = 0f;
-        lastRedCaptureValue = 0f;
-        lastGreenCaptureValue = 0f;
+        for (int i = 0; i < capture.Length; i++)
+        {
+            lastCaptureValue[i] = 0f;
+            capture[i].fillAmount = 0f;
+        }
     }
 
     void UpdateCapture()
@@ -97,13 +96,9 @@ public class AreaController : MonoBehaviour {
         {
             PhotonPlayer photonPlayer = player.GetComponent<PhotonPlayerOwner>().GetOwner();
             int playerTeam = (int)photonPlayer.customProperties["Team"];
-            if (teamInside == -1)
+            if (teamInside == -1 || teamInside == playerTeam)
             {
                 teamInside = playerTeam;
-                playersFromTeam += 1;
-            }
-            else if (teamInside == playerTeam)
-            {
                 playersFromTeam += 1;
             }
             else
@@ -112,16 +107,16 @@ public class AreaController : MonoBehaviour {
                 break;
             }
         }
-        
-        if ( !multipleTeamsInside )
+
+        if (!multipleTeamsInside)
         {
-            for (int i = 1; i<=captureDone.Count; i++) 
+            for (int i = 0; i < captureDone.Length; i++)
             {
-                float value = captureDone[i]; 
-                if ( teamInside == i )
+                float value = captureDone[i];
+                if (teamInside == i)
                     value += (basicIncreaseRate + (extraIncreaseRate * playersFromTeam - 1)) * Time.deltaTime;
                 else
-                    value -= uncaptureDecreaseRate*Time.deltaTime;
+                    value -= uncaptureDecreaseRate * Time.deltaTime;
                 captureDone[i] = Mathf.Clamp(value, 0f, captureToDo);
             }
         }
@@ -129,13 +124,13 @@ public class AreaController : MonoBehaviour {
 
     void CheckIfAreaIsCaptured()
     {
-        foreach (var team in captureDone)
+        for (int i = 0; i < captureDone.Length; i++)
         {
-            if ( team.Value == captureToDo)
+            if (captureDone[i] == captureToDo)
             {
-                teamWhoCaptured = team.Key;
+                teamWhoCaptured = i;
                 isCaptured = true;
-                gameManager.GetComponent<PhotonView>().RPC("TeamScored", PhotonTargets.AllBufferedViaServer, teamWhoCaptured);
+                CaptureEvents.CallOnTeamScored(teamWhoCaptured);
                 break;
             }
         }
@@ -143,10 +138,10 @@ public class AreaController : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if ( other.tag == "Player")
+        if (other.tag == "Player")
         {
             playersInside.Add(other.gameObject);
-            
+
         }
     }
 
@@ -166,12 +161,7 @@ public class AreaController : MonoBehaviour {
         }
         else
         {
-            captureDone = (Dictionary<int, float>)stream.ReceiveNext();
+            captureDone = (float[])stream.ReceiveNext();
         }
-    }
-
-    public void SetGameManager(CaptureGameController gameManager)
-    {
-        this.gameManager = gameManager;
     }
 }

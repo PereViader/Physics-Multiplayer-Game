@@ -15,6 +15,14 @@ public class PlayerFollower : MonoBehaviour {
     [SerializeField]
     bool canTeleport;
 
+    CameraFollow cameraFollow;
+
+    void Awake()
+    {
+        CaptureEvents.OnLocalPlayerSpawned += SetPlayer;
+        cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraFollow>();
+    }
+
     void FixedUpdate()
     {
         if (player)
@@ -24,12 +32,12 @@ public class PlayerFollower : MonoBehaviour {
             else
                 transform.position = Vector3.Lerp(transform.position, player.position, lerpFactor * Time.fixedDeltaTime);
         }
-        else
-            Destroy(gameObject);
     }
 
-    public void setPlayer(GameObject toFollow)
+    public void SetPlayer(GameObject toFollow)
     {
         player = toFollow.transform;
+        transform.position = player.position;
+        cameraFollow.SetObjectToFollow(gameObject);
     }
 }

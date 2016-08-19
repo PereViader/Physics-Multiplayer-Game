@@ -11,14 +11,12 @@ public class HabilityPush : Hability {
 
     private bool isBlocked = false;
 
-    CaptureGameController gameManager;
     PhotonPlayerOwner photonPlayerOwner;
 
     // Update is called once per frame
     void Awake()
     {
         photonPlayerOwner = GetComponent<PhotonPlayerOwner>();
-        gameManager = GameObject.Find("GameManager(Clone)").GetComponent<CaptureGameController>();
         cooldown = 1f;
     }
 
@@ -27,14 +25,8 @@ public class HabilityPush : Hability {
         if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
         {
             isBlocked = true;
-            photonView.RPC("ExecutePushServer", PhotonTargets.MasterClient);
+            photonView.RPC("ExecutePush", PhotonTargets.AllViaServer);
         }
-    }
-
-    [PunRPC]
-    void ExecutePushServer()
-    {
-        photonView.RPC("ExecutePush", PhotonTargets.All);
     }
 
     [PunRPC]
@@ -44,7 +36,7 @@ public class HabilityPush : Hability {
         onCooldown = true;
         isBlocked = false;
         int playerTeam = (int)photonPlayerOwner.GetOwner().customProperties["Team"];
-        foreach (GameObject other in gameManager.GetOtherTeamsPlayers(playerTeam))
+        foreach (GameObject other in PlayerManager.playerManager.GetOtherTeamsPlayers(playerTeam))
         {
             RaycastHit hit;
             bool hasHit = Physics.Raycast(transform.position, other.transform.position - transform.position, out hit, pushRange);

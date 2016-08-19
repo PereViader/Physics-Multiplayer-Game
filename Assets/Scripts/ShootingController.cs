@@ -4,7 +4,7 @@ using System.Collections;
 
 public class ShootingController : MonoBehaviour {
 
-    GameObject shootingControllerUI;
+    GameObject powerBar;
 
 	private Image movingBar;
 
@@ -20,8 +20,8 @@ public class ShootingController : MonoBehaviour {
 
     void Awake()
     {
-        shootingControllerUI = GameObject.Find("Canvas").transform.Find("PowerBar").gameObject;
-        movingBar = shootingControllerUI.transform.GetChild(0).GetComponent<Image>();
+        powerBar = GameObject.Find("Canvas").transform.Find("PowerBar").gameObject;
+        movingBar = powerBar.transform.GetChild(0).GetComponent<Image>();
     }
 
 	public void SetActive(bool state) {
@@ -29,7 +29,7 @@ public class ShootingController : MonoBehaviour {
         {
             isActive = state;
             if (state)
-                shootingControllerUI.SetActive(true);
+                powerBar.SetActive(true);
             else
             {
                 currentPower = 0f;
@@ -52,7 +52,7 @@ public class ShootingController : MonoBehaviour {
 
 	IEnumerator delayedDisappear() {
 		yield return new WaitForSeconds (timeToDisappear);
-        shootingControllerUI.SetActive(false);
+        powerBar.SetActive(false);
     }
 
 	public float getPower() {

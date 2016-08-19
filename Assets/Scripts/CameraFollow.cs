@@ -3,7 +3,6 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour
 {
-
     [SerializeField]
     Transform objectToFollow;
 
@@ -61,7 +60,7 @@ public class CameraFollow : MonoBehaviour
 
             float horizontal = 0f;
             float vertical = 0f;
-            if ( isInputEnabled )
+            if ( isInputEnabled && !PauseMenuManager.isPausePanelActive)
             {
                 horizontal = horizontalSensitivity * Input.GetAxis("CameraHorizontal");
                 vertical = verticalSensitivity * Input.GetAxis("CameraVertical");

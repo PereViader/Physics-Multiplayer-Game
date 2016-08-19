@@ -8,8 +8,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 450316}
-  - 114: {fileID: 11491822}
   - 114: {fileID: 11434946}
+  - 114: {fileID: 11491822}
+  - 114: {fileID: 11408952}
+  - 114: {fileID: 11424926}
+  - 114: {fileID: 11436180}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -30,6 +33,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11408952
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 191482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3d22216149af0042a02fe59524c9404, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamsInGame: 2
+  respawnTime: 2
+--- !u!114 &11424926
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 191482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c721e1f5a15581842b9d9982ee75058d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentCapture: {fileID: 0}
+  currentPosition: {fileID: 0}
 --- !u!114 &11434946
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -55,6 +84,17 @@ MonoBehaviour:
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &11436180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 191482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfb74c14d0ac6cd488e2692d37287c61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11491822
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -66,9 +106,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7490fa0615d0149b60f616a14c5e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBetweenCaptures: 2
-  team1Spawns: []
-  team2Spawns: []
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

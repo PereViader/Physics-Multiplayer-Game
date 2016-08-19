@@ -36,7 +36,7 @@ public class HabilityManager : MonoBehaviour {
 
     int GetRandomHabilityID()
     {
-        return Random.Range(0, 4);
+        return Random.Range(0, 5);
     }
 
     void AddRandomHabilities()
@@ -75,9 +75,12 @@ public class HabilityManager : MonoBehaviour {
             case 2:
                 hability = gameObject.AddComponent<HabilityPush>();
                 break;
-            default:
             case 3:
                 hability = gameObject.AddComponent<HabilityShrink>();
+                break;
+            case 4:
+            default:
+                hability = gameObject.AddComponent<HabilityStop>();
                 break;
         }
         hability.SetVirtualKey(habilityVirtualKey);

@@ -17,20 +17,14 @@ public class HabilityGuard : Hability {
         cooldown = 4f;
     }
 
-    protected override void Update()
+    override protected void Update()
     {
         base.Update();
         if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
         {
             isBlocked = true;
-            photonView.RPC("ExecuteGuardServer", PhotonTargets.MasterClient);
+            photonView.RPC("ExecuteGuard", PhotonTargets.AllViaServer);
         }
-    }
-
-    [PunRPC]
-    void ExecuteGuardServer()
-    {
-        photonView.RPC("ExecuteGuard", PhotonTargets.All);
     }
 
     [PunRPC]

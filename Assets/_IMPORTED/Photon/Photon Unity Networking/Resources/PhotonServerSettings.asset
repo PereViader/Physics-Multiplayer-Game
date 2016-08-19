@@ -63,4 +63,7 @@ MonoBehaviour:
   - NotifyPlayerKilledAndQueueRespawn
   - UnregisterPlayer
   - ExecuteShrink
+  - RPC_ScorePoint
+  - RPC_SetScore
+  - ExecuteStop
   DisableAutoOpenWizard: 1
