@@ -29,7 +29,10 @@ public class ShootingController : MonoBehaviour {
         {
             isActive = state;
             if (state)
+            {
                 powerBar.SetActive(true);
+                StopAllCoroutines();
+            }
             else
             {
                 currentPower = 0f;

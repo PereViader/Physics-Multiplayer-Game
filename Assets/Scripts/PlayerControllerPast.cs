@@ -53,7 +53,10 @@ public class PlayerControllerPast : Photon.MonoBehaviour
         if (Input.GetAxis("Fire2") > 0)
         {
             shootingController.SetActive(false);
-            yield return new WaitForSeconds(_timeBetweenShoots);
+            while (Input.GetAxis("Fire1") > 0)
+            {
+                yield return null;
+            }
             isShooting = false;
         } else
         {
