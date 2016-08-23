@@ -11,6 +11,7 @@ public class CaptureEvents {
     public static event GameObjectDelegate OnCaptureZoneCreated;
 
     public static event IntegerDelegate OnTeamScored;
+    public static event IntegerDelegate OnGameEnded;
 
     //public static event EmptyDelegate OnInputCaptureChange;
 
@@ -30,6 +31,15 @@ public class CaptureEvents {
     {
         if (OnTeamScored != null)
             OnTeamScored(team);
+    }
+
+    public static void CallOnGameEnded(int team)
+    { 
+        if (OnGameEnded != null)
+        {
+            OnGameEnded(team);
+
+        }
     }
 
 

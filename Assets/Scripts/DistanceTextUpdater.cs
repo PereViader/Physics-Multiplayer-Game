@@ -3,21 +3,21 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class DistanceTextUpdater : MonoBehaviour {
-
+    /*
     Text distanceText;
     GameObject distanceObject;
 
     void Awake()
     {
-        distanceObject = CaptureZoneManager.captureZoneManager.GetCurrentCaptureZone();
-        distanceText = GameObject.Find("Canvas").transform.Find("DistanceText").GetComponent<Text>();
-        SetObject(CaptureZoneManager.captureZoneManager.currentCapture);
+        //distanceText = GameObject.Find("Canvas").transform.Find("DistanceText").GetComponent<Text>();
         CaptureEvents.OnCaptureZoneCreated += SetObject;
+        SetObject(CaptureZoneManager.captureZoneManager.GetCurrentCaptureZone());
     }
 
     void Start()
     {
-        distanceText.gameObject.SetActive(true);
+        if (CaptureZoneManager.captureZoneManager == null)
+            Debug.Log("null");
     }
 
     void OnDestroy()
@@ -36,6 +36,7 @@ public class DistanceTextUpdater : MonoBehaviour {
 
     public void SetObject(GameObject other)
     {
+        //distanceText.gameObject.SetActive(true);
         distanceObject = other;
-    }
+    }*/
 }

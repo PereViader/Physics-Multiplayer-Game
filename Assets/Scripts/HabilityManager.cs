@@ -9,6 +9,8 @@ public class HabilityManager : MonoBehaviour {
     private Text[] habilityName;
     private Text[] habilityCooldown;
 
+    private bool areHabilitiesSet;
+
 	void Awake () {
         habilities = new Hability[2];
         habilityName = new Text[2];
@@ -23,15 +25,16 @@ public class HabilityManager : MonoBehaviour {
         
         if (PhotonNetwork.isMasterClient)
             AddRandomHabilities();
-
+        
     }
 
     void Update()
     {
-        for (int i = 0; i < habilities.Length; i++)
-        {
-            habilityCooldown[i].text = (habilities[i].GetCurrentCooldown()).ToString("0.0");
-        }
+        if (areHabilitiesSet)
+            for (int i = 0; i < habilities.Length; i++)
+            {
+                habilityCooldown[i].text = (habilities[i].GetCurrentCooldown()).ToString("0.0");
+            }
     }
 
     int GetRandomHabilityID()
@@ -53,6 +56,7 @@ public class HabilityManager : MonoBehaviour {
     [PunRPC]
     public void RPC_SetHabilities(int hability1Index, int hability2Index)
     {
+        areHabilitiesSet = true;
         habilities[0] = AddHability("Hability" + 1, hability1Index);
         habilities[1] = AddHability("Hability" + 2, hability2Index);
         for (int i = 0; i<habilities.Length; i++)

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamsInGame: 2
-  respawnTime: 2
+  respawnTime: 1.5
 --- !u!114 &11424926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfb74c14d0ac6cd488e2692d37287c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxScore: 10
 --- !u!114 &11491822
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -25,27 +25,29 @@ PluginImporter:
         DefaultValueInitialized: true
         OS: AnyOS
     Linux:
-      enabled: 1
+      enabled: 0
       settings:
-        CPU: x86
+        CPU: None
     Linux64:
-      enabled: 1
+      enabled: 0
       settings:
-        CPU: x86_64
+        CPU: None
     LinuxUniversal:
-      enabled: 1
-      settings: {}
+      enabled: 0
+      settings:
+        CPU: None
     OSXIntel:
-      enabled: 1
+      enabled: 0
       settings:
-        CPU: AnyCPU
+        CPU: None
     OSXIntel64:
-      enabled: 1
+      enabled: 0
       settings:
-        CPU: AnyCPU
+        CPU: None
     OSXUniversal:
-      enabled: 1
-      settings: {}
+      enabled: 0
+      settings:
+        CPU: None
     PS4:
       enabled: 1
       settings: {}

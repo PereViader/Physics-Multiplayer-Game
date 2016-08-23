@@ -3,7 +3,8 @@ using System.Collections;
 
 public class MouseController : MonoBehaviour {
 
-
+    [SerializeField]
+    bool isActive;
 
 	void Awake()
     {
@@ -12,14 +13,15 @@ public class MouseController : MonoBehaviour {
 
     public void SetCursorHidden(bool state)
     {
-        if (state && !Application.isEditor)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        } else
-        {
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
-        }
+        if (isActive)
+            if ( state && !Application.isEditor)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            } else
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+            }
     }
 }

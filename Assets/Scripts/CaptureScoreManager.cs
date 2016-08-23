@@ -11,6 +11,9 @@ public class CaptureScoreManager : Photon.MonoBehaviour {
 
     CaptureZoneManager captureZoneManger;
 
+    [SerializeField]
+    int maxScore;
+
     void Awake()
     {
         if (captureScoreManager == null)
@@ -45,6 +48,11 @@ public class CaptureScoreManager : Photon.MonoBehaviour {
     {
         score[team] += 1;
         scoreUI[team].text = score[team].ToString();
+
+        if (score[team] == maxScore)
+        {
+            CaptureEvents.CallOnGameEnded(team);
+        }
     }
 
 
