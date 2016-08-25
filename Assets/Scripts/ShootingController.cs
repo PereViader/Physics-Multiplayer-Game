@@ -24,14 +24,20 @@ public class ShootingController : MonoBehaviour {
         movingBar = powerBar.transform.GetChild(0).GetComponent<Image>();
     }
 
+    void OnDestroy()
+    {
+        SetVisible(false);
+        StopAllCoroutines();
+    }
+
 	public void SetActive(bool state) {
         if (state != isActive)
         {
             isActive = state;
-            if (state)
+            if (isActive)
             {
-                powerBar.SetActive(true);
                 StopAllCoroutines();
+                SetVisible(true);
             }
             else
             {
@@ -40,6 +46,8 @@ public class ShootingController : MonoBehaviour {
             }
         }
     }
+
+
 
     public bool IsActive() { return isActive;  }
 
@@ -53,9 +61,15 @@ public class ShootingController : MonoBehaviour {
         }
     }
 
+    void SetVisible(bool state)
+    {
+        if ( powerBar != null )
+            powerBar.SetActive(state);
+    }
+
 	IEnumerator delayedDisappear() {
 		yield return new WaitForSeconds (timeToDisappear);
-        powerBar.SetActive(false);
+        SetVisible(false);
     }
 
 	public float getPower() {

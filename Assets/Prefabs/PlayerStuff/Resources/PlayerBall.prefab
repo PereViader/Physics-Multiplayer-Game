@@ -18,7 +18,6 @@ GameObject:
   - 114: {fileID: 11406696}
   - 114: {fileID: 11484894}
   - 114: {fileID: 11494432}
-  - 114: {fileID: 11485308}
   - 114: {fileID: 11452810}
   m_Layer: 0
   m_Name: PlayerBall
@@ -94,7 +93,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195234}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 949af520f72c80d40b046d25386fbdad, type: 3}
   m_Name: 
@@ -111,8 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3000
-  _timeBetweenShoots: 0.4
-  timeBeforeShoots: 19.18
+  shootCooldown: 0
 --- !u!114 &11440822
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -149,6 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2755b001361e03b4dae584146bec8771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  correctingLerp: 17
 --- !u!114 &11476590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -169,17 +168,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b583dd3c1d747d841859058403bbba0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &11485308
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 195234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c57d21610f244074792b49d6c79eecfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11494432

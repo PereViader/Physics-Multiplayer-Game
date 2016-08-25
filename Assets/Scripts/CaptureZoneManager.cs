@@ -35,8 +35,6 @@ public class CaptureZoneManager : MonoBehaviour {
 
         currentPosition = getDiferentRandomCapturePosition();
         currentCapture = (GameObject)PhotonNetwork.Instantiate("Capture Zone", currentPosition.position, Quaternion.identity, 0);
-
-        CaptureEvents.CallOnCaptureZoneCreated(currentCapture);
     }
 
     public Transform getDiferentRandomCapturePosition()

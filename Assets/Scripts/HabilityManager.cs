@@ -12,6 +12,7 @@ public class HabilityManager : MonoBehaviour {
     private bool areHabilitiesSet;
 
 	void Awake () {
+        CaptureEvents.OnLocalPlayerSpawned += SetPlayer;
         habilities = new Hability[2];
         habilityName = new Text[2];
         habilityCooldown = new Text[2];
@@ -25,78 +26,39 @@ public class HabilityManager : MonoBehaviour {
         
         if (PhotonNetwork.isMasterClient)
             AddRandomHabilities();
-        
-    }
+    }    
 
-    void Update()
+    void OnDestroy()
     {
-        if (areHabilitiesSet)
-            for (int i = 0; i < habilities.Length; i++)
-            {
-                habilityCooldown[i].text = (habilities[i].GetCurrentCooldown()).ToString("0.0");
-            }
-    }
-
-    int GetRandomHabilityID()
-    {
-        return Random.Range(0, 5);
+        CaptureEvents.OnLocalPlayerSpawned -= SetPlayer;
     }
 
     void AddRandomHabilities()
     {
-        int randomHability1 = GetRandomHabilityID();
-        int randomHability2;
-        do{
-            randomHability2 = GetRandomHabilityID();
-        } while (randomHability2 == randomHability1);
-
-        GetComponent<PhotonView>().RPC("RPC_SetHabilities", PhotonTargets.AllBuffered, randomHability1,randomHability2);
+        int[] sHabilities = new int[habilities.Length];
+        HabilityFabric.FillWithRandomHabilityIndex(ref sHabilities);
+        GetComponent<PhotonView>().RPC("RPC_SetHabilities", PhotonTargets.AllBuffered, sHabilities);
     }
 
     [PunRPC]
-    public void RPC_SetHabilities(int hability1Index, int hability2Index)
+    public void RPC_SetHabilities(int[] sHabilities)
     {
         areHabilitiesSet = true;
-        habilities[0] = AddHability("Hability" + 1, hability1Index);
-        habilities[1] = AddHability("Hability" + 2, hability2Index);
-        for (int i = 0; i<habilities.Length; i++)
+        for ( int i = 0; i < habilities.Length; i++)
         {
-            habilityName[i].text = habilities[i].GetHabilityName();
+            System.Type habilityType = HabilityFabric.GethabilityType(sHabilities[i]);
+            habilities[i] = (Hability)gameObject.AddComponent(habilityType);
+            habilities[i].SetVirtualKey("Hability" + (i + 1));
+            habilities[i].enabled = false;
         }
     }
-
-    Hability AddHability (string habilityVirtualKey, int habilityNumber)
+    
+    void SetPlayer(GameObject player)
     {
-        Hability hability; 
-        switch (habilityNumber)
+        if ( player == gameObject)
         {
-            case 0:
-                hability = gameObject.AddComponent<HabilityJump>();
-                break;
-            case 1:
-                hability = gameObject.AddComponent<HabilityGuard>();
-                break;
-            case 2:
-                hability = gameObject.AddComponent<HabilityPush>();
-                break;
-            case 3:
-                hability = gameObject.AddComponent<HabilityShrink>();
-                break;
-            case 4:
-            default:
-                hability = gameObject.AddComponent<HabilityStop>();
-                break;
+            foreach (Hability h in habilities)
+                h.enabled = true;
         }
-        hability.SetVirtualKey(habilityVirtualKey);
-        hability.enabled = false;
-        return hability;
-    }
-
-    public void ActivateInputCaptureForHabilities()
-    {
-        foreach ( Hability hability in habilities)
-        {
-            hability.enabled = true;
-        }
-    }
+    }    
 }

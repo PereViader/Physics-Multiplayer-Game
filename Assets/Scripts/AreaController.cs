@@ -43,6 +43,14 @@ public class AreaController : MonoBehaviour
         playersInside = new List<GameObject>();
         captureDone = new float[2];
     }
+    void Start() {
+        CaptureEvents.CallOnCaptureZoneCreated(gameObject);
+    }
+
+    void OnDestroy()
+    {
+        CaptureEvents.CallOnCaptureZoneDestroyed(gameObject);
+    }
 
     void Update()
     {

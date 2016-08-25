@@ -106,7 +106,7 @@ public class PlayerManager : Photon.MonoBehaviour {
     public void GiveControlToPlayer(int playerViewId)
     {
         GameObject player = PhotonView.Find(playerViewId).gameObject;
-        player.GetComponent<PlayerControllerPast>().SetOwnPlayer(true);
+        //player.GetComponent<PlayerControllerPast>().SetOwnPlayer(true);
 
         CaptureEvents.CallOnLocalPlayerSpawned(player);
     }
