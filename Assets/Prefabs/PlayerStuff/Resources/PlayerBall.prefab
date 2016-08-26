@@ -19,6 +19,7 @@ GameObject:
   - 114: {fileID: 11484894}
   - 114: {fileID: 11494432}
   - 114: {fileID: 11452810}
+  - 114: {fileID: 11489792}
   m_Layer: 0
   m_Name: PlayerBall
   m_TagString: Player
@@ -81,7 +82,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 70
   m_Drag: 1
-  m_AngularDrag: 0.68
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -98,13 +99,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 949af520f72c80d40b046d25386fbdad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberOfHabilities: 2
 --- !u!114 &11430554
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195234}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbffe27f2ce643a42a810d629e42d6bc, type: 3}
   m_Name: 
@@ -168,6 +170,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b583dd3c1d747d841859058403bbba0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastHitDuration: 5
+--- !u!114 &11489792
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 195234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af0775174c2b41f498f3fb86115ddcd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11494432
