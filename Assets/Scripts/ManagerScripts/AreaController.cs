@@ -59,10 +59,6 @@ public class AreaController : MonoBehaviour
             UpdateCapture();
             CheckIfAreaIsCaptured();
         }
-    }
-
-    void LateUpdate()
-    {
         UpdateCaptureUI();
     }
 

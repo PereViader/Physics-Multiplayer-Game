@@ -9,39 +9,22 @@ public class PlayerHealth : MonoBehaviour {
     int lastHitDuration;
 
     WaitForSeconds removeDelay;
+    PhotonPlayerOwner myself;
 
     void Awake()
     {
+        myself = GetComponent<PhotonPlayerOwner>();
         removeDelay = new WaitForSeconds(lastHitDuration);
     }
 
+
+    // Matar el jugador
 	void OnTriggerEnter(Collider other)
     {
         if ( other.tag == "DeadZone" && PhotonNetwork.isMasterClient)
         {
             KillPlayer();
         }
-    }
-
-    void OnCollisionEnter(Collision other)
-    {
-        if ( other.gameObject.tag == "Player" )
-        {
-            PhotonPlayerOwner owner = other.gameObject.GetComponent<PhotonPlayerOwner>();
-            int team = owner.GetTeam();
-            if ( team != (int)PhotonNetwork.player.customProperties["Team"])
-            {
-                StopCoroutine("SetAndRemovePlayer");
-                StartCoroutine(SetAndRemovePlayer(owner.GetOwner()));
-            }
-        }
-    }
-
-    IEnumerator SetAndRemovePlayer(PhotonPlayer player)
-    {
-        lastPlayerHit = player;
-        yield return removeDelay;
-        lastPlayerHit = null;
     }
 
     void KillPlayer()
@@ -52,13 +35,36 @@ public class PlayerHealth : MonoBehaviour {
 
     void CallKillEvents()
     {
-        if (GetComponent<PhotonPlayerOwner>().GetOwner() == PhotonNetwork.player)
+        if (myself.GetOwner() == PhotonNetwork.player)
         {
             CaptureEvents.CallOnLocalPlayerKilled(gameObject);
-            if ( lastPlayerHit != null )
+            if (lastPlayerHit != null)
             {
-                CaptureEvents.CallOnPlayerKilled(lastPlayerHit);
+                CaptureEvents.CallOnPlayerKilled(lastPlayerHit,myself.GetOwner());
             }
         }
+    }
+
+
+    // Establir la persona contra la que xoca per despres si mor aquesta fitxa donarli punts
+    void OnCollisionEnter(Collision other)
+    {
+        if ( other.gameObject.tag == "Player" )
+        {
+            PhotonPlayerOwner owner = other.gameObject.GetComponent<PhotonPlayerOwner>();
+            int otherPlayerTeam = owner.GetTeam();
+            if ( otherPlayerTeam != myself.GetTeam() )
+            {
+                StopAllCoroutines();
+                StartCoroutine(SetAndRemovePlayer(owner.GetOwner()));
+            }
+        }
+    }
+
+    IEnumerator SetAndRemovePlayer(PhotonPlayer player)
+    {
+        lastPlayerHit = player;
+        yield return removeDelay;
+        lastPlayerHit = null;
     }
 }

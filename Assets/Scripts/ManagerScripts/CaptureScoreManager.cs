@@ -35,8 +35,6 @@ public class CaptureScoreManager : Photon.MonoBehaviour {
         CaptureEvents.OnTeamScored -= ScorePoint;
     }
 
-    
-
     public void ScorePoint(int team)
     {
         photonView.RPC("RPC_ScorePoint", PhotonTargets.All, team);

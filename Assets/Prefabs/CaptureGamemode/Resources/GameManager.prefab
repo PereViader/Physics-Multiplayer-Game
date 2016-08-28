@@ -13,6 +13,7 @@ GameObject:
   - 114: {fileID: 11408952}
   - 114: {fileID: 11424926}
   - 114: {fileID: 11436180}
+  - 114: {fileID: 11436008}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -84,6 +85,22 @@ MonoBehaviour:
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &11436008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 191482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2810ad2743dfbef4882e8b6b2cb514ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scorePoints: 50
+  captureHelpScore: 5
+  killScore: 25
+  winGame: 500
+  lateJoin: 250
 --- !u!114 &11436180
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfb74c14d0ac6cd488e2692d37287c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxScore: 10
+  maxScore: 1
 --- !u!114 &11491822
 MonoBehaviour:
   m_ObjectHideFlags: 1

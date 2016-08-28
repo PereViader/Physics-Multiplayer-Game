@@ -5,7 +5,7 @@ public class CaptureEvents {
 
     public delegate void GameObjectDelegate (GameObject gameObject);
     public delegate void IntegerDelegate(int integer);
-    public delegate void PhotonPlayerDelegate(PhotonPlayer photonPlayer);
+    public delegate void DoublePhotonPlayerDelegate(PhotonPlayer photonPlayer1, PhotonPlayer player2);
 
     public delegate void EmptyDelegate();
 
@@ -14,19 +14,17 @@ public class CaptureEvents {
     public static event GameObjectDelegate OnCaptureZoneCreated;
     public static event GameObjectDelegate OnCaptureZoneDestroyed;
 
-    public static event PhotonPlayerDelegate OnPlayerKilled;
-
-    public static event EmptyDelegate OnJoinedStartedGame;
+    public static event DoublePhotonPlayerDelegate OnPlayerKilled;
 
     public static event IntegerDelegate OnTeamScored;
     public static event IntegerDelegate OnGameEnded;
 
     //public static event EmptyDelegate OnInputCaptureChange;
 
-    public static void CallOnPlayerKilled(PhotonPlayer killer)
+    public static void CallOnPlayerKilled(PhotonPlayer killer, PhotonPlayer killed)
     {
         if (OnPlayerKilled != null)
-            OnPlayerKilled(killer);
+            OnPlayerKilled(killer, killed);
     }
 
     public static void CallOnCaptureZoneCreated(GameObject captureZone)
