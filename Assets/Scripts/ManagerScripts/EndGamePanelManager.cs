@@ -4,14 +4,14 @@ using UnityEngine.UI;
 
 public class EndGamePanelManager : MonoBehaviour {
 
-    Text winLoseText;
-    Text playerExperienceText;
+    /*Text winLoseText;
+    Text playerExperienceText;*/
 
     void Awake()
     {
-        Transform endGamePanel = GameObject.Find("Canvas").transform.Find("EndGamePanel");
+        /*Transform endGamePanel = GameObject.Find("Canvas").transform.Find("EndGamePanel");
         winLoseText = endGamePanel.Find("WinLoseText").GetComponent<Text>();
-        playerExperienceText = endGamePanel.Find("ExperienceText").GetComponent<Text>();
+        playerExperienceText = endGamePanel.Find("ExperienceText").GetComponent<Text>();*/
     }
     
     public void SetScoreAndEndGame(int score, int teamWon)

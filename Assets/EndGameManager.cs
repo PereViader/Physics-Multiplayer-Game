@@ -4,16 +4,25 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class EndGameManager : MonoBehaviour {
-    public static bool gameWon;
+    public enum GameResult
+    {
+        Lose,
+        Win,
+        Tie
+    }
+
+    public static GameResult result;
     public static int experience;
 
     Text endGameText;
     Text scoreText;
 
 	void Awake () {
+        result = GameResult.Win;
+        experience = 3000;
         scoreText = GameObject.Find("GameScore").GetComponent<Text>();
         endGameText = GameObject.Find("EndGameText").GetComponent<Text>();
-        SetTitle(gameWon);
+        SetTitle(result);
         SetScore(experience);
     }
 
@@ -22,14 +31,19 @@ public class EndGameManager : MonoBehaviour {
         scoreText.text += score.ToString();
     }
 
-    void SetTitle(bool isWinner)
+    void SetTitle(GameResult result)
     {
-        if ( isWinner )
+        switch(result)
         {
-            endGameText.text = "You Win";
-        } else
-        {
-            endGameText.text = "You Lose";
+            case GameResult.Lose:
+                endGameText.text = "You Lose";
+                break;
+            case GameResult.Tie:
+                endGameText.text = "It's a Tie";
+                break;
+            case GameResult.Win:
+                endGameText.text = "You Win";
+                break;
         }
     }
 

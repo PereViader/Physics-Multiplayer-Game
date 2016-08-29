@@ -67,4 +67,5 @@ MonoBehaviour:
   - RPC_SetScore
   - ExecuteStop
   - RPC_SetHabilities
+  - Rpc_EndGame
   DisableAutoOpenWizard: 1
