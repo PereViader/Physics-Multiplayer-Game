@@ -25,19 +25,17 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour {
 
     public void OnGameModeSetup()
     {
-        foreach (PhotonPlayer player in PhotonNetwork.playerList)
-            InitializePlayer(player);
+        
     }
 
     public void OnGameModeEnded()
     {
-        foreach (PhotonPlayer player in PhotonNetwork.playerList)
-            player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.experience, experience[player.ID] } });
-    }
-
-    public void InitializePlayer(PhotonPlayer player)
-    {
-        experience.Add(player.ID, 0);
+        int nPlayers = PhotonNetwork.playerList.Length;
+        foreach(var playerExperience in experience)
+        {
+            PhotonPlayer player = PhotonPlayer.Find(playerExperience.Key);
+            player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.experience, playerExperience.Value } });
+        }
     }
 
     public void AddExperience(PhotonPlayer player, int amount)
@@ -48,7 +46,12 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour {
     [PunRPC]
     void RPC_AddExperience(int playerID, int amount )
     {
-        experience[playerID] += amount;
+        int previousExperience = 0;
+        if (!experience.TryGetValue(playerID, out previousExperience)){
+            experience.Add(playerID, 0);
+        }
+        experience[playerID] = previousExperience + amount;
+
         if ( PhotonNetwork.player.ID == playerID)
             experienceManagerUI.DisplayAddedExperience(amount);
     }
@@ -66,9 +69,7 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour {
             int playerTeam = (int)player.customProperties[PlayerProperties.team];
             if ( playerTeam == team )
             {
-                experience[player.ID] += amount;
-                if (PhotonNetwork.player == player)
-                    experienceManagerUI.DisplayAddedExperience(amount);
+                RPC_AddExperience(player.ID, amount);
             }
         }
     }

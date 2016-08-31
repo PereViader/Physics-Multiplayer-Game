@@ -31,6 +31,7 @@ public class Capture_AreaController : MonoBehaviour {
         playersInside = new List<GameObject>();
 
         captureDone = new float[teamsInGame];
+        lastCaptureValue = new float[teamsInGame];
         captureBars = Component.FindObjectOfType<CaptureUI_CaptureBars>();
         gameManager = Component.FindObjectOfType<Capture_GameManager>();
     }

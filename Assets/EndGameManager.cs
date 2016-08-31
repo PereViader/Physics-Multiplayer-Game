@@ -13,8 +13,18 @@ public class EndGameManager : MonoBehaviour {
         scoreText = GameObject.Find("GameScore").GetComponent<Text>();
         endGameText = GameObject.Find("EndGameText").GetComponent<Text>();
         PhotonPlayer player = PhotonNetwork.player;
-        PlayerProperties.GameResult result = (PlayerProperties.GameResult)player.customProperties[PlayerProperties.gameResult];
-        int experience = (int)player.customProperties[PlayerProperties.experience];
+        PlayerProperties.GameResult result = PlayerProperties.GameResult.None;
+        object oResult;
+        if (player.customProperties.TryGetValue(PlayerProperties.experience, out oResult))
+        {
+            result = (PlayerProperties.GameResult)oResult;
+        }
+        int experience = 0;
+        object oExperience;
+        if (player.customProperties.TryGetValue(PlayerProperties.experience, out oExperience))
+        {
+            experience = (int)oExperience;
+        }
         player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.gameResult, null }, { PlayerProperties.experience, null } });
         
         SetTitle(result);
