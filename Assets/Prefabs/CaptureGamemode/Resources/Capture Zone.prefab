@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   captureToDo: 10
-  basicIncreaseRate: 3
+  basicIncreaseRate: 6
   extraIncreaseRate: 1
   uncaptureDecreaseRate: 1
   fillSpeed: 8

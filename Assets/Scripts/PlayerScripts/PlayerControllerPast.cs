@@ -20,15 +20,15 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     Vector3 surfaceVector;
     void Awake()
     {
-        CaptureEvents.OnLocalPlayerSpawned += SetOwnPlayer;
         shootingController = GetComponent<ShootingController>();
         rb = GetComponent<Rigidbody>();
         surfaceVector = Quaternion.Euler(new Vector3(0, 0, 45)) * Vector3.right * transform.localScale.x;
     }
 
-    void OnDestroy()
+    void OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        CaptureEvents.OnLocalPlayerSpawned -= SetOwnPlayer;
+        int playerID = (int)photonView.instantiationData[0];
+        enabled = playerID == PhotonNetwork.player.ID;
     }
 
     void Update()
@@ -87,10 +87,5 @@ public class PlayerControllerPast : Photon.MonoBehaviour
     public void SetInput(bool isActive)
     {
         isInputEnabled = isActive;
-    }
-
-    public void SetOwnPlayer(GameObject other)
-    {
-        enabled = other == gameObject;
     }
 }

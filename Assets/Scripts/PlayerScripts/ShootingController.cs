@@ -4,24 +4,20 @@ using System.Collections;
 
 public class ShootingController : MonoBehaviour {
 
-    GameObject powerBar;
-
-	private Image movingBar;
-
     [SerializeField]
     private int powerIncrement;
 
     [SerializeField]
     private float timeToDisappear;
 
+    CaptureUI_PowerBarManager powerBar;
 
     private bool isActive = false;
 	private float currentPower;
 
     void Awake()
     {
-        powerBar = GameObject.Find("Canvas").transform.Find("PowerBar").gameObject;
-        movingBar = powerBar.transform.GetChild(0).GetComponent<Image>();
+        powerBar = Component.FindObjectOfType<CaptureUI_PowerBarManager>();
     }
 
     void OnDestroy()
@@ -57,7 +53,7 @@ public class ShootingController : MonoBehaviour {
         if ( isActive )
         {
             currentPower = Mathf.Clamp(currentPower + powerIncrement * Time.deltaTime, 0f, 1f);
-            movingBar.fillAmount = currentPower;
+            powerBar.SetFill(currentPower);
         }
     }
 

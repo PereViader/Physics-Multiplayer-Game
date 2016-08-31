@@ -7,6 +7,7 @@ public class PlayerSpawnManager {
 
     public PlayerSpawnManager(int teams)
     {
+        Debug.Log("Teams" + teams);
         spawns = new Transform[teams][];
         GameObject container;
 

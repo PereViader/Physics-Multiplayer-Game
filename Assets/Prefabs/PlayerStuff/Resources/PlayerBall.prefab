@@ -13,13 +13,13 @@ GameObject:
   - 135: {fileID: 13521136}
   - 54: {fileID: 5463120}
   - 114: {fileID: 11440822}
-  - 114: {fileID: 11476590}
   - 114: {fileID: 11430554}
   - 114: {fileID: 11406696}
   - 114: {fileID: 11484894}
   - 114: {fileID: 11494432}
   - 114: {fileID: 11452810}
   - 114: {fileID: 11489792}
+  - 114: {fileID: 11455704}
   m_Layer: 0
   m_Name: PlayerBall
   m_TagString: Player
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   correctingLerp: 17
---- !u!114 &11476590
+--- !u!114 &11455704
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 195234}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfaeac40d8a764f489f2f8a6eb218432, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f716f75058b3594a80138634aaec871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11484894

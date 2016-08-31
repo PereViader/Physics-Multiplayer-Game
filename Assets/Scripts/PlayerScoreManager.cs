@@ -18,22 +18,23 @@ public class PlayerScoreManager : Photon.MonoBehaviour {
     [SerializeField]
     int lateJoin;
 
-    Dictionary<PhotonPlayer, int> score;
-    EndGamePanelManager endGamePanel;
-
     void Awake()
     {
-        endGamePanel = GameObject.Find("Manager").GetComponent<EndGamePanelManager>();
-        score = new Dictionary<PhotonPlayer, int>();
-        foreach (PhotonPlayer player in PhotonNetwork.playerList)
-        {
-            Debug.Log("dasdasd1");
-            score.Add(player, 0);
-
-        }
         CaptureEvents.OnPlayerKilled += OnPlayerKilled;
         CaptureEvents.OnGameEnded += OnMatchEnded;
         CaptureEvents.OnTeamScored += OnTeamCaptured;
+        InitializeExperience();
+    }
+
+    void InitializeExperience()
+    {
+        foreach (PhotonPlayer player in PhotonNetwork.playerList)
+            InitializeExperience(player);
+    }
+
+    void InitializeExperience(PhotonPlayer player)
+    {
+        player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Experience", 0 } });
     }
 
     void OnDestroy()
@@ -41,64 +42,59 @@ public class PlayerScoreManager : Photon.MonoBehaviour {
         CaptureEvents.OnPlayerKilled -= OnPlayerKilled;
         CaptureEvents.OnGameEnded -= OnMatchEnded;
         CaptureEvents.OnTeamScored -= OnTeamCaptured;
-        foreach (var entry in score)
-        {
-            Debug.Log("player: " + entry.Key.name + " score: " + entry.Value);
-        }
-    }
-
-    void OnPhotonPlayerDisconnected(PhotonPlayer player)
-    {
-        score.Remove(player);
     }
 
     void OnPhotonPlayerConnected(PhotonPlayer player)
     {
-        score.Add(player,lateJoin);
+        InitializeExperience(player);
+        IncreaseExperienceToPlayer(player, lateJoin);
     }
 
     void OnPlayerKilled(PhotonPlayer killer, PhotonPlayer killed)
     {
-        score[killer] += killScore;
+        IncreaseExperienceToPlayer(killer, killScore);
     }
 
-    
-
     void OnTeamCaptured(int team)
+    {
+        IncreaseExperienceToTeamPlayers(team, scorePoints);
+    }
+
+    void IncreaseExperienceToTeamPlayers(int team, int experience)
     {
         foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
             int playerTeam = (int)player.customProperties["Team"];
+            Debug.Log("playerteam " + playerTeam + " team " + team);
             if (playerTeam == team)
             {
-                score[player] += scorePoints;
+                IncreaseExperienceToPlayer(player, experience);
             }
         }
     }
 
-    void OnMatchEnded(int team)
+    void IncreaseExperienceToPlayer(PhotonPlayer player, int experience)
     {
-        if (PhotonNetwork.isMasterClient)
+        Debug.Log("added experience to player" + player.ID + " amount: " + experience);
+        if ( experience != 0 )
         {
-            Debug.Log("Game end");
-            foreach(PhotonPlayer player in score.Keys)
-            {
-                int finalScore = score[player];
-                int playerTeam = (int)player.customProperties["Team"];
-                if (playerTeam == team)
-                {
-                    finalScore += winGame;
-                }
-                photonView.RPC("RPC_SetScore", player, finalScore, team);
-            }
+            int currentExperience = (int)player.customProperties["Experience"];
+            int newExperience = currentExperience + experience;
+            Debug.Log("Player " + player.ID + " now has " + newExperience + " experience");
+            player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Experience", newExperience } });
         }
     }
 
     [PunRPC]
-    void RPC_SetScore(int score, int team)
+    void RPC_NotifyExperienceChanged(int experience)
     {
-        Debug.Log("rpc set score");
 
-        endGamePanel.SetScoreAndEndGame(score,team);
+    }
+
+
+    void OnMatchEnded(int team)
+    {
+        Debug.Log("Match ended" + team);
+        IncreaseExperienceToTeamPlayers(team, winGame);
     }
 }

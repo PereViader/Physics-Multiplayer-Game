@@ -53,13 +53,6 @@ public class Bomb_EndGameManager : Photon.MonoBehaviour {
     [PunRPC]
     void Rpc_EndGame(int experience)
     {
-        EndGameManager.experience = experience;
-        EndGameManager.GameResult result = EndGameManager.GameResult.Lose;
-        System.Object playerObject = PhotonNetwork.player.TagObject;
-        if (playerObject != null )
-        {
-            result = EndGameManager.GameResult.Win;
-        }
-        EndGameManager.result = result;
+
     }
 }

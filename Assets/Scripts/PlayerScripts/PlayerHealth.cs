@@ -4,16 +4,17 @@ using System.Collections;
 public class PlayerHealth : MonoBehaviour {
 
     PhotonPlayer lastPlayerHit;
+    Capture_PlayerManager playerManager;
 
     [SerializeField]
     int lastHitDuration;
 
     WaitForSeconds removeDelay;
-    PhotonPlayerOwner myself;
-
+    PhotonRemoteOwner remoteOwner;
     void Awake()
     {
-        myself = GetComponent<PhotonPlayerOwner>();
+        playerManager = Component.FindObjectOfType<Capture_PlayerManager>();
+        remoteOwner = GetComponent<PhotonRemoteOwner>();
         removeDelay = new WaitForSeconds(lastHitDuration);
     }
 
@@ -29,18 +30,19 @@ public class PlayerHealth : MonoBehaviour {
 
     void KillPlayer()
     {
-        PlayerManager.playerManager.KillPlayer(gameObject);
+        playerManager.KillPlayer(gameObject);
         CallKillEvents();
     }
 
     void CallKillEvents()
     {
-        if (myself.GetOwner() == PhotonNetwork.player)
+        PhotonPlayer remotePlayer = remoteOwner.GetPlayer();
+        if (remotePlayer == PhotonNetwork.player)
         {
             CaptureEvents.CallOnLocalPlayerKilled(gameObject);
             if (lastPlayerHit != null)
             {
-                CaptureEvents.CallOnPlayerKilled(lastPlayerHit,myself.GetOwner());
+                CaptureEvents.CallOnPlayerKilled(lastPlayerHit, remotePlayer);
             }
         }
     }
@@ -51,12 +53,12 @@ public class PlayerHealth : MonoBehaviour {
     {
         if ( other.gameObject.tag == "Player" )
         {
-            PhotonPlayerOwner owner = other.gameObject.GetComponent<PhotonPlayerOwner>();
-            int otherPlayerTeam = owner.GetTeam();
-            if ( otherPlayerTeam != myself.GetTeam() )
+            PhotonPlayer player = other.gameObject.GetComponent<PhotonRemoteOwner>().GetPlayer();
+            int otherPlayerTeam = (int)player.customProperties[PlayerProperties.team];
+            if ( otherPlayerTeam != (int)remoteOwner.GetPlayer().customProperties[PlayerProperties.team] )
             {
                 StopAllCoroutines();
-                StartCoroutine(SetAndRemovePlayer(owner.GetOwner()));
+                StartCoroutine(SetAndRemovePlayer(player));
             }
         }
     }

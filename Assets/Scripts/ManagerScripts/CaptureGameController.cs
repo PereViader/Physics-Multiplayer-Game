@@ -13,6 +13,7 @@ public class CaptureGameController : Photon.MonoBehaviour
 
     void Awake()
     {
+        CaptureEvents.OnGameEnded += OnGameEnded;
         if (captureGameController == null)
             captureGameController = this;
         else
@@ -23,13 +24,13 @@ public class CaptureGameController : Photon.MonoBehaviour
         playerManager = GetComponent<PlayerManager>();
         captureZoneManager = GetComponent<CaptureZoneManager>();
         captureScoreManager = GetComponent<CaptureScoreManager>();
-
     }
 
     void Start()
     {
         if (PhotonNetwork.isMasterClient)
         {
+            playerManager.InitializePlayers();
             playerManager.SpawnPlayers();
             captureZoneManager.InstantiateNewRandomCapture();
         }
@@ -47,15 +48,16 @@ public class CaptureGameController : Photon.MonoBehaviour
     {
         if (PhotonNetwork.isMasterClient)
         {
+            captureScoreManager.SendGameState(newPlayer);
+            playerManager.InitializePlayer(newPlayer);
             playerManager.SpawnPlayer(newPlayer);
-            SendGameState(newPlayer);
         }
     }
 
-    void SendGameState(PhotonPlayer player)
+    void OnGameEnded(int winnerTeam)
     {
-        playerManager.SendGameState(player);
-        captureScoreManager.SendGameState(player);
+        playerManager.SetPlayersGameResult(winnerTeam);
+        PhotonNetwork.LoadLevel("EndGameScene");
     }
 
     void OnMasterClientSwitched(PhotonPlayer newMasterClient) // si el client que fa de servidor es deconnecta tothom tanca el joc

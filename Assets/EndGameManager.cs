@@ -4,26 +4,28 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class EndGameManager : MonoBehaviour {
-    public enum GameResult
-    {
-        Lose,
-        Win,
-        Tie
-    }
-
-    public static GameResult result;
-    public static int experience;
-
     Text endGameText;
     Text scoreText;
 
 	void Awake () {
-        result = GameResult.Win;
-        experience = 3000;
+        if (!PhotonNetwork.isMasterClient)
+            PhotonNetwork.LeaveRoom();
         scoreText = GameObject.Find("GameScore").GetComponent<Text>();
         endGameText = GameObject.Find("EndGameText").GetComponent<Text>();
+        PhotonPlayer player = PhotonNetwork.player;
+        PlayerProperties.GameResult result = (PlayerProperties.GameResult)player.customProperties[PlayerProperties.gameResult];
+        int experience = (int)player.customProperties[PlayerProperties.experience];
+        player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.gameResult, null }, { PlayerProperties.experience, null } });
+        
         SetTitle(result);
         SetScore(experience);
+        GetComponent<ExperienceBarManager>().AddExperienceAndAnimate(experience);
+    }
+
+    void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
+    {
+        if (PhotonNetwork.isMasterClient && PhotonNetwork.playerList.Length == 1)
+            PhotonNetwork.LeaveRoom();
     }
 
     void SetScore(int score)
@@ -31,25 +33,23 @@ public class EndGameManager : MonoBehaviour {
         scoreText.text += score.ToString();
     }
 
-    void SetTitle(GameResult result)
+    void SetTitle(PlayerProperties.GameResult result)
     {
         switch(result)
         {
-            case GameResult.Lose:
+            case PlayerProperties.GameResult.None:
+                endGameText.text = "None maybe error?";
+                break;
+            case PlayerProperties.GameResult.Lose:
                 endGameText.text = "You Lose";
                 break;
-            case GameResult.Tie:
+            case PlayerProperties.GameResult.Tie:
                 endGameText.text = "It's a Tie";
                 break;
-            case GameResult.Win:
+            case PlayerProperties.GameResult.Win:
                 endGameText.text = "You Win";
                 break;
         }
-    }
-
-    void Start()
-    {
-        GetComponent<ExperienceBarManager>().AddExperienceAndAnimate(experience);
     }
 
     public void OnMainMenuButtonPressed()

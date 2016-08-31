@@ -1141,8 +1141,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomPanelController: {fileID: 263389221}
-  timesToRetrySearch: 1
-  timeBetweenRetries: 1
+  timesToRetrySearch: 0
+  timeBetweenRetries: 0
 --- !u!1 &440805894
 GameObject:
   m_ObjectHideFlags: 0

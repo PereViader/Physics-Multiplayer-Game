@@ -17,8 +17,7 @@ public class HabilityUIManager : MonoBehaviour {
 
     void Awake()
     {
-        CaptureEvents.OnLocalPlayerSpawned += OnPlayerSpawned;
-        CaptureEvents.OnLocalPlayerKilled += OnPlayerKilled;
+        player = new GameObject(); // aixo esta malament pero per treure un warning fins que ho elimini
 
         habilityNameUI = new Text[numberOfHabilities];
         habilityCooldownUI = new Text[numberOfHabilities];
@@ -34,19 +33,10 @@ public class HabilityUIManager : MonoBehaviour {
 
     void OnDestroy()
     {
-        CaptureEvents.OnLocalPlayerSpawned -= OnPlayerSpawned;
-        CaptureEvents.OnLocalPlayerKilled -= OnPlayerKilled;
+
     }
 
     void Update()
-    {
-        if ( player != null)
-        {
-            UpdateHabilityCooldownUI();
-        }
-    }
-
-    void UpdateHabilityCooldownUI()
     {
         for (int i = 0; i < playerHability.Length; i++)
         {
@@ -62,13 +52,13 @@ public class HabilityUIManager : MonoBehaviour {
         }
     }
 
-    void OnPlayerSpawned(GameObject player)
+    void OnPlayerHabilitiesSet()
     {
-        this.player = player;
+        enabled = true;
         habilityUI.SetActive(true);
         playerHability = player.GetComponents<Hability>();
         if (playerHability.Length != numberOfHabilities)
-            Debug.Log("Habilities and numberOfHabilities don't match\nPlayerHabilities "+ playerHability.Length+"\nnumberOfHabilities "+numberOfHabilities);
+            Debug.Log("Habilities and numberOfHabilities don't match\nPlayerHabilities " + playerHability.Length + "\nnumberOfHabilities " + numberOfHabilities);
         UpdateHabilityNameUI();
     }
 
@@ -76,6 +66,7 @@ public class HabilityUIManager : MonoBehaviour {
     {
         if ( this.player == player)
         {
+            enabled = false;
             player = null;
             habilityUI.SetActive(false);
         }

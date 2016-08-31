@@ -47,7 +47,7 @@ public class CaptureScoreManager : Photon.MonoBehaviour {
         score[team] += 1;
         scoreUI[team].text = score[team].ToString();
 
-        if (score[team] == maxScore)
+        if (score[team] == maxScore && PhotonNetwork.isMasterClient )
         {
             CaptureEvents.CallOnGameEnded(team);
         }

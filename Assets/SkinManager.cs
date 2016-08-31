@@ -1,18 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SkinManager : MonoBehaviour {
+public class SkinManager : Photon.MonoBehaviour {
 
-    void Awake()
+    void OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        GetComponent<PhotonPlayerOwner>().OnPlayerOwnerSet += PlayerOwnerSet; // no fa falta falta desubscriure's ja que quan aquest objecte s'elimina l'altre també i no queden referencies
-    }
-
-    void PlayerOwnerSet()
-    {
-        string playerSkin = (string)GetComponent<PhotonPlayerOwner>().GetOwner().customProperties["Skin"];
-        if (playerSkin != "")
+        int playerID = (int)photonView.instantiationData[0];
+        string playerSkin = "DefaultMaterial";
+        if (PhotonPlayer.Find(playerID).customProperties[PlayerProperties.skin] != null)
         {
+            playerSkin = (string)PhotonPlayer.Find(playerID).customProperties["Skin"];
             GetComponent<MeshRenderer>().material = (Material)Resources.Load(playerSkin);
         }
     }

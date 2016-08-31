@@ -15,7 +15,6 @@ public class AreaController : MonoBehaviour
     float extraIncreaseRate;
     [SerializeField]
     float uncaptureDecreaseRate;
-
     [SerializeField]
     float fillSpeed;
 
@@ -98,8 +97,7 @@ public class AreaController : MonoBehaviour
         bool multipleTeamsInside = false;
         foreach (GameObject player in playersInside)
         {
-            PhotonPlayer photonPlayer = player.GetComponent<PhotonPlayerOwner>().GetOwner();
-            int playerTeam = (int)photonPlayer.customProperties["Team"];
+            int playerTeam = (int)player.GetComponent<Capture_Initializer>().GetTeam();
             if (teamInside == -1 || teamInside == playerTeam)
             {
                 teamInside = playerTeam;

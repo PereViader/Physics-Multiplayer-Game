@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using System;
 
 public class PlayerManager : Photon.MonoBehaviour {
 
@@ -13,8 +13,6 @@ public class PlayerManager : Photon.MonoBehaviour {
     [SerializeField]
     float respawnTime;
 
-    List<GameObject>[] players;
-
     PlayerSpawnManager playerSpawnManager;
 
     void Awake()
@@ -25,39 +23,50 @@ public class PlayerManager : Photon.MonoBehaviour {
             Debug.Log("There can only be one player manager");
 
         playerSpawnManager = new PlayerSpawnManager(teamsInGame);
-        players = new List<GameObject>[teamsInGame];
-        for (int i = 0; i < teamsInGame; i++)
-            players[i] = new List<GameObject>();
     }
 
+    public void SetPlayersGameResult(int winnerTeam)
+    {
+        foreach(PhotonPlayer player in PhotonNetwork.playerList)
+        {
+            int playerTeam = (int)player.customProperties["Team"];
+            int result;
+            if ( playerTeam == winnerTeam )
+            {
+                result = 1;
+            } else
+            {
+                result = 0;
+            }
+            player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.gameResult, result } });
+        }
+    }
 
     // --------------------------------------------------- Initializers
     public int GetTeamForNewPlayer()
     {
-        int team = -1;
-        int chosenTeamMembers = -1;
-        for (int currentTeam = 0; currentTeam < players.Length; currentTeam++)
+        int[] teamPlayers = GetPlayersTeams();
+        int minTeam = 0;
+        for (int i = 0; i < teamsInGame; i++)
         {
-            if (team == -1 || players[currentTeam].Count < chosenTeamMembers)
-            {
-                team = currentTeam;
-                chosenTeamMembers = players[currentTeam].Count;
-            }
+            if (teamPlayers[i] < teamPlayers[minTeam]) { minTeam = i; }
         }
-        return team;
+        return minTeam;
     }
 
-    public void SendGameState(PhotonPlayer player)
+
+    int[] GetPlayersTeams()
     {
-        foreach (PhotonPlayer other in PhotonNetwork.playerList)
+        int[] teamPlayers = new int[teamsInGame];
+        foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
-            if (other != player)
+            if (player.customProperties[PlayerProperties.team] != null)
             {
-                int playerObjectViewID = (int)other.customProperties["Object"];
-                int playerTeam = (int)other.customProperties["Team"];
-                photonView.RPC("RegisterPlayer", player, playerObjectViewID, playerTeam);
+                int playerTeam = (int)player.customProperties[PlayerProperties.team];
+                teamPlayers[playerTeam] += 1;
             }
         }
+        return teamPlayers;
     }
 
     public void SpawnPlayers()  // spawn dels jugadors connectats al entrar a la partida
@@ -68,44 +77,38 @@ public class PlayerManager : Photon.MonoBehaviour {
         }
     }
 
+    // -------------------------------------------------- Player Initializing
+
+    public void InitializePlayers()
+    {
+        foreach (PhotonPlayer photonPlayer in PhotonNetwork.playerList)
+        {
+            InitializePlayer(photonPlayer);
+        }
+    }
+
+    public void InitializePlayer(PhotonPlayer player)
+    {
+        int playerTeam = GetTeamForNewPlayer();
+        Debug.Log("Chosen team " + playerTeam);
+        player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.team, playerTeam } });
+    }
+
+
     // --------------------------------------------------- Player Spawning
 
     public void SpawnPlayer(PhotonPlayer player)
     {
-        object oTeam;
-        int team;
-        Transform spawn;
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-
-        bool teamAlreadyAssigned = player.customProperties.TryGetValue("Team", out oTeam);
-        if (teamAlreadyAssigned)
-            team = (int)oTeam;
-        else
-        {
-            team = GetTeamForNewPlayer();
-            properties.Add("Team", team);
-        }
-        spawn = playerSpawnManager.GetRandomSpawn(team);
-
-
-        GameObject playerGameObject = PhotonNetwork.Instantiate("PlayerBall", spawn.position, spawn.rotation, 0);
-        playerGameObject.GetComponent<HabilityManager>().AddRandomHabilities();
-        int playerViewId = playerGameObject.GetComponent<PhotonView>().viewID;
-
-        
-        properties.Add("Object", playerViewId);
-        player.SetCustomProperties(properties);
-
-
-        photonView.RPC("RegisterPlayer", PhotonTargets.All, playerViewId, team);
-        playerGameObject.GetComponent<PhotonView>().RPC("SetOwner", PhotonTargets.AllBufferedViaServer, player.ID);
+        int playerTeam = (int)player.customProperties["Team"];
+        Transform spawn = playerSpawnManager.GetRandomSpawn(playerTeam);
+        PhotonNetwork.InstantiateSceneObject("PlayerBall", spawn.position, spawn.rotation, 0, new object[] { player.ID });
     }
 
     // ----------------------------------------------------- Player Killers
 
     public void KillPlayer(GameObject playerObject)
     {
-        PhotonPlayer player = playerObject.GetComponent<PhotonPlayerOwner>().GetOwner();
+        PhotonPlayer player = playerObject.GetComponent<Capture_Initializer>().GetPlayer();
         photonView.RPC("NotifyPlayerKilledAndQueueRespawn", PhotonTargets.MasterClient, player.ID);
     }
 
@@ -117,15 +120,9 @@ public class PlayerManager : Photon.MonoBehaviour {
             Debug.Log("Player Disconnected");
         else
         {
-            PhotonView playerObjectView = PhotonView.Find((int)player.customProperties["Object"]);
-            if (playerObjectView == null)
-                Debug.LogWarning("No player object out, something went wrong!");
-            else
-            {
-                photonView.RPC("UnregisterPlayer", PhotonTargets.All, playerObjectView.viewID, player.customProperties["Team"]);
-                PhotonNetwork.Destroy(playerObjectView);
-                StartCoroutine(RespawnPlayer(playerID));
-            }
+            GameObject playerObject = (GameObject)player.TagObject;
+            PhotonNetwork.Destroy(playerObject);
+            StartCoroutine(RespawnPlayer(playerID));
         }
     }
 
@@ -143,62 +140,40 @@ public class PlayerManager : Photon.MonoBehaviour {
         }
     }
 
-
-
-
-    // ---------------------------------------------------Player Tracking 
-    [PunRPC]
-    public void RegisterPlayer(int playerObjectViewId, int playerTeam)
-    {
-        PhotonView playerObjectView = PhotonView.Find(playerObjectViewId);
-        if (playerObjectView == null)
-            Debug.Log("playerObjectView Is null");
-        else
-            AddPlayer(playerObjectView.gameObject, playerTeam);
-    }
-
-    [PunRPC]
-    public void UnregisterPlayer(int playerObjectViewID, int playerTeam)
-    {
-        PhotonView playerObjectView = PhotonView.Find(playerObjectViewID);
-        if (playerObjectView == null)
-            Debug.Log("playerObjectView Is null");
-        else
-            RemovePlayer(playerObjectView.gameObject, playerTeam);
-    }
-
-    public void AddPlayer(GameObject player, int playerTeam)
-    {
-        players[playerTeam].Add(player);
-    }
-
-    public void RemovePlayer(GameObject player, int playerTeam)
-    {
-        players[playerTeam].Remove(player);
-    }
-
     // --------------------------------------------------- Player Getters
-
-    public List<GameObject> GetPlayers(int team)
+    
+    public static List<GameObject> GetPlayers(int team)
     {
-        return players[team];
-    }
-
-    public List<GameObject> GetPlayers()
-    {
-        return GetOtherTeamsPlayers(-1);
-    }
-
-    public List<GameObject> GetOtherTeamsPlayers(int team)
-    {
-        List<GameObject> ret = new List<GameObject>();
-        for(int i = 0; i<players.Length; i++)
+        List<GameObject> players = new List<GameObject>();
+        foreach ( PhotonPlayer player in PhotonNetwork.playerList)
         {
-            if (team != i)
-                foreach (GameObject player in players[i])
-                    ret.Add(player);
+            int playerTeam = (int)player.customProperties["Team"];
+            if (playerTeam == team && player.TagObject != null)
+                players.Add((GameObject)player.TagObject);
         }
+        return players;
+    }
 
-        return ret;
+    public static List<GameObject> GetPlayers()
+    {
+        List<GameObject> players = new List<GameObject>();
+        foreach (PhotonPlayer player in PhotonNetwork.playerList)
+        {
+            if ( player.TagObject != null)
+                players.Add((GameObject)player.TagObject);
+        }
+        return players;
+    }
+
+    public static List<GameObject> GetOtherTeamsPlayers(int team)
+    {
+        List<GameObject> players = new List<GameObject>();
+        foreach (PhotonPlayer player in PhotonNetwork.playerList)
+        {
+            int playerTeam = (int)player.customProperties["Team"];
+            if (playerTeam != team && player.TagObject != null)
+                players.Add((GameObject)player.TagObject);
+        }
+        return players;
     }
 }
