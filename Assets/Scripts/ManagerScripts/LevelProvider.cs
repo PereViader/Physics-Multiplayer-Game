@@ -23,7 +23,7 @@ public class LevelProvider {
         throw new System.Exception("Not implemented");
     }
 
-    public static int GetRandomMap(int gameMode)
+    public static int GetRandomMap(GameMode gameMode)
     {
         Random.seed = (int)System.DateTime.Now.Ticks;
         int ret = -1;

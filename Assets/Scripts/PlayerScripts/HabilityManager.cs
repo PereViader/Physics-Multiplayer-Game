@@ -10,12 +10,11 @@ public class HabilityManager : Photon.MonoBehaviour {
     Hability[] habilities;
 
     CaptureUI_HabilityManager habilityManager;
-    PhotonRemoteOwner remoteOwner;
 
     bool areHabilitiesSet;
+    bool isLocalPlayer;
 
 	void Awake () {
-        remoteOwner = GetComponent<PhotonRemoteOwner>();
         habilityManager = Component.FindObjectOfType<CaptureUI_HabilityManager>();
         habilities = new Hability[numberOfHabilities];
         if (PhotonNetwork.isMasterClient)
@@ -36,7 +35,7 @@ public class HabilityManager : Photon.MonoBehaviour {
     {
         habilityManager.SetActive(true);
         int playerID = (int)photonView.instantiationData[0];
-        bool isLocalPlayer = playerID == PhotonNetwork.player.ID;
+        isLocalPlayer = playerID == PhotonNetwork.player.ID;
             
         for ( int i = 0; i < habilities.Length; i++)
         {
@@ -44,21 +43,24 @@ public class HabilityManager : Photon.MonoBehaviour {
             habilities[i] = (Hability)gameObject.AddComponent(habilityType);
             habilities[i].SetVirtualKey("Hability" + (i + 1));
             habilities[i].enabled = isLocalPlayer;
-            habilityManager.SetName(i, habilities[i].GetHabilityName());
-            habilityManager.SetCooldown(i, 0);
+            if ( isLocalPlayer )
+            {
+                habilityManager.SetName(i, habilities[i].GetHabilityName());
+                habilityManager.SetCooldown(i, habilities[i].GetCurrentCooldown());
+            }
         }
         areHabilitiesSet = true;
     }
 
     void OnDestroy()
     {
-        if (remoteOwner.GetPlayer() == PhotonNetwork.player)
+        if (isLocalPlayer)
             habilityManager.SetActive(false);
     }
 
     void FixedUpdate()
     {
-        if ( areHabilitiesSet)
+        if ( isLocalPlayer && areHabilitiesSet )
             for (int i = 0; i < habilities.Length; i++)
                 habilityManager.SetCooldown(i, habilities[i].GetCurrentCooldown());
     }

@@ -11,7 +11,7 @@ public class CaptureUI_CaptureBars : MonoBehaviour {
 
     void Awake()
     {
-        GameObject captureUI = GameObject.Find("Canvas/CaptureUI");
+        GameObject captureUI = GameObject.Find("Canvas/GameUI/CaptureUI");
         captureBar = new Image[teamsInGame];
         for (int i = 0; i < teamsInGame; i++)
             captureBar[i] = captureUI.transform.Find("Team" + i+"/Inside").GetComponent<Image>();

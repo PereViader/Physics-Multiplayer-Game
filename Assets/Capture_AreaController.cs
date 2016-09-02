@@ -73,7 +73,6 @@ public class Capture_AreaController : MonoBehaviour {
                 float value = captureDone[i];
                 if (teamInside == i)
                 {
-                    Debug.Log("PlayersFromTeam" + playersFromTeam);
                     value += (basicIncreaseRate + (extraIncreaseRate * (playersFromTeam - 1))) * Time.deltaTime;
                 }
                 else

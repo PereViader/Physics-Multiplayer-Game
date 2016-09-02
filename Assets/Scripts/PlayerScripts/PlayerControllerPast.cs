@@ -33,7 +33,7 @@ public class PlayerControllerPast : Photon.MonoBehaviour
 
     void Update()
     {
-        if (!PauseMenuManager.isPausePanelActive)
+        if (InputState.isGameInput)
         {
             if (!isShooting && Input.GetAxis("Fire1") > 0 && isInputEnabled)
             {

@@ -8,6 +8,7 @@ public class EndGameManager : MonoBehaviour {
     Text scoreText;
 
 	void Awake () {
+        InputState.ActivateMenuInput();
         if (!PhotonNetwork.isMasterClient)
             PhotonNetwork.LeaveRoom();
         scoreText = GameObject.Find("GameScore").GetComponent<Text>();
@@ -15,7 +16,7 @@ public class EndGameManager : MonoBehaviour {
         PhotonPlayer player = PhotonNetwork.player;
         PlayerProperties.GameResult result = PlayerProperties.GameResult.None;
         object oResult;
-        if (player.customProperties.TryGetValue(PlayerProperties.experience, out oResult))
+        if (player.customProperties.TryGetValue(PlayerProperties.gameResult, out oResult))
         {
             result = (PlayerProperties.GameResult)oResult;
         }

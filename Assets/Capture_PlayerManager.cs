@@ -23,27 +23,48 @@ public class Capture_PlayerManager : MonoBehaviour {
 
 	public void OnGameModeSetup()
     {
-        InitializePlayers();
-        SpawnPlayers();
+        if ( PhotonNetwork.isMasterClient)
+        {
+            InitializePlayers();
+            SpawnPlayers();
+        }
     }
 
     public void OnGameModeEnded()
     {
-        int winnerTeam = scoreManager.GetWinnerTeam();
-        foreach (PhotonPlayer player in PhotonNetwork.playerList)
+        if ( PhotonNetwork.isMasterClient)
         {
-            int playerTeam = (int)player.customProperties[PlayerProperties.team];
-            PlayerProperties.GameResult result;
-            if (playerTeam == winnerTeam)
+            int winnerTeam = scoreManager.GetWinnerTeam();
+            foreach (PhotonPlayer player in PhotonNetwork.playerList)
             {
-                result = PlayerProperties.GameResult.Win;
+                int playerTeam = (int)player.customProperties[PlayerProperties.team];
+                PlayerProperties.GameResult result;
+                if (playerTeam == winnerTeam)
+                {
+                    result = PlayerProperties.GameResult.Win;
+                }
+                else
+                {
+                    result = PlayerProperties.GameResult.Lose;
+                }
+                Debug.Log("Player " + player.ID + " " + result);
+                player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.gameResult, result } });
             }
-            else
-            {
-                result = PlayerProperties.GameResult.Lose;
-            }
-            Debug.Log("Game ended, you " + result);
-            player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.gameResult, result } });
+        }
+    }
+
+    public void PlayerConnected(PhotonPlayer player)
+    {
+
+        InitializePlayer(player);
+        SpawnPlayer(player);
+    }
+
+    void Update()
+    {
+        if ( Input.GetKeyDown(KeyCode.Space))
+        {
+            GetPlayersTeams();
         }
     }
 
@@ -105,6 +126,18 @@ public class Capture_PlayerManager : MonoBehaviour {
         Transform spawn = spawnManager.GetRandomSpawn(playerTeam);
         GameObject playerObject = PhotonNetwork.InstantiateSceneObject("GameMode/Capture/Player", spawn.position, spawn.rotation, 0, new object[] { player.ID });
         cameraManager.SetPlayer(playerObject);
+    }
+
+    public void PlayerDisconnected(PhotonPlayer player)
+    {
+        Debug.Log("PlayerDisconnected");
+        Debug.Log("PlayerList "+PhotonNetwork.playerList.Length);
+
+        if (PhotonNetwork.isMasterClient)
+        {
+            GameObject playerObject = (GameObject)player.TagObject;
+            PhotonNetwork.Destroy(playerObject);
+        }
     }
 
     public void KillPlayer(GameObject playerObject)

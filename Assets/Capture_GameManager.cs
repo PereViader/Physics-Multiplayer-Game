@@ -20,19 +20,17 @@ public class Capture_GameManager : MonoBehaviour, IScorable {
     public void OnGameModeSetup()
     {
         experienceManager.OnGameModeSetup();
-        if (PhotonNetwork.isMasterClient)
-        {
-            playerManager.OnGameModeSetup();
-            areaManager.OnGameModeSetup();
-        }
+        playerManager.OnGameModeSetup();
+        areaManager.OnGameModeSetup();
     }
 
     public void OnGameModeEnded()
     {
+        experienceManager.OnGameModeEnded();
+        playerManager.OnGameModeEnded();
+
         if ( PhotonNetwork.isMasterClient )
         {
-            experienceManager.OnGameModeEnded();
-            playerManager.OnGameModeEnded();
             PhotonNetwork.LoadLevel("EndGameScene");
         }
     }
@@ -58,5 +56,17 @@ public class Capture_GameManager : MonoBehaviour, IScorable {
     public void SetScore(int[] score)
     {
         ((IScorable)scoreManager).SetScore(score);
+    }
+
+    void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    {
+        playerManager.PlayerConnected(newPlayer);
+        scoreManager.PlayerConnected(newPlayer);
+    }
+
+    void OnPhotonPlayerDisconnected(PhotonPlayer player)
+    {
+        experienceManager.PlayerDisconnected(player);
+        playerManager.PlayerDisconnected(player);
     }
 }

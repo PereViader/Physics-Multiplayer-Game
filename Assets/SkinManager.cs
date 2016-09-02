@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SkinManager : Photon.MonoBehaviour {
+public class SkinManager : MonoBehaviour {
 
     void OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        int playerID = (int)photonView.instantiationData[0];
-        string playerSkin = "DefaultMaterial";
+        int playerID = (int)GetComponent<PhotonView>().photonView.instantiationData[0];
+        string playerTexture = "DefaultMaterial";
         if (PhotonPlayer.Find(playerID).customProperties[PlayerProperties.skin] != null)
         {
-            playerSkin = (string)PhotonPlayer.Find(playerID).customProperties["Skin"];
-            GetComponent<MeshRenderer>().material = (Material)Resources.Load(playerSkin);
+            playerTexture = (string)PhotonPlayer.Find(playerID).customProperties[PlayerProperties.skin];
+            GetComponent<MeshRenderer>().material = (Material)Resources.Load("PlayerTextures/"+playerTexture);
         }
     }
 }

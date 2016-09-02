@@ -43,12 +43,11 @@ public class NetworkManager : MonoBehaviour {
     void CreateRoom()
     {
         RoomOptions roomOptions = new RoomOptions() { maxPlayers = 8 };
-        string[] properties = new string[1];
-        properties[0] = RoomProperty.Mode;
+        string[] properties = new string[] { RoomProperty.GameMode };
 
         roomOptions.customRoomPropertiesForLobby = properties;
         Hashtable roomProperties = new Hashtable();
-        roomProperties.Add(RoomProperty.Mode, GameMode.Capture);
+        roomProperties.Add(RoomProperty.GameMode, GameMode.Capture);
         roomOptions.customRoomProperties = roomProperties;
         PhotonNetwork.automaticallySyncScene = true;
         PhotonNetwork.JoinOrCreateRoom("testRoom", roomOptions, TypedLobby.Default);

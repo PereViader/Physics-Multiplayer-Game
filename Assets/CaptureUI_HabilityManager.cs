@@ -11,7 +11,7 @@ public class CaptureUI_HabilityManager : MonoBehaviour {
 
     void Awake()
     {
-        habilityParent = GameObject.Find("Canvas").transform.Find("HabilitiesUI").gameObject;
+        habilityParent = GameObject.Find("Canvas/GameUI").transform.Find("HabilitiesUI").gameObject;
         int numberOfHabilities = habilityParent.transform.childCount;
         habilityName = new Text[numberOfHabilities];
         habilityCooldown = new Text[numberOfHabilities];

@@ -22,7 +22,7 @@ public class CaptureUI_ExperienceManager : MonoBehaviour {
         toDisplay = new List<int>();
         displayDelay = new WaitForSeconds(displayTime);
         delayBetween = new WaitForSeconds(delayTime);
-        experienceUI = GameObject.Find("Canvas").transform.Find("ExperienceText").GetComponent<Text>();
+        experienceUI = GameObject.Find("Canvas/GameUI").transform.Find("ExperienceText").GetComponent<Text>();
     }
 
     public void DisplayAddedExperience(int amount)

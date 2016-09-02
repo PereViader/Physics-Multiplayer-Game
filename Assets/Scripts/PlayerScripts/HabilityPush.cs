@@ -13,7 +13,6 @@ public class HabilityPush : Hability {
 
     PhotonPlayer player;
 
-    // Update is called once per frame
     void Awake()
     {
         player = GetComponent<PhotonRemoteOwner>().GetPlayer();
@@ -35,14 +34,14 @@ public class HabilityPush : Hability {
         currentCooldown = cooldown;
         onCooldown = true;
         isBlocked = false;
-        int playerTeam = (int)player.customProperties["Team"];
-        foreach (GameObject other in PlayerManager.GetOtherTeamsPlayers(playerTeam))
+        int playerTeam = (int)player.customProperties[PlayerProperties.team];
+        foreach (GameObject other in Capture_PlayerManager.GetOtherTeamsPlayers(playerTeam))
         {
             RaycastHit hit;
             bool hasHit = Physics.Raycast(transform.position, other.transform.position - transform.position, out hit, pushRange);
             if ( hasHit )
             {
-                int otherTeam = (int)other.GetComponent<Capture_Initializer>().GetPlayer().customProperties["Team"];
+                int otherTeam = (int)other.GetComponent<PhotonRemoteOwner>().GetPlayer().customProperties[PlayerProperties.team];
                 if ( hit.transform.gameObject.tag == "Player" && playerTeam != otherTeam)
                 {
                     Vector3 pushVector = other.transform.position - transform.position;

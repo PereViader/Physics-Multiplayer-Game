@@ -73,4 +73,5 @@ MonoBehaviour:
   - RPC_AddExperience
   - RPC_AddExperienceToTeam
   - RPC_SetPlayer
+  - RPC_SetExperience
   DisableAutoOpenWizard: 1

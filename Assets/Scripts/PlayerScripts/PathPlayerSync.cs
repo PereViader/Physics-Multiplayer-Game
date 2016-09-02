@@ -161,6 +161,7 @@ public class PathPlayerSync : MonoBehaviour {
                 List<State> receivedPath = (List<State>)stream.ReceiveNext();
                 if (receivedPath.Count > 0)
                 {
+                    statePath.Clear();
                     statePath.AddRange(receivedPath);
                 }
             }

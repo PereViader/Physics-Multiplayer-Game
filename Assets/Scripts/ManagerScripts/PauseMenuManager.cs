@@ -6,47 +6,35 @@ using UnityEngine.Events;
 
 public class PauseMenuManager : MonoBehaviour {
 
-    public static PauseMenuManager pauseMenuManager;
-
-    private GameObject pausePanel;
-
-    MouseController mouseController;
-
-    public static bool isPausePanelActive = false;
+    GameObject pausePanel;
+    ExitGameManager exitGameManager;
+    bool isPausePanelActive;
 
     void Awake()
     {
-        isPausePanelActive = false;
-        if (pauseMenuManager == null)
-            pauseMenuManager = this;
-        else
-            Debug.Log("There should be only one pause menu manager");
-        mouseController = GetComponent<MouseController>();
-        pausePanel = GameObject.Find("Canvas").transform.Find("PausePanel").gameObject;
-        if (!pausePanel)
-            Debug.Log("Pause Panel reference not found!");
-        pausePanel.transform.Find("MainMenuButton").gameObject.GetComponent<Button>().onClick.AddListener(new UnityAction(OnMainMenuButtonPressed));
+        pausePanel = GameObject.Find("Canvas").transform.Find("PauseUI").gameObject;
+        exitGameManager = Component.FindObjectOfType<ExitGameManager>();
+        InputState.ActivateGameInput();
     }
 
     void Update()
     {
         if (Input.GetButtonDown("Pause"))
         {
-            mouseController.SetCursorHidden(isPausePanelActive);
             isPausePanelActive = !isPausePanelActive;
+            if (isPausePanelActive)
+                InputState.ActivateMenuInput();
+            else
+                InputState.ActivateGameInput();
             pausePanel.SetActive(isPausePanelActive);
         }
     }
 
     public void OnMainMenuButtonPressed()
     {
-        PhotonNetwork.automaticallySyncScene = false;
-        PhotonNetwork.LeaveRoom();
         Debug.Log("Main Menu Button pressed");
+        exitGameManager.ExitGame();
     }
 
-    public void OnLeftRoom()
-    {
-        SceneManager.LoadScene(0);
-    }
+    
 }

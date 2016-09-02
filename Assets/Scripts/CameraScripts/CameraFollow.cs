@@ -60,7 +60,7 @@ public class CameraFollow : MonoBehaviour
 
             float horizontal = 0f;
             float vertical = 0f;
-            if ( isInputEnabled && !PauseMenuManager.isPausePanelActive)
+            if ( isInputEnabled && InputState.isGameInput )
             {
                 horizontal = horizontalSensitivity * Input.GetAxis("CameraHorizontal");
                 vertical = verticalSensitivity * Input.GetAxis("CameraVertical");

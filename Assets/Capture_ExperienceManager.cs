@@ -30,12 +30,29 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour {
 
     public void OnGameModeEnded()
     {
-        int nPlayers = PhotonNetwork.playerList.Length;
-        foreach(var playerExperience in experience)
-        {
-            PhotonPlayer player = PhotonPlayer.Find(playerExperience.Key);
-            player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.experience, playerExperience.Value } });
-        }
+        if (PhotonNetwork.isMasterClient)
+            foreach(var playerExperience in experience)
+            {
+                PhotonPlayer player = PhotonPlayer.Find(playerExperience.Key);
+                player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.experience, playerExperience.Value } });
+            }
+    }
+
+    public void PlayerConnected(PhotonPlayer player)
+    {
+        photonView.RPC("RPC_SetExperience", player, experience);
+        AddExperience(player, experienceValues.joinGameAlreadyStarted);
+    }
+
+    public void PlayerDisconnected(PhotonPlayer player)
+    {
+        experience.Remove(player.ID);
+    }
+
+    [PunRPC]
+    void RPC_SetExperience(Dictionary<int,int> newExperience)
+    {
+        experience = newExperience;
     }
 
     public void AddExperience(PhotonPlayer player, int amount)
@@ -80,9 +97,6 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour {
         {
             GUI.Box(new Rect(0, 70, 150, 30), "Experience: " + experience[PhotonNetwork.player.ID]);
         }
-        catch(System.Exception)
-        {
-
-        }
+        catch(System.Exception){}
     }
 }

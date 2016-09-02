@@ -23,6 +23,11 @@ public class Capture_ScoreManager : Photon.MonoBehaviour, IScorable {
         scoreManagerUI = Component.FindObjectOfType<CaptureUI_ScoreManager>();
     }
 
+    public void PlayerConnected(PhotonPlayer player)
+    {
+        photonView.RPC("RPC_SetScore", PhotonTargets.All, score);
+    }
+
     //---------------------------------------
 
     public void Score(int team, int value = 1)

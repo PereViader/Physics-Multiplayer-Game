@@ -2,15 +2,21 @@
 using System.Collections;
 
 public class Capture_ConnexionStarter : MonoBehaviour {
-
-    static string gameVersion = "2.0";
-
     void Start()
     {
-        if (!PhotonNetwork.connected) // obrir la escena directament per fer proves rapidament
-            PhotonNetwork.ConnectUsingSettings(gameVersion);
+
+        PhotonNetwork.automaticallySyncScene = true;
+        if (!PhotonNetwork.connected) {        // obrir la escena directament per fer proves rapidament
+            InitializePlayerForFastDevelopment();
+            PhotonNetwork.ConnectUsingSettings(GamePreferences.GAME_VERSION);
+        }
         else if (PhotonNetwork.isMasterClient) // obrir la escena des del menu principal on ja ens haviem connectat
             InitializeGame();
+    }
+
+    void InitializePlayerForFastDevelopment()
+    {
+        PhotonNetwork.player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Skin", PlayerPrefs.GetString("Skin") } });
     }
 
     void OnConnectedToMaster()
@@ -20,15 +26,23 @@ public class Capture_ConnexionStarter : MonoBehaviour {
 
     void CreateRoom()
     {
-        RoomOptions roomOptions = new RoomOptions() { maxPlayers = 6, isOpen = true, isVisible = true };
-        string[] properties = new string[] { RoomProperty.Mode };
-        roomOptions.customRoomPropertiesForLobby = properties;
-        ExitGames.Client.Photon.Hashtable roomProperties = new ExitGames.Client.Photon.Hashtable();
-        roomProperties.Add(RoomProperty.Mode, GameMode.Capture);
-        roomOptions.customRoomProperties = roomProperties;
-        PhotonNetwork.automaticallySyncScene = true;
-        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
+        RoomOptions roomOptions = new RoomOptions();
+
+        roomOptions.customRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // Properties visible of the room by other players
+        roomOptions.customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { RoomProperty.GameMode, GameMode.Capture } };
+
+        PhotonNetwork.CreateRoom("asd", roomOptions, TypedLobby.Default);
     }
+    /*
+    void CreateRoom()
+    {
+        RoomOptions roomOptions = new RoomOptions();
+        string[] prop = new string[] { RoomProperty.Mode };
+        roomOptions.customRoomPropertiesForLobby = prop;
+        roomOptions.customRoomProperties = expectedProperties;
+        roomOptions.maxPlayers = 2;
+        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
+    }*/
 
     void OnJoinedRoom()
     {
@@ -41,10 +55,9 @@ public class Capture_ConnexionStarter : MonoBehaviour {
         //Destroy(this);
     }
 
-
-
     void OnGUI()
     {
-        GUI.Box(new Rect(0, 0, 160, 40), PhotonNetwork.connectionStateDetailed + "\n Ping: " + PhotonNetwork.GetPing());
+        GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
+        GUILayout.Label("Ping: " + PhotonNetwork.GetPing());
     }
 }

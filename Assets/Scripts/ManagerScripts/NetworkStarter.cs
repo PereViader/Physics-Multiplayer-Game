@@ -12,7 +12,7 @@ public class NetworkStarter : MonoBehaviour {
     void Awake()
     {
         if ( !PhotonNetwork.connected)
-            PhotonNetwork.ConnectUsingSettings("1");
+            PhotonNetwork.ConnectUsingSettings(GamePreferences.GAME_VERSION);
     }
 
     void Update()

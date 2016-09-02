@@ -15,7 +15,7 @@ public class CaptureUI_ScoreManager : MonoBehaviour, IScorable {
         scoreUI = new Text[teamsInGame];
         for ( int i = 0; i<teamsInGame; i++)
         {
-            scoreUI[i] = GameObject.Find("Canvas/Marcador/Score"+i).GetComponent<Text>();
+            scoreUI[i] = GameObject.Find("Canvas/GameUI/Marcador/Score"+i).GetComponent<Text>();
             scoreUI[i].text = "0";
         }
     }

@@ -2,53 +2,39 @@
 using System.Collections;
 
 public class PlayerCustomizationMenuController : MonoBehaviour {
-    [SerializeField]
-    Material[] aviableTextures;
 
     [SerializeField]
     MeshRenderer displayDummy;
 
-    void Awake()
+    Material[] aviableTextures;
+
+    void Start()
     {
+        aviableTextures = Resources.LoadAll<Material>("PlayerTextures");
         SetStartingSkin();
     }
 
     void SetStartingSkin()
     {
-        Material startingSkin = GetStartingSkin();
-        if (startingSkin == null)
-        {
-            Debug.Log("Starting skin not set");
-        }
-        else
-        {
-            ChangeDummySkin(startingSkin);
-        }
+        string startingSkinName = GetStartingSkinName();
+        Material startingSkin = FindMaterialByName(startingSkinName);
+        ChangeDummySkin(startingSkin);
+        SetPhotonPlayerSkin(startingSkinName);
     }
 
-    void SetPhotonPlayerSkin(string skin)
-    {
-        PhotonNetwork.player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Skin", skin } });
-    }
+    
 
     void ChangeDummySkin(Material newSkin)
     {
         displayDummy.material = newSkin;
     }
 
-    Material GetStartingSkin()
+    string GetStartingSkinName()
     {
-        Material startingSkin;
         string startingSkinName = PlayerPrefs.GetString("Skin");
-        if (startingSkinName != "")
-        {
-            startingSkin = FindMaterialByName(startingSkinName);
-        }
-        else
-        {
-            startingSkin = null;
-        }
-        return startingSkin;
+        if (startingSkinName == "")
+            startingSkinName = "DefaultMaterial";
+        return startingSkinName;
     }
 
     public void ChangePlayerMaterial(string newMaterialName)
@@ -64,6 +50,11 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
         }
     }
 
+    void SetPhotonPlayerSkin(string skin)
+    {
+        PhotonNetwork.player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Skin", skin } });
+    }
+
     private Material FindMaterialByName(string name)
     {
         Material texture = null;
@@ -73,5 +64,15 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
         return texture;
     }
 
-
+    void OnGUI()
+    {
+        try
+        {
+            foreach (var entry in PhotonNetwork.player.customProperties)
+            {
+                GUILayout.Label(entry.Key + " - " + entry.Value);
+            }
+        }
+        catch (System.Exception) { Debug.Log("error"); }
+    }
 }

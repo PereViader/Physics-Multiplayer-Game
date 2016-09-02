@@ -62,6 +62,6 @@ public class CaptureGameController : Photon.MonoBehaviour
 
     void OnMasterClientSwitched(PhotonPlayer newMasterClient) // si el client que fa de servidor es deconnecta tothom tanca el joc
     {
-        PauseMenuManager.pauseMenuManager.OnMainMenuButtonPressed();
+        
     }
 }

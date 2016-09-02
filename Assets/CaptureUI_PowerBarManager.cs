@@ -9,7 +9,7 @@ public class CaptureUI_PowerBarManager : MonoBehaviour {
 
     void Awake()
     {
-        powerBar = GameObject.Find("Canvas").transform.Find("PowerBar").gameObject;
+        powerBar = GameObject.Find("Canvas/GameUI").transform.Find("PowerBar").gameObject;
         inside = powerBar.transform.Find("Inside").GetComponent<Image>();
     }
 

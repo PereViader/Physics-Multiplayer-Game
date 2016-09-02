@@ -5,11 +5,6 @@ public class Capture_AreaManager : MonoBehaviour {
 
     Transform[] areaPositions;
 
-    GameObject currentArea;
-    Transform currentPosition;
-
-
-
     void Awake()
     {
         GameObject container = GameObject.Find("Map/CapturePositions");
@@ -23,7 +18,8 @@ public class Capture_AreaManager : MonoBehaviour {
 
     public void OnGameModeSetup()
     {
-        InstantiateNewRandomCapture();
+        if ( PhotonNetwork.isMasterClient )
+            InstantiateNewRandomCapture();
     }
 
     public void OnGameModeEnded()
@@ -38,32 +34,30 @@ public class Capture_AreaManager : MonoBehaviour {
 
     public void InstantiateNewRandomCapture()
     {
+        Capture_AreaController currentArea = Component.FindObjectOfType<Capture_AreaController>();
+        Transform currentAreaTransform = null;
         if (currentArea != null)
         {
+            currentAreaTransform = currentArea.transform;
             PhotonNetwork.Destroy(currentArea.gameObject);
         }
 
-        currentPosition = getDiferentRandomAreaPosition();
-        currentArea = (GameObject)PhotonNetwork.Instantiate("GameMode/Capture/Area", currentPosition.position, Quaternion.identity, 0);
+        Transform newTransform = getDiferentRandomAreaPosition(currentAreaTransform);
+        PhotonNetwork.InstantiateSceneObject("GameMode/Capture/Area", newTransform.position, newTransform.rotation, 0, new object[0]);
     }
 
-    public Transform getDiferentRandomAreaPosition()
+    public Transform getDiferentRandomAreaPosition(Transform current)
     {
         Transform newCapturePosition;
         do
         {
             newCapturePosition = GetRandomCapturePosition();
-        } while (newCapturePosition == currentPosition);
+        } while (newCapturePosition == current);
         return newCapturePosition;
     }
 
     public Transform GetRandomCapturePosition()
     {
         return areaPositions[Random.Range(0, areaPositions.Length)];
-    }
-
-    public GameObject GetCurrentCaptureZone()
-    {
-        return currentArea;
     }
 }

@@ -13,7 +13,6 @@ public class NetworkRoomController : MonoBehaviour {
 
     private int currentRetryCount;
 
-    private int currentGameMode = -1;
     private bool isSearching = false;
     private bool blockFuturePlayPress = false;
 
@@ -25,7 +24,7 @@ public class NetworkRoomController : MonoBehaviour {
         PhotonNetwork.automaticallySyncScene = true;
     }
 
-    public void joinGameOrCreate(int gameMode)
+    public void joinGameOrCreate(GameMode gameMode)
     {
         if (blockFuturePlayPress || !PhotonNetwork.connectedAndReady)
         {
@@ -37,27 +36,30 @@ public class NetworkRoomController : MonoBehaviour {
 
         isSearching = true;
         roomPanelController.DisplaySearchingText();
-        currentRetryCount = 0;
-        currentGameMode = gameMode;
+
         expectedProperties.Clear();
-        expectedProperties.Add(RoomProperty.Mode, gameMode);
+        expectedProperties.Add(RoomProperty.GameMode, gameMode);
+
+
+        currentRetryCount = 0;
 
         if (PhotonNetwork.inRoom)
         {
             PhotonNetwork.LeaveRoom();
-            blockFuturePlayPress = true;
         } else
         {
             RetryJoinGameOrCreate();
         }
+        blockFuturePlayPress = true;
     }
+
 
     public void RetryJoinGameOrCreate()
     {
         
         if ( currentRetryCount <= timesToRetrySearch )
         {
-            JoinRandomRoom();
+            PhotonNetwork.JoinRandomRoom(expectedProperties, 0);
             currentRetryCount++;
         } else
         {
@@ -65,13 +67,9 @@ public class NetworkRoomController : MonoBehaviour {
         }
     }
 
-    void JoinRandomRoom()
-    {
-        PhotonNetwork.JoinRandomRoom(expectedProperties, 0);
-    }
-
     void OnPhotonRandomJoinFailed()
     {
+        blockFuturePlayPress = false;
         CancelInvoke();
         Invoke("RetryJoinGameOrCreate", timeBetweenRetries);
     }
@@ -79,11 +77,10 @@ public class NetworkRoomController : MonoBehaviour {
     void CreateRoom()
     {
         RoomOptions roomOptions = new RoomOptions();
-        string[] prop = new string[1];
-        prop[0] = RoomProperty.Mode;
-        roomOptions.customRoomPropertiesForLobby = prop;
-        roomOptions.customRoomProperties = expectedProperties;
-        roomOptions.maxPlayers = 2;
+        
+        roomOptions.customRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // Properties visible of the room from the lobby used for matchmaking
+        roomOptions.customRoomProperties = expectedProperties; // Properties of the room 
+
         PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
     }
 
@@ -91,7 +88,7 @@ public class NetworkRoomController : MonoBehaviour {
     {
         if (PhotonNetwork.isMasterClient && PhotonNetwork.playerList.Length == 2)
         {
-            PhotonNetwork.LoadLevel(LevelProvider.GetRandomMap(currentGameMode));
+            PhotonNetwork.LoadLevel(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]));
         } 
 
     }
@@ -113,5 +110,9 @@ public class NetworkRoomController : MonoBehaviour {
         {
             RetryJoinGameOrCreate();
         }
+    }
+
+    void OnGUI()
+    {
     }
 }
