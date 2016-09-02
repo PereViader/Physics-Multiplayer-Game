@@ -3027,7 +3027,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamsInGame: 2
-  endGameScore: 3
+  endGameScore: 5
 --- !u!114 &1343341698
 MonoBehaviour:
   m_ObjectHideFlags: 0

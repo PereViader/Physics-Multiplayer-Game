@@ -30,21 +30,8 @@ public class PlayerHealth : MonoBehaviour {
 
     void KillPlayer()
     {
-        playerManager.KillPlayer(gameObject);
-        CallKillEvents();
-    }
-
-    void CallKillEvents()
-    {
-        PhotonPlayer remotePlayer = remoteOwner.GetPlayer();
-        if (remotePlayer == PhotonNetwork.player)
-        {
-            CaptureEvents.CallOnLocalPlayerKilled(gameObject);
-            if (lastPlayerHit != null)
-            {
-                CaptureEvents.CallOnPlayerKilled(lastPlayerHit, remotePlayer);
-            }
-        }
+        playerManager.KillPlayer(gameObject); 
+        // substituir el player manager per una porta d'entrada que cridi al playermanager la porta d'entrada també utilitzara el lastplayerhit per donar experiencia
     }
 
 

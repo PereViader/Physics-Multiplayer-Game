@@ -19,13 +19,7 @@ public class PlayerFollower : MonoBehaviour {
 
     void Awake()
     {
-        CaptureEvents.OnLocalPlayerSpawned += SetPlayer;
         cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraFollow>();
-    }
-
-    void OnDestroy ()
-    {
-        CaptureEvents.OnLocalPlayerSpawned -= SetPlayer;
     }
 
     void FixedUpdate()
