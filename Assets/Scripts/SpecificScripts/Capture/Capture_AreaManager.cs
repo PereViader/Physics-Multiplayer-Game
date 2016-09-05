@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Capture_AreaManager : MonoBehaviour {
+public class Capture_AreaManager : MonoBehaviour, ISetup {
 
     Transform[] areaPositions;
 
@@ -16,15 +16,10 @@ public class Capture_AreaManager : MonoBehaviour {
     } 
 
 
-    public void OnGameModeSetup()
+    public void OnGameSetup()
     {
         if ( PhotonNetwork.isMasterClient )
             InstantiateNewRandomCapture();
-    }
-
-    public void OnGameModeEnded()
-    {
-
     }
 
     void OnAreaCaptured()

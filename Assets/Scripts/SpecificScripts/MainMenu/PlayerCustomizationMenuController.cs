@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class PlayerCustomizationMenuController : MonoBehaviour {
 
@@ -8,10 +10,28 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
 
     Material[] aviableTextures;
 
+    [SerializeField]
+    RectTransform customizeButtonParent;
+
     void Start()
     {
         aviableTextures = Resources.LoadAll<Material>("PlayerTextures");
+        InititializeCustomizeMenu(aviableTextures);
         SetStartingSkin();
+    }
+
+    void InititializeCustomizeMenu(Material[] materials)
+    {
+        foreach( Material material in materials)
+        {
+            GameObject gButton = (GameObject)Instantiate(Resources.Load("MainMenu/SkinButton"));
+            gButton.transform.SetParent(customizeButtonParent);
+
+            gButton.GetComponentInChildren<Text>().text = material.name;
+            gButton.GetComponent<Button>().onClick.AddListener(() => ChangePlayerMaterial(material.name));
+       }
+
+        customizeButtonParent.sizeDelta = new Vector2(0, customizeButtonParent.childCount * 50);
     }
 
     void SetStartingSkin()

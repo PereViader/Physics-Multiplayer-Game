@@ -6,8 +6,6 @@ public class HabilityJump : Hability {
     [SerializeField]
     private float jumpForce = 600f;
 
-    private bool isBlocked = false;
-
     private Rigidbody rb;
 
     void Awake()
@@ -19,9 +17,9 @@ public class HabilityJump : Hability {
     protected override void Update()
     {
         base.Update();
-        if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
+        if (!onCooldown && Input.GetButtonDown(virtualKey))
         {
-            isBlocked = true;
+            SetOnCooldown();
             photonView.RPC("ExecuteJumpServer", PhotonTargets.MasterClient);
         }
     }
@@ -35,8 +33,6 @@ public class HabilityJump : Hability {
     [PunRPC]
     void ExecuteJump()
     {
-        SetOnCooldown();
-        isBlocked = false;
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 

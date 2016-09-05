@@ -8,7 +8,6 @@ public abstract class Hability : Photon.MonoBehaviour {
 
     protected float currentCooldown;
     protected bool onCooldown;
-
     protected string virtualKey;
 
     public float GetCurrentCooldown()

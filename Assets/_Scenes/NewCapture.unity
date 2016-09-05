@@ -1757,7 +1757,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 422620, guid: 0769a3d67c8a3b4438b30a0563e746dc, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0769a3d67c8a3b4438b30a0563e746dc, type: 2}
@@ -2996,9 +2996,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1343341691}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c17eac48c916d345ac4bb337b6d6773, type: 3}
+  m_Script: {fileID: 11500000, guid: f5c407b755d50e1478987bb524699b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameMode: 0
+  destroyOnSetup: 0
+  displayNetworkStats: 1
 --- !u!114 &1343341696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3051,8 +3054,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1beeaa92affe4cb4faadc476932bd455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamsInGame: 2
   respawnTime: 2
+  teamsInGame: 2
 --- !u!114 &1343341700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4558,7 +4561,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!114 &2060234452
 MonoBehaviour:
   m_ObjectHideFlags: 0

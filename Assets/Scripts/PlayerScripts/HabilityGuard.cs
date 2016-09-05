@@ -6,9 +6,6 @@ public class HabilityGuard : Hability {
     [SerializeField]
     private float guardDuration = 1.4f;
 
-    private bool isBlocked = false;
-    //private bool isGuarding = false;
-
     private Rigidbody rb;
 
     void Awake()
@@ -20,9 +17,9 @@ public class HabilityGuard : Hability {
     override protected void Update()
     {
         base.Update();
-        if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
+        if (!onCooldown && Input.GetButtonDown(virtualKey))
         {
-            isBlocked = true;
+            SetOnCooldown();
             photonView.RPC("ExecuteGuard", PhotonTargets.AllViaServer);
         }
     }
@@ -30,10 +27,6 @@ public class HabilityGuard : Hability {
     [PunRPC]
     void ExecuteGuard()
     {
-        onCooldown = true;
-        currentCooldown = cooldown;
-        isBlocked = false;
-        //isGuarding = true;
         rb.isKinematic = true;
         GetComponent<MeshRenderer>().material.color = Color.black;
         Invoke("EndHability", guardDuration);
@@ -42,7 +35,6 @@ public class HabilityGuard : Hability {
     private void EndHability()
     {
         GetComponent<MeshRenderer>().material.color = Color.white;
-        //isGuarding = false;
         rb.isKinematic = false;
     }
 

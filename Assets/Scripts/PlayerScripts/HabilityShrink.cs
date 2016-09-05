@@ -25,7 +25,7 @@ public class HabilityShrink : Hability {
         base.Update();
         if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
         {
-            isBlocked = true;
+            SetOnCooldown();
             photonView.RPC("ExecuteShrink", PhotonTargets.AllViaServer);
         }
     }
@@ -33,8 +33,6 @@ public class HabilityShrink : Hability {
     [PunRPC]
     void ExecuteShrink()
     {
-        SetOnCooldown();
-        isBlocked = false;
         previousScale = transform.localScale;
         transform.localScale = transform.localScale/shrinkedDivider;
         Invoke("EndShrink", shrinkDuration);

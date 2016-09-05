@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-public class Capture_GameManager : MonoBehaviour, IScorable {
+public class Capture_GameManager : GameManager, IScorable, IKillManager {
 
     Capture_PlayerManager playerManager;
     Capture_ScoreManager scoreManager;
@@ -17,24 +16,6 @@ public class Capture_GameManager : MonoBehaviour, IScorable {
         areaManager = GetComponent<Capture_AreaManager>();
     }
 
-    public void OnGameModeSetup()
-    {
-        experienceManager.OnGameModeSetup();
-        playerManager.OnGameModeSetup();
-        areaManager.OnGameModeSetup();
-    }
-
-    public void OnGameModeEnded()
-    {
-        experienceManager.OnGameModeEnded();
-        playerManager.OnGameModeEnded();
-
-        if ( PhotonNetwork.isMasterClient )
-        {
-            PhotonNetwork.LoadLevel("EndGameScene");
-        }
-    }
-
     public void Score(int team, int value)
     {
         experienceManager.AddExperienceToTeam(team, experienceManager.experienceValues.score*value);
@@ -43,7 +24,7 @@ public class Capture_GameManager : MonoBehaviour, IScorable {
         {
             int winnerTeam = scoreManager.GetWinnerTeam();
             experienceManager.AddExperienceToTeam(winnerTeam, experienceManager.experienceValues.winGame);
-            OnGameModeEnded();
+            OnGameEnd();
         } else 
             areaManager.InstantiateNewRandomCapture();
     }
@@ -58,15 +39,10 @@ public class Capture_GameManager : MonoBehaviour, IScorable {
         ((IScorable)scoreManager).SetScore(score);
     }
 
-    void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    public void Killed(GameObject killed, PhotonPlayer killer)
     {
-        playerManager.PlayerConnected(newPlayer);
-        scoreManager.PlayerConnected(newPlayer);
-    }
-
-    void OnPhotonPlayerDisconnected(PhotonPlayer player)
-    {
-        experienceManager.PlayerDisconnected(player);
-        playerManager.PlayerDisconnected(player);
+        playerManager.KillPlayer(killed);
+        if ( killer != null )
+            experienceManager.AddExperience(killer, experienceManager.experienceValues.kill);
     }
 }

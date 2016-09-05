@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Capture_ExperienceManager : Photon.MonoBehaviour {
+public class Capture_ExperienceManager : Photon.MonoBehaviour, IEnd {
     [System.Serializable]
     public class ExperienceType {
         public int score;
@@ -23,28 +23,23 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour {
         experienceManagerUI = Component.FindObjectOfType<CaptureUI_ExperienceManager>();
     }
 
-    public void OnGameModeSetup()
-    {
-        
-    }
-
-    public void OnGameModeEnded()
+    public void OnGameEnd()
     {
         if (PhotonNetwork.isMasterClient)
-            foreach(var playerExperience in experience)
+            foreach (var playerExperience in experience)
             {
                 PhotonPlayer player = PhotonPlayer.Find(playerExperience.Key);
                 player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.experience, playerExperience.Value } });
             }
     }
 
-    public void PlayerConnected(PhotonPlayer player)
+    public void OnPhotonPlayerConnected(PhotonPlayer player)
     {
         photonView.RPC("RPC_SetExperience", player, experience);
         AddExperience(player, experienceValues.joinGameAlreadyStarted);
     }
 
-    public void PlayerDisconnected(PhotonPlayer player)
+    public void OnPhotonPlayerDisconnected(PhotonPlayer player)
     {
         experience.Remove(player.ID);
     }

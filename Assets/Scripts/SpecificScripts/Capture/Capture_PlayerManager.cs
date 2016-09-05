@@ -2,13 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Capture_PlayerManager : MonoBehaviour {
-
+public class Capture_PlayerManager : PlayerManager {
     [SerializeField]
     int teamsInGame;
-
-    [SerializeField]
-    float respawnTime;
 
     Capture_ScoreManager scoreManager;
     Capture_SpawnManager spawnManager;
@@ -21,16 +17,7 @@ public class Capture_PlayerManager : MonoBehaviour {
         cameraManager = Component.FindObjectOfType<CaptureUI_CameraManager>();
     }
 
-	public void OnGameModeSetup()
-    {
-        if ( PhotonNetwork.isMasterClient)
-        {
-            InitializePlayers();
-            SpawnPlayers();
-        }
-    }
-
-    public void OnGameModeEnded()
+    public override void OnGameEnd()
     {
         if ( PhotonNetwork.isMasterClient)
         {
@@ -53,32 +40,7 @@ public class Capture_PlayerManager : MonoBehaviour {
         }
     }
 
-    public void PlayerConnected(PhotonPlayer player)
-    {
-
-        InitializePlayer(player);
-        SpawnPlayer(player);
-    }
-
-    void Update()
-    {
-        if ( Input.GetKeyDown(KeyCode.Space))
-        {
-            GetPlayersTeams();
-        }
-    }
-
-    // -------------------------------- Player Initializers
-
-    void InitializePlayers()
-    {
-        foreach (PhotonPlayer photonPlayer in PhotonNetwork.playerList)
-        {
-            InitializePlayer(photonPlayer);
-        }
-    }
-
-    void InitializePlayer(PhotonPlayer player)
+    protected override void InitializePlayer(PhotonPlayer player)
     {
         int playerTeam = GetTeamForNewPlayer();
         player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.team, playerTeam } });
@@ -112,15 +74,7 @@ public class Capture_PlayerManager : MonoBehaviour {
 
     // ------------------------------------------------ Player Spawners
 
-    public void SpawnPlayers()  // spawn dels jugadors connectats al entrar a la partida
-    {
-        foreach (PhotonPlayer photonPlayer in PhotonNetwork.playerList)
-        {
-            SpawnPlayer(photonPlayer);
-        }
-    }
-
-    public void SpawnPlayer(PhotonPlayer player)
+    protected override void SpawnPlayer(PhotonPlayer player)
     {
         int playerTeam = (int)player.customProperties[PlayerProperties.team];
         Transform spawn = spawnManager.GetRandomSpawn(playerTeam);
@@ -128,42 +82,15 @@ public class Capture_PlayerManager : MonoBehaviour {
         cameraManager.SetPlayer(playerObject);
     }
 
-    public void PlayerDisconnected(PhotonPlayer player)
+    public override bool IsFriendly(GameObject gameObject1, GameObject gameObject2)
     {
-        Debug.Log("PlayerDisconnected");
-        Debug.Log("PlayerList "+PhotonNetwork.playerList.Length);
-
-        if (PhotonNetwork.isMasterClient)
-        {
-            GameObject playerObject = (GameObject)player.TagObject;
-            PhotonNetwork.Destroy(playerObject);
-        }
-    }
-
-    public void KillPlayer(GameObject playerObject)
-    {
-
-        int playerID = playerObject.GetComponent<PhotonRemoteOwner>().GetPlayer().ID;
-        PhotonNetwork.Destroy(playerObject);
-        StartCoroutine(RespawnPlayer(playerID));
-    }
-
-    IEnumerator RespawnPlayer(int playerID)
-    {
-        yield return new WaitForSeconds(respawnTime);
-        PhotonPlayer player = PhotonPlayer.Find(playerID);
-        if (player == null)
-        {
-            Debug.Log("Player disconnected when trying to respawn");
-        }
-        else
-        {
-            SpawnPlayer(player);
-        }
+        int player1Team = (int)gameObject1.GetComponent<PhotonRemoteOwner>().GetPlayer().customProperties[PlayerProperties.team];
+        int player2Team = (int)gameObject2.GetComponent<PhotonRemoteOwner>().GetPlayer().customProperties[PlayerProperties.team];
+        return player1Team == player2Team;
     }
 
     // --------------------------------------------------- Player Getters
-
+    /*
     public static List<GameObject> GetPlayers(int team)
     {
         List<GameObject> players = new List<GameObject>();
@@ -197,5 +124,5 @@ public class Capture_PlayerManager : MonoBehaviour {
                 players.Add((GameObject)player.TagObject);
         }
         return players;
-    }
+    }*/
 }

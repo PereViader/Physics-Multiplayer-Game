@@ -3,8 +3,6 @@ using System.Collections;
 
 public class HabilityStop : Hability {
 
-    private bool isBlocked = false;
-
     private Rigidbody rb;
 
     void Awake()
@@ -16,19 +14,16 @@ public class HabilityStop : Hability {
     override protected void Update()
     {
         base.Update();
-        if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
+        if (!onCooldown && Input.GetButtonDown(virtualKey))
         {
-            isBlocked = true;
             photonView.RPC("ExecuteStop", PhotonTargets.AllViaServer);
+            SetOnCooldown();
         }
     }
 
     [PunRPC]
     void ExecuteStop()
     {
-        onCooldown = true;
-        currentCooldown = cooldown;
-        isBlocked = false;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }

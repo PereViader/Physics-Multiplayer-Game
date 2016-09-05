@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerHealth : MonoBehaviour {
 
     PhotonPlayer lastPlayerHit;
-    Capture_PlayerManager playerManager;
+    IKillManager killManager;
 
     [SerializeField]
     int lastHitDuration;
@@ -13,9 +13,17 @@ public class PlayerHealth : MonoBehaviour {
     PhotonRemoteOwner remoteOwner;
     void Awake()
     {
-        playerManager = Component.FindObjectOfType<Capture_PlayerManager>();
         remoteOwner = GetComponent<PhotonRemoteOwner>();
         removeDelay = new WaitForSeconds(lastHitDuration);
+
+        try
+        {
+            killManager = (IKillManager)Component.FindObjectOfType<GameManager>();
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("There needs to be a GameManager that implement the IKillManager interface");
+        }
     }
 
 
@@ -30,8 +38,7 @@ public class PlayerHealth : MonoBehaviour {
 
     void KillPlayer()
     {
-        playerManager.KillPlayer(gameObject); 
-        // substituir el player manager per una porta d'entrada que cridi al playermanager la porta d'entrada també utilitzara el lastplayerhit per donar experiencia
+        killManager.Killed(gameObject,lastPlayerHit); 
     }
 
 

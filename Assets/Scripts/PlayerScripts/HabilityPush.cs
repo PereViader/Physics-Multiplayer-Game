@@ -7,23 +7,21 @@ public class HabilityPush : Hability {
     float pushRange = 7f;
 
     [SerializeField]
-    float pushForce = 35f;
+    float pushForce = 20f;
 
-    private bool isBlocked = false;
-
-    PhotonPlayer player;
+    PlayerManager playerManager;
 
     void Awake()
     {
-        player = GetComponent<PhotonRemoteOwner>().GetPlayer();
+        playerManager = Component.FindObjectOfType<PlayerManager>();
         cooldown = 1f;
     }
 
     protected override void Update () {
         base.Update();
-        if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
+        if (!onCooldown && Input.GetButtonDown(virtualKey))
         {
-            isBlocked = true;
+            SetOnCooldown();
             photonView.RPC("ExecutePush", PhotonTargets.AllViaServer);
         }
     }
@@ -31,26 +29,15 @@ public class HabilityPush : Hability {
     [PunRPC]
     void ExecutePush()
     {
-        currentCooldown = cooldown;
-        onCooldown = true;
-        isBlocked = false;
-        int playerTeam = (int)player.customProperties[PlayerProperties.team];
-        foreach (GameObject other in Capture_PlayerManager.GetOtherTeamsPlayers(playerTeam))
-        {
-            RaycastHit hit;
-            bool hasHit = Physics.Raycast(transform.position, other.transform.position - transform.position, out hit, pushRange);
-            if ( hasHit )
+        Collider[] objects = Physics.OverlapSphere(transform.position, pushRange);
+        foreach( Collider collider in objects) {
+            if ( collider.tag == "Player" && !playerManager.IsFriendly(collider.gameObject, gameObject))
             {
-                int otherTeam = (int)other.GetComponent<PhotonRemoteOwner>().GetPlayer().customProperties[PlayerProperties.team];
-                if ( hit.transform.gameObject.tag == "Player" && playerTeam != otherTeam)
-                {
-                    Vector3 pushVector = other.transform.position - transform.position;
-                    pushVector.y = 0;
-                    pushVector.Normalize();
-                    pushVector *= pushForce;
-                   
-                    other.GetComponent<PlayerControllerPast>().ShootPlayer(pushVector);
-                }
+                Vector3 pushVector = collider.gameObject.transform.position - transform.position;
+                pushVector.y = 0;
+                pushVector.Normalize();
+                pushVector *= pushForce;
+                collider.GetComponent<Rigidbody>().AddExplosionForce(pushForce, transform.position, pushRange,0f,ForceMode.VelocityChange);
             }
         }
     }
