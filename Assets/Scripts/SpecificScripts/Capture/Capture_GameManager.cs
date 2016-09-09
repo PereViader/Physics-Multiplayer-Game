@@ -7,9 +7,9 @@ public class Capture_GameManager : GameManager, IScorable, IKillManager {
     Capture_ExperienceManager experienceManager;
     Capture_AreaManager areaManager;
 
-    void Awake()
+    protected override void Awake()
     {
-        Random.seed = ((int)System.DateTime.Now.Ticks) + ((int)Time.time) + Time.frameCount;
+        base.Awake();
         playerManager = GetComponent<Capture_PlayerManager>();
         experienceManager = GetComponent<Capture_ExperienceManager>();
         scoreManager = GetComponent<Capture_ScoreManager>();

@@ -3,9 +3,9 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour, ISetup , IEnd {
 
-    void Awake()
+    protected virtual void Awake()
     {
-        Random.seed = ((int)System.DateTime.Now.Ticks) + ((int)Time.time) + Time.frameCount;
+        Random.InitState(((int)System.DateTime.Now.Ticks) + ((int)Time.time) + Time.frameCount);
     }
 
     public void OnGameSetup()

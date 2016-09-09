@@ -25,7 +25,7 @@ public class LevelProvider {
 
     public static int GetRandomMap(GameMode gameMode)
     {
-        Random.seed = (int)System.DateTime.Now.Ticks;
+        Random.InitState((int)System.DateTime.Now.Ticks);
         int ret = -1;
         switch (gameMode)
         {
