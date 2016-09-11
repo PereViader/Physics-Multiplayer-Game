@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using ExitGames.Client.Photon;
+using UnityEngine.SceneManagement;
 
 public class NetworkRoomController : MonoBehaviour {
     [SerializeField]
@@ -77,9 +78,9 @@ public class NetworkRoomController : MonoBehaviour {
     void CreateRoom()
     {
         RoomOptions roomOptions = new RoomOptions();
-        
-        roomOptions.customRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // Properties visible of the room from the lobby used for matchmaking
-        roomOptions.customRoomProperties = expectedProperties; // Properties of the room 
+
+        roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // Properties visible of the room from the lobby used for matchmaking
+        roomOptions.CustomRoomProperties = expectedProperties; // Properties of the room 
 
         PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
     }
@@ -88,7 +89,8 @@ public class NetworkRoomController : MonoBehaviour {
     {
         if (PhotonNetwork.isMasterClient && PhotonNetwork.playerList.Length == 2)
         {
-            PhotonNetwork.LoadLevel(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]));
+            SceneManager.LoadScene(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]));
+            //PhotonNetwork.LoadLevel(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]));
         } 
 
     }
@@ -98,10 +100,11 @@ public class NetworkRoomController : MonoBehaviour {
         roomPanelController.DisplayWaitingText();
     }
 
+    /*
     void OnLevelWasLoaded(int level)
     {
         PhotonNetwork.isMessageQueueRunning = true;
-    }
+    }*/
 
     void OnConnectedToMaster()
     {

@@ -39,8 +39,8 @@ public class ConnexionStarter : MonoBehaviour {
     {
         RoomOptions roomOptions = new RoomOptions();
 
-        roomOptions.customRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // Properties visible of the room by other players
-        roomOptions.customRoomProperties = new ExitGames.Client.Photon.Hashtable() { { RoomProperty.GameMode, gameMode} };
+        roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // Properties visible of the room by other players
+        roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { RoomProperty.GameMode, gameMode} };
 
         PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
     }

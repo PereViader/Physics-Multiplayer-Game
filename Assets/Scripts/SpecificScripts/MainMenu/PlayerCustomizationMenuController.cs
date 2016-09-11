@@ -20,18 +20,23 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
         SetStartingSkin();
     }
 
+    [SerializeField]
+    float buttonSize;
+
     void InititializeCustomizeMenu(Material[] materials)
-    {
-        foreach( Material material in materials)
+    {     
+        foreach ( Material material in materials)
         {
             GameObject gButton = (GameObject)Instantiate(Resources.Load("MainMenu/SkinButton"));
-            gButton.transform.SetParent(customizeButtonParent);
+            gButton.transform.SetParent(customizeButtonParent,false);
 
-            gButton.GetComponentInChildren<Text>().text = material.name;
-            gButton.GetComponent<Button>().onClick.AddListener(() => ChangePlayerMaterial(material.name));
-       }
+            string name = material.name;
+            gButton.GetComponentInChildren<Text>().text = name;
 
-        customizeButtonParent.sizeDelta = new Vector2(0, customizeButtonParent.childCount * 50);
+            UnityAction onClick = () => this.ChangePlayerMaterial(name);
+            gButton.GetComponent<Button>().onClick.AddListener(onClick);
+
+        }
     }
 
     void SetStartingSkin()
@@ -41,8 +46,6 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
         ChangeDummySkin(startingSkin);
         SetPhotonPlayerSkin(startingSkinName);
     }
-
-    
 
     void ChangeDummySkin(Material newSkin)
     {
