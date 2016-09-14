@@ -4,7 +4,7 @@ using System.Collections;
 public class GameModeController : MonoBehaviour {
 
     [SerializeField]
-    private NetworkRoomController networkRoomController;
+    NetworkRoomController networkRoomController;
 
     [SerializeField]
     GameMode gameMode;

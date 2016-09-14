@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerProperties : MonoBehaviour {
-    public static string team = "Team";
-    public static string experience = "Experience";
-    public static string gameResult = "Result";
-    public static string skin = "Skin";
+public class PlayerProperties {
+    public static readonly string team = "Team";
+    public static readonly string experience = "Experience";
+    public static readonly string gameResult = "Result";
+    public static readonly string skin = "Skin";
 
     public enum GameResult
     {

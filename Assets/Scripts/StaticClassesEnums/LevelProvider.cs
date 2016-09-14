@@ -1,47 +1,24 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using UnityEditor;
 
 public class LevelProvider {
-
-    private const int minCaptureBuildIndex = 1;
-    private const int maxCaptureBuildIndex = 1;
-
-    private const int minBombBuildIndex = 3;
-    private const int maxBombBuildIndex = 3;
-
-    public static int GetRandomCaptureMap()
+    public static GameMode GetRandomGameMode()
     {
-        return Random.Range(minCaptureBuildIndex, maxCaptureBuildIndex+1);
+        return (GameMode)Random.Range(0, System.Enum.GetNames(typeof(GameMode)).Length);
     }
 
-    public static int GetRandomBombMap()
+    public static string GetRandomMap(GameMode gameMode)
     {
-        return Random.Range(minBombBuildIndex, maxBombBuildIndex + 1);
+        SceneAsset[] gameModeMaps = Resources.LoadAll<SceneAsset>("GameModeScenes/" + gameMode.ToString());
+        int chosenMapIndex = Random.Range(0, gameModeMaps.Length);
+        return gameModeMaps[chosenMapIndex].name;
     }
 
-    public static int GetRandomIAMap()
+    public static string GetRandomMap()
     {
-        throw new System.Exception("Not implemented");
-    }
-
-    public static int GetRandomMap(GameMode gameMode)
-    {
-        Random.InitState((int)System.DateTime.Now.Ticks);
-        int ret = -1;
-        switch (gameMode)
-        {
-            case GameMode.Capture:
-                ret = GetRandomCaptureMap();
-                break;
-            case GameMode.Bomb:
-                ret = GetRandomBombMap();
-                break;
-            case GameMode.IA:
-                ret = GetRandomIAMap();
-                break;
-            default:
-                throw new System.Exception("No gamplay associated with " + gameMode);
-        }
-        return ret;
-    }
+        GameMode gameMode = GetRandomGameMode();
+        return GetRandomMap(gameMode);
+    } 
 
 }

@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerExperience {
 
     static int baseExperience = 400;
-    static int incrementExperience = 400;
+    static int incrementExperience = 200;
 
     public static int ExperienceToLevelUp(int level)
     {

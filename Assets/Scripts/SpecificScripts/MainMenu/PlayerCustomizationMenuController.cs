@@ -8,15 +8,15 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
     [SerializeField]
     MeshRenderer displayDummy;
 
-    Material[] aviableTextures;
+    Material[] playerSkins;
 
     [SerializeField]
     RectTransform customizeButtonParent;
 
     void Start()
     {
-        aviableTextures = Resources.LoadAll<Material>("PlayerTextures");
-        InititializeCustomizeMenu(aviableTextures);
+        playerSkins = PlayerSkinLoader.LoadPlayerSkins();
+        InititializeCustomizeMenu(playerSkins);
         SetStartingSkin();
     }
 
@@ -41,10 +41,9 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
 
     void SetStartingSkin()
     {
-        string startingSkinName = GetStartingSkinName();
-        Material startingSkin = FindMaterialByName(startingSkinName);
+        Material startingSkin = GetStartingSkin();
         ChangeDummySkin(startingSkin);
-        SetPhotonPlayerSkin(startingSkinName);
+        SetPhotonPlayerSkin(startingSkin.name);
     }
 
     void ChangeDummySkin(Material newSkin)
@@ -52,12 +51,12 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
         displayDummy.material = newSkin;
     }
 
-    string GetStartingSkinName()
+    Material GetStartingSkin()
     {
         string startingSkinName = PlayerPrefs.GetString("Skin");
         if (startingSkinName == "")
-            startingSkinName = "DefaultMaterial";
-        return startingSkinName;
+            startingSkinName = "0. Default Skin";
+        return FindMaterialByName(startingSkinName);
     }
 
     public void ChangePlayerMaterial(string newMaterialName)
@@ -81,7 +80,7 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
     private Material FindMaterialByName(string name)
     {
         Material texture = null;
-        foreach (Material t in aviableTextures)
+        foreach (Material t in playerSkins)
             if (t.name == name)
                 texture = t;
         return texture;
@@ -94,6 +93,7 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
             foreach (var entry in PhotonNetwork.player.customProperties)
             {
                 GUILayout.Label(entry.Key + " - " + entry.Value);
+                GUILayout.Label("Level: " + PlayerExperience.GetLevel());
             }
         }
         catch (System.Exception) { Debug.Log("error"); }

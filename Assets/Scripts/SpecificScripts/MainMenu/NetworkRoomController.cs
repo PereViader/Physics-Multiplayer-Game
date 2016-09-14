@@ -90,21 +90,13 @@ public class NetworkRoomController : MonoBehaviour {
         if (PhotonNetwork.isMasterClient && PhotonNetwork.playerList.Length == 2)
         {
             SceneManager.LoadScene(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]));
-            //PhotonNetwork.LoadLevel(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]));
         } 
-
     }
 
     void OnJoinedRoom()
     {
         roomPanelController.DisplayWaitingText();
     }
-
-    /*
-    void OnLevelWasLoaded(int level)
-    {
-        PhotonNetwork.isMessageQueueRunning = true;
-    }*/
 
     void OnConnectedToMaster()
     {
