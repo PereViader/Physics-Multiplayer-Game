@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class SkinManager : MonoBehaviour {
 
@@ -7,10 +8,16 @@ public class SkinManager : MonoBehaviour {
     {
         int playerID = (int)GetComponent<PhotonView>().photonView.instantiationData[0];
         string playerTexture = "DefaultMaterial";
-        if (PhotonPlayer.Find(playerID).customProperties[PlayerProperties.skin] != null)
+        PhotonPlayer player = PhotonPlayer.Find(playerID);
+        if ( player != null )
         {
-            playerTexture = (string)PhotonPlayer.Find(playerID).customProperties[PlayerProperties.skin];
-            GetComponent<MeshRenderer>().material = (Material)Resources.Load("PlayerTextures/"+playerTexture);
+            if (player.customProperties[PlayerProperties.skin] != null)
+            {
+                playerTexture = (string)player.customProperties[PlayerProperties.skin];
+                GetComponent<MeshRenderer>().material = (Material)Resources.Load("PlayerTextures/" + playerTexture);
+            }
+            transform.GetComponentInChildren<Text>().text = player.name;
         }
+        
     }
 }

@@ -102,7 +102,7 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
 
     public void ChangeNickname(string nickname)
     {
-        PhotonNetwork.player.name = nickname;
+        PhotonNetwork.playerName = nickname;
         PlayerPrefs.SetString("Nickname", nickname);
 
     }
