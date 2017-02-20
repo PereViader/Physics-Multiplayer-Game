@@ -9,13 +9,13 @@ public class HabilityManager : Photon.MonoBehaviour {
 
     Hability[] habilities;
 
-    CaptureUI_HabilityManager habilityManager;
+    CaptureUI_HabilityManager habilityManagerUI;
 
     bool areHabilitiesSet;
     bool isLocalPlayer;
 
 	void Awake () {
-        habilityManager = Component.FindObjectOfType<CaptureUI_HabilityManager>();
+        habilityManagerUI = Component.FindObjectOfType<CaptureUI_HabilityManager>();
         habilities = new Hability[numberOfHabilities];
         if (PhotonNetwork.isMasterClient)
         {
@@ -33,7 +33,7 @@ public class HabilityManager : Photon.MonoBehaviour {
     [PunRPC]
     public void RPC_SetHabilities(int[] sHabilities)
     {
-        habilityManager.SetActive(true);
+        habilityManagerUI.SetActive(true);
         int playerID = (int)photonView.instantiationData[0];
         isLocalPlayer = playerID == PhotonNetwork.player.ID;
             
@@ -45,8 +45,8 @@ public class HabilityManager : Photon.MonoBehaviour {
             habilities[i].enabled = isLocalPlayer;
             if ( isLocalPlayer )
             {
-                habilityManager.SetName(i, habilities[i].GetHabilityName());
-                habilityManager.SetCooldown(i, habilities[i].GetCurrentCooldown());
+                habilityManagerUI.SetName(i, habilities[i].GetHabilityName());
+                habilityManagerUI.SetCooldown(i, habilities[i].GetCurrentCooldown());
             }
         }
         areHabilitiesSet = true;
@@ -55,13 +55,13 @@ public class HabilityManager : Photon.MonoBehaviour {
     void OnDestroy()
     {
         if (isLocalPlayer)
-            habilityManager.SetActive(false);
+            habilityManagerUI.SetActive(false);
     }
 
     void FixedUpdate()
     {
         if ( isLocalPlayer && areHabilitiesSet )
             for (int i = 0; i < habilities.Length; i++)
-                habilityManager.SetCooldown(i, habilities[i].GetCurrentCooldown());
+                habilityManagerUI.SetCooldown(i, habilities[i].GetCurrentCooldown());
     }
 }

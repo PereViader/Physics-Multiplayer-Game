@@ -1575,7 +1575,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Bomb
+  m_Text: King
 --- !u!222 &437217705
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2270,7 +2270,7 @@ GameObject:
   - 224: {fileID: 530898420}
   - 114: {fileID: 530898421}
   m_Layer: 5
-  m_Name: BombToggle
+  m_Name: KingOfTheHillToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2330,7 +2330,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 230036698}
   toggleTransition: 1
   graphic: {fileID: 1338598808}
@@ -8982,7 +8982,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1204494653}
   toggleTransition: 1
   graphic: {fileID: 2053565053}
@@ -8992,4 +8992,4 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0

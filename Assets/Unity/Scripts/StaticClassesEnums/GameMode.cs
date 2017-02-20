@@ -3,6 +3,6 @@ using System.Collections;
 
 public enum GameMode {
     Capture,
-    Bomb,
+    KingOfTheHill,
     IA
 }

@@ -20,8 +20,9 @@ public class MainMenu_PlayMenuController : MonoBehaviour {
             gameModes.Add(GameMode.Capture);
 
         if (bombToggle.isOn)
-            gameModes.Add(GameMode.Bomb);
-
-        networkRoomController.JoinOrCreateGame(gameModes.ToArray());
+            gameModes.Add(GameMode.KingOfTheHill);
+        
+        if(gameModes.Count > 0)
+            networkRoomController.JoinOrCreateGame(gameModes.ToArray());
     }
 }

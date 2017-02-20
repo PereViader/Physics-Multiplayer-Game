@@ -14,7 +14,10 @@ public class SQLMatchMaker : MonoBehaviour {
     public void JoinOrCreateGame(GameMode[] gameModes)
     {
         chosenGameModeForRoomCreation = gameModes[Random.Range(0, gameModes.Length)];
-        TypedLobby sqlLobby = new TypedLobby("myLobby", LobbyType.SqlLobby);    // same as above
+        TypedLobby sqlLobby = new TypedLobby("myLobby", LobbyType.SqlLobby);
+
+        // photon network provides sql match making. Using registers C0 .. C10 you can set your own properties
+        // C0 is gamemodetype
         string sqlLobbyFilter = "";
         foreach(GameMode gameMode in gameModes)
             sqlLobbyFilter += "C0 = "+ (int)gameMode + ((sqlLobbyFilter != "") ? " OR " : "");
