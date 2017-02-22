@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class GameLobyManager : MonoBehaviour {
     // UI elements
@@ -23,9 +24,6 @@ public class GameLobyManager : MonoBehaviour {
 
     public string lookingForGameText;
 
-    public string joinedLobbyText;
-
-
 
 
     // others
@@ -33,7 +31,7 @@ public class GameLobyManager : MonoBehaviour {
 
 
     // lobby properties
-    public int playersInGame;
+    public static int playersInGame;
 
     public float timeToStartGame;
 
@@ -48,14 +46,28 @@ public class GameLobyManager : MonoBehaviour {
 
     public void JoinOrCreateGame()
     {
-        TypedLobby sqlLobby = new TypedLobby("myLobby", LobbyType.SqlLobby);
+        if ( desiredGameModes != null )
+        {
+            TypedLobby sqlLobby = new TypedLobby("myLobby", LobbyType.SqlLobby);
 
-        // photon network provides sql match making. Using registers C0 .. C10 you can set your own properties
-        // C0 is gamemodetype
-        string sqlLobbyFilter = "";
-        foreach (GameMode gameMode in desiredGameModes)
-            sqlLobbyFilter += "C0 = " + (int)gameMode + ((sqlLobbyFilter != "") ? " OR " : "");
-        PhotonNetwork.JoinRandomRoom(null, 0, MatchmakingMode.FillRoom, sqlLobby, sqlLobbyFilter);
+            // photon network provides sql match making. Using registers C0 .. C10 you can set your own properties
+            // C0 is gamemodetype
+            string sqlLobbyFilter = "";
+            foreach (GameMode gameMode in desiredGameModes)
+                sqlLobbyFilter += ((sqlLobbyFilter != "") ? " OR " : "")+"C0 = " + (int)gameMode;
+            Debug.Log("Trying to join random room");
+            Debug.Log(sqlLobbyFilter);
+            PhotonNetwork.JoinRandomRoom(null, 0, MatchmakingMode.FillRoom, sqlLobby, sqlLobbyFilter);
+        } else
+        {
+            Debug.Log("No desired modes specified");
+            SceneManager.LoadScene("MainMenu");
+        }
+    }
+
+    void OnMasterClientSwitched(PhotonPlayer newMasterClient)
+    {
+        masterText.enabled = PhotonNetwork.isMasterClient;
     }
 
     // if PhotonNetwork.JoinRandomRoom fails this will be called
@@ -72,16 +84,16 @@ public class GameLobyManager : MonoBehaviour {
         roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "C0", (int)gameMode } }; // C0 es el nom de la taula sql es fa servir en el matchmaking sql
         roomOptions.CustomRoomPropertiesForLobby = new string[] { "C0" }; // this makes "C0" available in the lobby
         TypedLobby sqlLobby = new TypedLobby("myLobby", LobbyType.SqlLobby);
-        Debug.Log("Try Create " + PhotonNetwork.connectedAndReady);
         PhotonNetwork.CreateRoom(null, roomOptions, sqlLobby);
     }
 
-
-
-
+    // called after random join or create room
     void OnJoinedRoom()
     {
-        lobbyState.text = joinedLobbyText;
+        if (PhotonNetwork.playerList.Length == playersInGame)
+            lobbyState.text = startingGameText;
+        else
+            lobbyState.text = waitingForUsersText;
         updatePlayerUI();
         if (PhotonNetwork.isMasterClient)
             masterText.enabled = true;
@@ -90,11 +102,14 @@ public class GameLobyManager : MonoBehaviour {
 
     void updatePlayerUI()
     {
-        roomUsersText.text = "Players " + PhotonNetwork.playerList.Length;
-        while(userDisplay.childCount > 0)
+        roomUsersText.text = "Players " + PhotonNetwork.playerList.Length + " / "+playersInGame;
+        List<Transform> tags = new List<Transform>();
+        for (int child = 0; child < userDisplay.childCount; child++)
         {
-            Destroy(userDisplay.GetChild(0));
+            tags.Add(userDisplay.GetChild(child));
         }
+
+        tags.ForEach(x => Destroy(x.gameObject));
 
         foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
@@ -103,18 +118,20 @@ public class GameLobyManager : MonoBehaviour {
         }
     }
 
-    void OnPhotonPlayerConnected()
+    void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
     {
         updatePlayerUI();
         Debug.Log("player joined room");
         if (PhotonNetwork.playerList.Length == playersInGame)
         {
+            CancelInvoke();
             lobbyState.text = startingGameText;
+            startingGame = true;
             Invoke("StartGame", timeToStartGame);
         }
     }
 
-    void OnPhotonPlayerDisconnected()
+    void OnPhotonPlayerDisconnected(PhotonPlayer player)
     {
         Debug.Log("Player Disconnected");
         if ( startingGame )
@@ -122,6 +139,7 @@ public class GameLobyManager : MonoBehaviour {
             startingGame = false;
             CancelInvoke();
         }
+        lobbyState.text = waitingForUsersText;
         updatePlayerUI();
     }
 
@@ -133,6 +151,4 @@ public class GameLobyManager : MonoBehaviour {
             SceneManager.LoadScene(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties["C0"]));
         }
     }
-
-    
 }

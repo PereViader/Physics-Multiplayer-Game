@@ -8,6 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Unity/_Scenes/MainMenu.unity
   - enabled: 1
+    path: Assets/Unity/_Scenes/GameLobby.unity
+  - enabled: 1
     path: Assets/Unity/_Scenes/EndGameScene.unity
   - enabled: 1
     path: Assets/Unity/_Scenes/Resources/GameModeScenes/Capture/NewCapture.unity

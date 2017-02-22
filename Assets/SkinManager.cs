@@ -18,6 +18,5 @@ public class SkinManager : MonoBehaviour {
             }
             transform.GetComponentInChildren<Text>().text = player.name;
         }
-        
     }
 }

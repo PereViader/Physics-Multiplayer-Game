@@ -52,4 +52,6 @@ MonoBehaviour:
   - RPC_SetScore
   - ShootPlayer
   - TaggedPlayer
+  - createNewMap
+  - endGame
   DisableAutoOpenWizard: 1

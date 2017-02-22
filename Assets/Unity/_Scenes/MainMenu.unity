@@ -1371,7 +1371,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Loading
+  m_Text: Connecting To Server
 --- !u!222 &375738607
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5203,10 +5203,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 742794270}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0.34431246, y: 0.3666308}
-  m_AnchorMax: {x: 0.65743756, y: 0.4898123}
-  m_AnchoredPosition: {x: -1.5000153, y: 0.5}
-  m_SizeDelta: {x: 0, y: 2}
+  m_AnchorMin: {x: 0.3806647, y: 0.3907033}
+  m_AnchorMax: {x: 0.62233543, y: 0.46570328}
+  m_AnchoredPosition: {x: -1, y: -0.000030517578}
+  m_SizeDelta: {x: 3, y: -6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1499121177
 MonoBehaviour:

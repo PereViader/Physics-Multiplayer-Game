@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainMenu_PlayMenuController : MonoBehaviour {
 
@@ -23,6 +24,11 @@ public class MainMenu_PlayMenuController : MonoBehaviour {
             gameModes.Add(GameMode.KingOfTheHill);
         
         if(gameModes.Count > 0)
-            networkRoomController.JoinOrCreateGame(gameModes.ToArray());
+        {
+            GameLobyManager.desiredGameModes = gameModes.ToArray();
+            GameLobyManager.playersInGame = 2; // TODO fer que sigui dinamic sengons el mode de joc
+            SceneManager.LoadScene("GameLobby");
+        }
+            //networkRoomController.JoinOrCreateGame(gameModes.ToArray());
     }
 }
