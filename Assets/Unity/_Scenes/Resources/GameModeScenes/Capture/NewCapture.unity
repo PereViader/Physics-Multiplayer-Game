@@ -4328,6 +4328,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 1868324713}
+  - 114: {fileID: 1868324714}
   m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
@@ -4360,6 +4361,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1868324714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1868324712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c83a891e1b86c44b00093ee426ac1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  habilityParent: {fileID: 168395174}
+  hability:
+  - nameText: {fileID: 185012426}
+    cooldownText: {fileID: 1689383156}
+  - nameText: {fileID: 1155153768}
+    cooldownText: {fileID: 1077280155}
 --- !u!1 &1910129122
 GameObject:
   m_ObjectHideFlags: 0

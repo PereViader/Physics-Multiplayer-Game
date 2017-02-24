@@ -5,17 +5,17 @@ using UnityEngine.UI;
 public class HabilityManager : Photon.MonoBehaviour {
 
     [SerializeField]
-    int numberOfHabilities;
+    private int numberOfHabilities;
 
-    Hability[] habilities;
+    private Hability[] habilities;
 
-    CaptureUI_HabilityManager habilityManagerUI;
+    private bool isLocalPlayer;
 
-    bool areHabilitiesSet;
-    bool isLocalPlayer;
+    private UI_HabilityManager habilityManagerUI;
 
-	void Awake () {
-        habilityManagerUI = Component.FindObjectOfType<CaptureUI_HabilityManager>();
+
+    void Awake () {
+        habilityManagerUI = GameObject.FindObjectOfType<UI_HabilityManager>();
         habilities = new Hability[numberOfHabilities];
         if (PhotonNetwork.isMasterClient)
         {
@@ -33,35 +33,27 @@ public class HabilityManager : Photon.MonoBehaviour {
     [PunRPC]
     public void RPC_SetHabilities(int[] sHabilities)
     {
-        habilityManagerUI.SetActive(true);
+        habilityManagerUI.setDisplay(true);
+
         int playerID = (int)photonView.instantiationData[0];
         isLocalPlayer = playerID == PhotonNetwork.player.ID;
-            
         for ( int i = 0; i < habilities.Length; i++)
         {
             System.Type habilityType = HabilityFabric.GethabilityType(sHabilities[i]);
             habilities[i] = (Hability)gameObject.AddComponent(habilityType);
-            habilities[i].SetVirtualKey("Hability" + (i + 1));
             habilities[i].enabled = isLocalPlayer;
-            if ( isLocalPlayer )
-            {
-                habilityManagerUI.SetName(i, habilities[i].GetHabilityName());
-                habilityManagerUI.SetCooldown(i, habilities[i].GetCurrentCooldown());
-            }
+            if (isLocalPlayer)
+                habilities[i].Initialize(habilityManagerUI.getHability(i), i);
         }
-        areHabilitiesSet = true;
     }
 
     void OnDestroy()
     {
-        if (isLocalPlayer)
-            habilityManagerUI.SetActive(false);
-    }
-
-    void FixedUpdate()
-    {
-        if ( isLocalPlayer && areHabilitiesSet )
-            for (int i = 0; i < habilities.Length; i++)
-                habilityManagerUI.SetCooldown(i, habilities[i].GetCurrentCooldown());
+        try
+        {
+            if (isLocalPlayer)
+                habilityManagerUI.setDisplay(false);
+        }
+        catch { }
     }
 }

@@ -16,7 +16,7 @@ public class SkinManager : MonoBehaviour {
                 playerTexture = (string)player.customProperties[PlayerProperties.skin];
                 GetComponent<MeshRenderer>().material = (Material)Resources.Load("PlayerTextures/" + playerTexture);
             }
-            transform.GetComponentInChildren<Text>().text = player.name;
+            //transform.GetComponentInChildren<Text>().text = player.name;
         }
     }
 }

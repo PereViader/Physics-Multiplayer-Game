@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(PhotonView))]
-public class KingOfTheHill_GameManager : MonoBehaviour {
+public class KingOfTheHill_GameManager : GameManager {
 
     [SerializeField]
     private GridMeshGenerator gridMeshGenerator;
@@ -23,10 +23,20 @@ public class KingOfTheHill_GameManager : MonoBehaviour {
     [SerializeField]
     private float endGameDelay;
 
+    [SerializeField]
+    private Transform deadZone;
+
     void Start()
+    {
+        InputState.isGameInput = true;
+        InputState.isMenuInput = false;
+    }
+
+    public override void OnGameSetup()
     {
         if (PhotonNetwork.isMasterClient)
             startGame();
+        base.OnGameSetup();
     }
 
     private void startGame()
@@ -64,6 +74,8 @@ public class KingOfTheHill_GameManager : MonoBehaviour {
 
         map.GetComponent<MeshFilter>().mesh = mapMesh;
         map.GetComponent<MeshCollider>().sharedMesh = mapMesh;
+
+        deadZone.localScale = new Vector3(gridMeshGenerator.getMeshWidth(), gridMeshGenerator.getMeshHeight(),1);
     }
 
     void startRound()
@@ -80,6 +92,7 @@ public class KingOfTheHill_GameManager : MonoBehaviour {
         customProperties["isAlive"] = true;
         player.SetCustomProperties(customProperties);
 
+        PhotonNetwork.Instantiate("GameMode/KingOfTheHill/NewPlayer", new Vector3(0, 10, 2), Quaternion.identity, 0, new object[] { player.ID });
         // TODO spawn player in game
     }
 

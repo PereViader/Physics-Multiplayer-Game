@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 [System.Serializable]
 public class GridMeshGenerator
@@ -46,6 +47,63 @@ public class GridMeshGenerator
         right = new Vector3(cellSize / 2f, 0, 0);
         height = new Vector3(0, sideHeight, 0);
     }*/
+
+    public float getMeshWidth()
+    {
+        int startingX = -1;
+        int endingX = -1;
+        for (int x = 0; x < matrixOcupation.GetLength(0); x++)
+        {
+            bool containsValue = false;
+            for (int z = 0; z < matrixOcupation.GetLength(1); z++)
+            {
+                if (matrixOcupation[x, z])
+                {
+                    containsValue = true;
+                    break;
+                }
+            }
+            if (startingX == -1 && containsValue)
+            {
+                startingX = x;
+            }else if(startingX != -1 && endingX == -1 && !containsValue )
+            {
+                endingX = x;
+                break;
+            }
+        }
+
+        return (endingX - startingX) * cellSize;
+    }
+
+    public float getMeshHeight()
+    {
+        int startingZ = -1;
+        int endingZ = -1;
+        for (int z = 0; z < matrixOcupation.GetLength(1); z++)
+        {
+            bool containsValue = false;
+            for (int x = 0; x < matrixOcupation.GetLength(0); x++)   
+            {
+                if (matrixOcupation[x, z])
+                {
+                    containsValue = true;
+                    break;
+                }
+            }
+            if (startingZ == -1 && containsValue)
+            {
+                startingZ = z;
+            }
+            else if (startingZ != -1 && endingZ == -1 && !containsValue)
+            {
+                endingZ = z;
+                break;
+            }
+        }
+
+        return (endingZ - startingZ) * cellSize;
+    }
 
     public Mesh generateMap(int seed)
     {

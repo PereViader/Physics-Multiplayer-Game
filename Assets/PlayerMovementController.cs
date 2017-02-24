@@ -34,7 +34,6 @@ public class PlayerMovementController : MonoBehaviour {
         photonView = GetComponent<PhotonView>();
         surfaceVector = Quaternion.Euler(new Vector3(0, 0, 45)) * Vector3.right * transform.localScale.x;
         powerBar = GameObject.FindObjectOfType<UI_PowerBarManager>();
-        Debug.Log(powerBar);
     }
 
     void Update()
@@ -49,7 +48,6 @@ public class PlayerMovementController : MonoBehaviour {
     {
         isChargingMove = true;
         currentForce = startingForce-forceIncrementPerSecond;
-        Debug.Log("Start SHoot");
         // send event to notify UI that it has to start to display
         // set its value
         powerBar.setDisplay(true);
@@ -60,10 +58,11 @@ public class PlayerMovementController : MonoBehaviour {
             powerBar.setFill(currentChargePercentage());
             yield return null;
         }
-        powerBar.setDisplay(false);
+        
 
         if (Input.GetAxis("Fire2") > 0)
         {
+            powerBar.setDisplay(false);
             // move has been canceled
             // wait until the button has been released to not start charging at the start of the next frame
             while (Input.GetAxis("Fire1") > 0)
@@ -76,6 +75,7 @@ public class PlayerMovementController : MonoBehaviour {
             Vector3 force = InputGetter.GetDirection() * currentForce;
             photonView.RPC("ShootPlayer", PhotonTargets.MasterClient, force);
             yield return new WaitForSeconds(chargeCooldown);
+            powerBar.setDisplay(false);
         }
         isChargingMove = false;
     }
@@ -88,12 +88,16 @@ public class PlayerMovementController : MonoBehaviour {
     [PunRPC]
     public void ShootPlayer(Vector3 force)
     {
-        Debug.Log("SHoot execute "+force);
         Vector2 forceDirection = new Vector2(force.normalized.x, force.normalized.z).normalized;
         float angleBetween = Vector2.Angle(Vector2.right, forceDirection);
         Quaternion rotationToSurface = Quaternion.Euler(0f, angleBetween, 0f);
         Vector3 surfacePosition = rotationToSurface * surfaceVector;
         rb.angularVelocity = Vector3.zero;
         rb.AddForceAtPosition(force, transform.position + surfacePosition, ForceMode.Impulse);
+    }
+
+    void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        enabled = PhotonNetwork.player.ID == (int)GetComponent<PhotonView>().instantiationData[0];
     }
 }

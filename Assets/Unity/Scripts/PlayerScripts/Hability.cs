@@ -9,6 +9,20 @@ public abstract class Hability : Photon.MonoBehaviour {
     protected float currentCooldown;
     protected bool onCooldown;
     protected string virtualKey;
+    protected int habilityNumber;
+
+    protected UI_Hability habilityUi;
+
+    public void Initialize(UI_Hability habilityUi, int habilityNumber)
+    {
+        //link hability to it's UI representation
+        this.habilityUi = habilityUi;
+        habilityUi.setName(GetHabilityName());
+
+        // link Hability to it's Input
+        // virtual key starts at one, arrays start at 0
+        this.virtualKey = "Hability" + (habilityNumber + 1);
+    }
 
     public float GetCurrentCooldown()
     {
@@ -22,6 +36,7 @@ public abstract class Hability : Photon.MonoBehaviour {
 
     protected void SetOnCooldown()
     {
+        habilityUi.setCooldown(cooldown);
         currentCooldown = cooldown;
         onCooldown = true;
     }
@@ -36,12 +51,13 @@ public abstract class Hability : Photon.MonoBehaviour {
                 onCooldown = false;
                 currentCooldown = 0f;
             }
+            habilityUi.setCooldown(currentCooldown);
         }
     }
 
-    public void SetVirtualKey(string virtualKey)
+    public void SetHabilityNumber()
     {
-        this.virtualKey = virtualKey;
+        
     }
 
     public abstract string GetHabilityName();

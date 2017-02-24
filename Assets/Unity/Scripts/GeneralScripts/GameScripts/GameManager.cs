@@ -1,34 +1,67 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameManager : MonoBehaviour, ISetup , IEnd {
+public class GameManager : MonoBehaviour, ISetup , IEnd, IGame {
 
     protected virtual void Awake()
     {
         Random.InitState(((int)System.DateTime.Now.Ticks) + ((int)Time.time) + Time.frameCount);
     }
 
-    public void OnGameSetup()
+    public virtual void OnGameSetup()
     {
         foreach (ISetup component in GetComponents<ISetup>())
         {
 
-            if ((Object)component != this)
+            if ((object)component != this)
                 component.OnGameSetup();
         }
     }
 
-    public void OnGameEnd()
+    public virtual void OnGameEnd()
     {
         foreach (IEnd component in GetComponents<IEnd>())
         {
-            if ((Object)component != this)
+            if ((object)component != this)
                 component.OnGameEnd();
         }
 
         if (PhotonNetwork.isMasterClient)
         {
             PhotonNetwork.LoadLevel("EndGameScene");
+        }
+    }
+
+    public virtual void OnRoundSetup()
+    {
+        foreach(IGame component in GetComponents<IGame>())
+        {
+            if((object)component != this)
+            {
+                component.OnRoundSetup();
+            }
+        }
+    }
+
+    public virtual void OnRoundStart()
+    {
+        foreach (IGame component in GetComponents<IGame>())
+        {
+            if ((object)component != this)
+            {
+                component.OnRoundStart();
+            }
+        }
+    }
+
+    public virtual void OnRoundEnd()
+    {
+        foreach (IGame component in GetComponents<IGame>())
+        {
+            if ((object)component != this)
+            {
+                component.OnRoundEnd();
+            }
         }
     }
 }
