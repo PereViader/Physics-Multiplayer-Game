@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
-public class Capture_PlayerManager : PlayerManager {
+public class Capture_PlayerManager : NewPlayerManager {
     [SerializeField]
     int teamsInGame;
 
@@ -82,11 +83,36 @@ public class Capture_PlayerManager : PlayerManager {
         cameraManager.SetPlayer(playerObject);
     }
 
-    public override bool IsFriendly(GameObject gameObject1, GameObject gameObject2)
+    public bool IsFriendly(GameObject gameObject1, GameObject gameObject2)
     {
         int player1Team = (int)gameObject1.GetComponent<PhotonRemoteOwner>().GetPlayer().customProperties[PlayerProperties.team];
         int player2Team = (int)gameObject2.GetComponent<PhotonRemoteOwner>().GetPlayer().customProperties[PlayerProperties.team];
         return player1Team == player2Team;
+    }
+
+    public override void OnGameSetup()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnGameStart()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnRoundSetup()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnRoundStart()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnRoundEnd()
+    {
+        throw new NotImplementedException();
     }
 
     // --------------------------------------------------- Player Getters

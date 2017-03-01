@@ -1,28 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class PlayerManager : MonoBehaviour, ISetup, IEnd
+public abstract class NewPlayerManager : MonoBehaviour, IGame
 {
-    [SerializeField]
-    protected float respawnTime;
+    public abstract void OnGameSetup();
 
-
-
-    public virtual void OnGameSetup()
-    {
-        if (PhotonNetwork.isMasterClient)
-        {
-            InitializePlayers();
-            SpawnPlayers();
-        }
-    }
+    public abstract void OnGameStart();
 
     public abstract void OnGameEnd();
 
+    public abstract void OnRoundSetup();
+
+    public abstract void OnRoundStart();
+
+    public abstract void OnRoundEnd();
+
     public virtual void OnPhotonPlayerConnected(PhotonPlayer player)
     {
-        InitializePlayer(player);
-        SpawnPlayer(player);
+        //player joined the game late
+        if ( PhotonNetwork.isMasterClient ) {
+            InitializePlayer(player);
+            SpawnPlayer(player);
+        }
     }
 
     public virtual void OnPhotonPlayerDisconnected(PhotonPlayer player)
@@ -56,24 +55,7 @@ public abstract class PlayerManager : MonoBehaviour, ISetup, IEnd
 
     public virtual void KillPlayer(GameObject playerObject)
     {
-        int playerID = playerObject.GetComponent<PhotonRemoteOwner>().GetPlayer().ID;
+        //int playerID = playerObject.GetComponent<PhotonRemoteOwner>().GetPlayer().ID;
         PhotonNetwork.Destroy(playerObject);
-        StartCoroutine(RespawnPlayer(playerID));
     }
-
-    protected virtual IEnumerator RespawnPlayer(int playerID)
-    {
-        yield return new WaitForSeconds(respawnTime);
-        PhotonPlayer player = PhotonPlayer.Find(playerID);
-        if (player == null)
-        {
-            Debug.Log("Player disconnected when trying to respawn");
-        }
-        else
-        {
-            SpawnPlayer(player);
-        }
-    }
-
-    public abstract bool IsFriendly(GameObject gameObject1, GameObject gameObject2);
 }

@@ -1,10 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
-public class GameEventManager : MonoBehaviour, IGame
+public abstract class GameEventManager : MonoBehaviour, IGame
 {
-    
+    public virtual void TriggerStartingGameEvents()
+    {
+        OnGameSetup();
+        OnGameStart();
+        OnRoundSetup();
+        OnRoundStart();
+    }
 
     public virtual void OnGameEnd()
     {
@@ -13,6 +19,7 @@ public class GameEventManager : MonoBehaviour, IGame
             if( (object) component != this )
                 component.OnGameEnd();
         }
+        GetComponent<PhotonView>().RPC("RPC_EndGame", PhotonTargets.All);
     }
 
     public virtual void OnGameSetup()
@@ -59,4 +66,16 @@ public class GameEventManager : MonoBehaviour, IGame
                 component.OnRoundStart();
         }
     }
+
+    [PunRPC]
+    public virtual void RPC_EndGame()
+    {
+        PhotonNetwork.automaticallySyncScene = false;
+        PhotonNetwork.LeaveRoom();
+        EndGameManager.experienceGained = (int)PhotonNetwork.player.customProperties[PlayerProperties.experience];
+        EndGameManager.gameResult = GetGameResultForPlayer(PhotonNetwork.player);
+        SceneManager.LoadScene("EndGameScene");
+    }
+
+    public abstract PlayerProperties.GameResult GetGameResultForPlayer(PhotonPlayer player);
 }

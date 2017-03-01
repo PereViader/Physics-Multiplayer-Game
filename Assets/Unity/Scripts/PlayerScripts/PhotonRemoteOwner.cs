@@ -19,6 +19,7 @@ public class PhotonRemoteOwner : Photon.MonoBehaviour {
 
     void OnDestroy()
     {
-        player.TagObject = null;
+        if ( (GameObject)player.TagObject == gameObject)
+            player.TagObject = null;
     }
 }

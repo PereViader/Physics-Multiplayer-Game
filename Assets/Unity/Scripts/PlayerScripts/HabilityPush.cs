@@ -9,11 +9,11 @@ public class HabilityPush : Hability {
     [SerializeField]
     float pushForce = 20f;
 
-    PlayerManager playerManager;
+    //NewPlayerManager playerManager;
 
     void Awake()
     {
-        playerManager = Component.FindObjectOfType<PlayerManager>();
+        //playerManager = Component.FindObjectOfType<NewPlayerManager>();
         cooldown = 1f;
     }
 
@@ -31,7 +31,7 @@ public class HabilityPush : Hability {
     {
         Collider[] objects = Physics.OverlapSphere(transform.position, pushRange);
         foreach( Collider collider in objects) {
-            if ( collider.tag == "Player" && !playerManager.IsFriendly(collider.gameObject, gameObject))
+            if ( collider.tag == "Player" /*&& !playerManager.IsFriendly(collider.gameObject, gameObject)*/)
             {
                 Vector3 pushVector = collider.gameObject.transform.position - transform.position;
                 pushVector.y = 0;

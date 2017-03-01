@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public class ConnexionStarter : MonoBehaviour {
 
@@ -27,7 +28,10 @@ public class ConnexionStarter : MonoBehaviour {
 
     void InitializePlayerForFastDevelopment()
     {
-        PhotonNetwork.player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.skin, PlayerPrefs.GetString("Skin") } });
+        ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+        customProperties.Add(PlayerProperties.skin, PlayerPrefs.GetString("Skin"));
+        PhotonNetwork.player.SetCustomProperties(customProperties);
+        PhotonNetwork.playerName = "Player " + Random.Range(0, 100);
     }
 
     void OnConnectedToMaster()
@@ -37,22 +41,27 @@ public class ConnexionStarter : MonoBehaviour {
 
     void CreateRoom()
     {
-        RoomOptions roomOptions = new RoomOptions();
+        /*RoomOptions roomOptions = new RoomOptions();
 
         roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // Properties visible of the room by other players
-        roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { RoomProperty.GameMode, gameMode} };
+        roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { RoomProperty.GameMode, (int)gameMode} };
 
-        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
+        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);*/
+        RoomOptions roomOptions = GameModeFabric.ConstructRoomOptionsForGameMode(gameMode);
+        TypedLobby sqlLobby = GameModeFabric.ConstructTyppedLobby();
+        PhotonNetwork.CreateRoom(null, roomOptions, sqlLobby);
     }
 
     void OnJoinedRoom()
     {
+        PhotonNetwork.room.visible = true;
+        PhotonNetwork.room.open = true;
         InitializeGame();
     }
 
     void InitializeGame()
     {
-        GetComponent<GameManager>().OnGameSetup();
+        GetComponent<GameEventManager>().TriggerStartingGameEvents();
         if ( destroyOnSetup )
             Destroy(this);
     }
@@ -61,8 +70,8 @@ public class ConnexionStarter : MonoBehaviour {
     {
         if (displayNetworkStats)
         {
-            GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
-            GUILayout.Label("Ping: " + PhotonNetwork.GetPing());
+            GUILayout.Box(PhotonNetwork.connectionStateDetailed.ToString());
+            GUILayout.Box("Ping: " + PhotonNetwork.GetPing());
         }
     }
 }

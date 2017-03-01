@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class RoomProperty {
-    public const string Map = "Map";
-    public const string GameMode = "Mode";
+    // photon network provides sql match making. Using registers C0 .. C10 you can set your own properties
+    public const string GameMode = "C0";
+    public const string Map = "C1";
 }

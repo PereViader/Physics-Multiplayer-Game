@@ -1,15 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 [RequireComponent(typeof(PhotonView))]
-public class KingOfTheHill_GameManager : GameManager {
-
-    [SerializeField]
-    private GridMeshGenerator gridMeshGenerator;
-
-    [SerializeField]
-    private GameObject map;
+public class KingOfTheHill_GameManager : GameEventManager {
 
     [SerializeField]
     private int scoreToWin;
@@ -28,108 +23,67 @@ public class KingOfTheHill_GameManager : GameManager {
 
     void Start()
     {
-        InputState.isGameInput = true;
-        InputState.isMenuInput = false;
+        InputState.ActivateGameInput();
     }
-
-    public override void OnGameSetup()
+    
+    void Update()
     {
-        if (PhotonNetwork.isMasterClient)
-            startGame();
-        base.OnGameSetup();
-    }
-
-    private void startGame()
-    {
-        initializePlayers();
-        prepareNewMap();
-        startRound();
-    }
-
-    private void initializePlayers()
-    {
-        foreach( PhotonPlayer player in PhotonNetwork.playerList )
+        if (Input.GetKeyDown(KeyCode.J))
         {
-            ExitGames.Client.Photon.Hashtable basicCustomProperties = new ExitGames.Client.Photon.Hashtable();
-            basicCustomProperties["score"] = 0;
-            basicCustomProperties["experience"] = 0;
-            player.SetCustomProperties(basicCustomProperties);
+            awardExperienceToPlayer(PhotonNetwork.player, 29);
         }
     }
 
-    void prepareNewMap()
+    public void playerDied()
     {
-        ExitGames.Client.Photon.Hashtable roomProperties = PhotonNetwork.room.customProperties;
-        roomProperties["currentMapSeed"] = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-        PhotonNetwork.room.SetCustomProperties(roomProperties);
-        GetComponent<PhotonView>().RPC("createNewMap", PhotonTargets.All);
-    }
-
-    [PunRPC]
-    void createNewMap()
-    {
-        Mesh mapMesh = gridMeshGenerator.generateMap((int)PhotonNetwork.room.customProperties["currentMapSeed"]);
-        map.GetComponent<MeshFilter>().mesh = null;
-        map.GetComponent<MeshCollider>().sharedMesh = null;
-
-        map.GetComponent<MeshFilter>().mesh = mapMesh;
-        map.GetComponent<MeshCollider>().sharedMesh = mapMesh;
-
-        deadZone.localScale = new Vector3(gridMeshGenerator.getMeshWidth(), gridMeshGenerator.getMeshHeight(),1);
-    }
-
-    void startRound()
-    {
-        foreach(PhotonPlayer player in PhotonNetwork.playerList)
-        {
-            spawnPlayer(player);
-        }
-    }
-
-    private void spawnPlayer(PhotonPlayer player)
-    {
-        ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
-        customProperties["isAlive"] = true;
-        player.SetCustomProperties(customProperties);
-
-        PhotonNetwork.Instantiate("GameMode/KingOfTheHill/NewPlayer", new Vector3(0, 10, 2), Quaternion.identity, 0, new object[] { player.ID });
-        // TODO spawn player in game
-    }
-
-
-    public void playerDied(PhotonPlayer player)
-    {
-        ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
-        customProperties["isAlive"] = true;
-        player.SetCustomProperties(customProperties);
-
-        // kill player
         PhotonPlayer winner;
         if (checkEndOfRound(out winner))
         {
-            int experience = roundWinExperience;
+            if ( winner != null )
+            {
+                increasePlayerScore(winner);
+                awardExperienceToPlayer(winner, roundWinExperience);
+            }
             bool hasGameEnded = checkEndOfGame();
-            if (hasGameEnded)
-                experience += gameWinExperience;
-            
-            awardExperienceToPlayer(winner, experience);
+            if ( winner != null && hasGameEnded)
+            {
+                awardExperienceToPlayer(winner, gameWinExperience);
+            }
 
+            // end round
+            OnRoundEnd();
             if(hasGameEnded)
-                GetComponent<PhotonView>().RPC("endGame", PhotonTargets.All);
+            {
+                OnGameEnd();
+            } else
+            {
+                OnRoundSetup();
+                OnRoundStart();
+            }
         }
     }
 
-    [PunRPC]
-    void endGame()
+    public override PlayerProperties.GameResult GetGameResultForPlayer(PhotonPlayer player)
     {
-        // Move to end game scene
-        Debug.Log("End game");
+        PlayerProperties.GameResult gameResult = PlayerProperties.GameResult.Lose;
+        if ((int)PhotonNetwork.player.customProperties[PlayerProperties.score] == scoreToWin)
+        {
+            gameResult = PlayerProperties.GameResult.Win;
+        }
+        return gameResult;
     }
 
     private void awardExperienceToPlayer(PhotonPlayer player, int experience)
     {
         ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
-        customProperties["experience"] = experience + (int)customProperties["experience"];
+        customProperties[PlayerProperties.experience] = experience + (int)customProperties[PlayerProperties.experience];
+        player.SetCustomProperties(customProperties);
+    }
+
+    private void increasePlayerScore(PhotonPlayer player)
+    {
+        ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
+        customProperties[PlayerProperties.score] = 1 + (int)customProperties[PlayerProperties.score];
         player.SetCustomProperties(customProperties);
     }
 
@@ -137,40 +91,30 @@ public class KingOfTheHill_GameManager : GameManager {
     {
         int playersAlive = 0;
         roundWinner = null;
-        IEnumerator<PhotonPlayer> players = (IEnumerator<PhotonPlayer>)PhotonNetwork.playerList.GetEnumerator();
-        while (players.MoveNext() && playersAlive<= 1)
+        foreach( PhotonPlayer player in PhotonNetwork.playerList)
         {
-            if ( (bool)players.Current.customProperties["isAlive"])
+            if (player.TagObject != null)
             {
                 playersAlive++;
-                roundWinner = players.Current;
+                if (playersAlive <= 1)
+                {
+                    roundWinner = player;
+                } else
+                {
+                    roundWinner = null;
+                    break;
+                }
             }
         }
-
-        if (playersAlive > 1) roundWinner = null;
+        
         return playersAlive <= 1;
-    }
-
-    private bool checkEndOfGame(ref PhotonPlayer winner)
-    {
-        winner = null;
-        foreach(PhotonPlayer player in PhotonNetwork.playerList)
-        {
-            if ( (int)player.customProperties["score"] == scoreToWin )
-            {
-                winner = player;
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private bool checkEndOfGame()
     {
         foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
-            if ((int)player.customProperties["score"] == scoreToWin)
+            if ((int)player.customProperties[PlayerProperties.score] == scoreToWin)
             {
                 return true;
             }

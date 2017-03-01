@@ -19,8 +19,8 @@ public class ExperienceBarManager : MonoBehaviour {
 
     void Awake()
     {
-        PlayerExperience.SetLevel(1);
-        PlayerExperience.SetExperience(300);
+        /*PlayerExperience.SetLevel(1);
+        PlayerExperience.SetExperience(300);*/
         nextLevel = GameObject.Find("NextLevel").GetComponent<Text>();
         currentLevel = GameObject.Find("CurrentLevel").GetComponent<Text>();
         experienceBar = GameObject.Find("ExperienceBar/Bar/Inside").GetComponent<Image>();

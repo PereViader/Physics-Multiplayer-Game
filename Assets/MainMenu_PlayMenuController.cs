@@ -26,9 +26,7 @@ public class MainMenu_PlayMenuController : MonoBehaviour {
         if(gameModes.Count > 0)
         {
             GameLobyManager.desiredGameModes = gameModes.ToArray();
-            GameLobyManager.playersInGame = 2; // TODO fer que sigui dinamic sengons el mode de joc
             SceneManager.LoadScene("GameLobby");
         }
-            //networkRoomController.JoinOrCreateGame(gameModes.ToArray());
     }
 }

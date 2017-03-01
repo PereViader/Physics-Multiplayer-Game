@@ -1,33 +1,87 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
-public class KingOfTheHill_PlayerManager : PlayerManager
+public class KingOfTheHill_PlayerManager : NewPlayerManager, IPlayerDeath
 {
-    public override bool IsFriendly(GameObject gameObject1, GameObject gameObject2)
+    public override void OnGameSetup()
     {
-        return gameObject1 == gameObject2;
+        if (PhotonNetwork.isMasterClient)
+        {
+            InitializePlayers();
+        }
     }
 
-    public override void OnGameEnd()
+    public override void OnGameStart() { }
+
+    public override void OnRoundSetup()
     {
+        if (PhotonNetwork.isMasterClient)
+        {
+            SpawnPlayers();
+        }
     }
 
+    public override void OnRoundStart() { }
+
+    public override void OnRoundEnd() {
+        if (PhotonNetwork.isMasterClient)
+        {
+            RemovePlayersStillAlive();
+        }
+    }
+
+    public override void OnGameEnd() { }
+    
     protected override void InitializePlayer(PhotonPlayer player)
     {
         ExitGames.Client.Photon.Hashtable basicCustomProperties = new ExitGames.Client.Photon.Hashtable();
         basicCustomProperties["score"] = 0;
-        basicCustomProperties["experience"] = 0;
+        basicCustomProperties[PlayerProperties.experience] = 0;
         player.SetCustomProperties(basicCustomProperties);
+    }
+
+    protected void RemovePlayersStillAlive()
+    {
+        foreach(PhotonPlayer player in PhotonNetwork.playerList)
+        {
+            if (player.TagObject != null)
+                PhotonNetwork.Destroy((GameObject)player.TagObject);
+        }
     }
 
     protected override void SpawnPlayer(PhotonPlayer player)
     {
         ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
-        customProperties["isAlive"] = true;
         player.SetCustomProperties(customProperties);
 
         PhotonNetwork.Instantiate("GameMode/KingOfTheHill/NewPlayer", new Vector3(0, 10, 2), Quaternion.identity, 0, new object[] { player.ID });
-        // TODO spawn player in game    
+        // TODO spawn player in game  at good spawn location  
+    }
+
+    public void OnPlayerDeath(PhotonPlayer player)
+    {
+        if (player.TagObject == null)
+            Debug.LogError("For some reason player " + player + " is null");
+        PhotonNetwork.Destroy((GameObject)player.TagObject);
+        player.TagObject = null;
+
+        GetComponent<KingOfTheHill_GameManager>().playerDied();
+    }
+    
+    public override void OnPhotonPlayerDisconnected(PhotonPlayer player)
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            OnPlayerDeath(player);
+        }
+    }
+
+    public override void OnPhotonPlayerConnected(PhotonPlayer player)
+    {
+        if (PhotonNetwork.isMasterClient) // TODO també s'ha d'enviar l'estat del joc actual
+        {
+            InitializePlayer(player);
+        }
     }
 }
+

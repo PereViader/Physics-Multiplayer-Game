@@ -54,4 +54,5 @@ MonoBehaviour:
   - TaggedPlayer
   - createNewMap
   - endGame
+  - RPC_EndGame
   DisableAutoOpenWizard: 1

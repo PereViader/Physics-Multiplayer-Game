@@ -18,11 +18,19 @@ public class MenuManager : MonoBehaviour {
     [SerializeField]
     private GameObject customizationPanel;
 
+    //EventSystem eventSystem;
+
+    void Awake()
+    {
+        //eventSystem = Component.FindObjectOfType<EventSystem>();
+    }
 
     public void OnExitButtonPressed()
     {
         Application.Quit();
     }
+
+    //TODO fer que cada vegada que s'entra i es surt de una finestra es canvii l'objecte actiu
 
     public void OnOptionsButtonPressed()
     {

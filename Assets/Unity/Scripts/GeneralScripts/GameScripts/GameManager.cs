@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameManager : MonoBehaviour, ISetup , IEnd, IGame {
+public class GameManager : MonoBehaviour, ISetup , IEnd {
 
     protected virtual void Awake()
     {

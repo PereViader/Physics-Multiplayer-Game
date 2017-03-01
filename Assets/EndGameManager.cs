@@ -4,9 +4,30 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class EndGameManager : MonoBehaviour {
-    Text endGameText;
-    Text scoreText;
 
+    [SerializeField]
+    private Text endGameText;
+
+    public static int experienceGained;
+    public static PlayerProperties.GameResult gameResult;
+
+    void Start()
+    {
+        InputState.ActivateMenuInput();
+        SetTitle(gameResult);
+        GetComponent<ExperienceBarManager>().AddExperienceAndAnimate(experienceGained);
+        ResetEndGameState();
+    }
+
+    private void ResetEndGameState()
+    {
+        experienceGained = 0;
+        gameResult = PlayerProperties.GameResult.None;
+    }
+
+
+
+    /*
 	void Awake () {
         InputState.ActivateMenuInput();
         if (!PhotonNetwork.isMasterClient)
@@ -37,12 +58,7 @@ public class EndGameManager : MonoBehaviour {
     {
         if (PhotonNetwork.isMasterClient && PhotonNetwork.playerList.Length == 1)
             PhotonNetwork.LeaveRoom();
-    }
-
-    void SetScore(int score)
-    {
-        scoreText.text += score.ToString();
-    }
+    }*/
 
     void SetTitle(PlayerProperties.GameResult result)
     {
