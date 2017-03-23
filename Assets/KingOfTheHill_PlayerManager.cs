@@ -54,7 +54,7 @@ public class KingOfTheHill_PlayerManager : NewPlayerManager, IPlayerDeath
         ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
         player.SetCustomProperties(customProperties);
 
-        PhotonNetwork.Instantiate("GameMode/KingOfTheHill/NewPlayer", new Vector3(0, 10, 2), Quaternion.identity, 0, new object[] { player.ID });
+        PhotonNetwork.Instantiate("GameMode/KingOfTheHill/NewPlayer", new Vector3(0, 1, 0), Quaternion.identity, 0, new object[] { player.ID });
         // TODO spawn player in game  at good spawn location  
     }
 

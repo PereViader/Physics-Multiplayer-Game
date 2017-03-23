@@ -70,8 +70,6 @@ public abstract class GameEventManager : MonoBehaviour, IGame
     [PunRPC]
     public virtual void RPC_EndGame()
     {
-        PhotonNetwork.automaticallySyncScene = false;
-        PhotonNetwork.LeaveRoom();
         EndGameManager.experienceGained = (int)PhotonNetwork.player.customProperties[PlayerProperties.experience];
         EndGameManager.gameResult = GetGameResultForPlayer(PhotonNetwork.player);
         SceneManager.LoadScene("EndGameScene");

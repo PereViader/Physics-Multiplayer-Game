@@ -5,13 +5,35 @@ using System;
 public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
 
     [SerializeField]
-    private GridMeshGenerator gridMeshGenerator;
+    private MapMatrixGenerator mapMatrixGenerator;
+
+    [SerializeField]
+    private MapMeshGenerator mapMeshGenerator;
+
+    [SerializeField]
+    private float exteriorBounds;
 
     [SerializeField]
     private GameObject map;
 
     [SerializeField]
     private GameObject deadZone;
+
+    [SerializeField]
+    private Transform ceiling;
+
+    [SerializeField]
+    private Transform northWall;
+
+    [SerializeField]
+    private Transform southWall;
+
+    [SerializeField]
+    private Transform eastWall;
+
+    [SerializeField]
+    private Transform westWall;
+
 
     public void OnGameSetup() { }
 
@@ -40,15 +62,40 @@ public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
     [PunRPC]
     void createNewMap()
     {
-        Mesh mapMesh = gridMeshGenerator.generateMap((int)PhotonNetwork.room.customProperties["currentMapSeed"]);
-        map.GetComponent<MeshFilter>().mesh = null;
-        map.GetComponent<MeshCollider>().sharedMesh = null;
+        bool[,] mapMatrix = mapMatrixGenerator.GenerateMatrix((int)PhotonNetwork.room.customProperties["currentMapSeed"]);
+        Mesh mapMesh = mapMeshGenerator.GenerateGeometryFromMesh(mapMatrix);
 
-        map.GetComponent<MeshFilter>().mesh = mapMesh;
-        map.GetComponent<MeshCollider>().sharedMesh = mapMesh;
+        MeshFilter meshFilter = map.GetComponent<MeshFilter>();
+        MeshCollider meshCollider = map.GetComponent<MeshCollider>();
 
-        deadZone.transform.localScale = new Vector3(gridMeshGenerator.getMeshWidth(), gridMeshGenerator.getMeshHeight(), 1);
+        // unity recomana posar a null primer ja que internament fa unes optimitzacions
+        meshFilter.mesh = null;
+        meshCollider.sharedMesh = null;
+        meshFilter.mesh = mapMesh;
+        meshCollider.sharedMesh = mapMesh;
+
+
+        Vector3 floorCeilingScale = new Vector3(
+                    (mapMesh.bounds.extents.x + exteriorBounds) * 2,
+                    (mapMesh.bounds.extents.z + exteriorBounds) * 2,
+                    1);
+        deadZone.transform.localScale = floorCeilingScale;
+        deadZone.transform.position = new Vector3(0, -mapMeshGenerator.sideHeight, 0);
+
+        ceiling.position = new Vector3(0, 20 - mapMeshGenerator.sideHeight, 0);
+        ceiling.localScale = floorCeilingScale;
+
+        Vector3 wallScalex = new Vector3((mapMesh.bounds.extents.x+exteriorBounds) * 2, 20, 1);
+        northWall.localScale = wallScalex;
+        southWall.localScale = wallScalex;
+        Vector3 wallScalez = new Vector3((mapMesh.bounds.extents.z + exteriorBounds) * 2, 20, 1);
+
+        eastWall.localScale = wallScalez;
+        westWall.localScale = wallScalez;
+
+        northWall.position = new Vector3(0, 10 - mapMeshGenerator.sideHeight, mapMesh.bounds.extents.z + exteriorBounds);
+        southWall.position = new Vector3(0, 10 - mapMeshGenerator.sideHeight, -mapMesh.bounds.extents.z - exteriorBounds);
+        eastWall.position = new Vector3(mapMesh.bounds.extents.x + exteriorBounds, 10 - mapMeshGenerator.sideHeight, 0);
+        westWall.position = new Vector3(-mapMesh.bounds.extents.x - exteriorBounds, 10 - mapMeshGenerator.sideHeight, 0);
     }
-
-
 }

@@ -13,6 +13,9 @@ public class EndGameManager : MonoBehaviour {
 
     void Start()
     {
+        PhotonNetwork.automaticallySyncScene = false;
+        PhotonNetwork.LeaveRoom();
+
         InputState.ActivateMenuInput();
         SetTitle(gameResult);
         GetComponent<ExperienceBarManager>().AddExperienceAndAnimate(experienceGained);
@@ -24,41 +27,6 @@ public class EndGameManager : MonoBehaviour {
         experienceGained = 0;
         gameResult = PlayerProperties.GameResult.None;
     }
-
-
-
-    /*
-	void Awake () {
-        InputState.ActivateMenuInput();
-        if (!PhotonNetwork.isMasterClient)
-            PhotonNetwork.LeaveRoom();
-        scoreText = GameObject.Find("GameScore").GetComponent<Text>();
-        endGameText = GameObject.Find("EndGameText").GetComponent<Text>();
-        PhotonPlayer player = PhotonNetwork.player;
-        PlayerProperties.GameResult result = PlayerProperties.GameResult.None;
-        object oResult;
-        if (player.customProperties.TryGetValue(PlayerProperties.gameResult, out oResult))
-        {
-            result = (PlayerProperties.GameResult)oResult;
-        }
-        int experience = 0;
-        object oExperience;
-        if (player.customProperties.TryGetValue(PlayerProperties.experience, out oExperience))
-        {
-            experience = (int)oExperience;
-        }
-        player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.gameResult, null }, { PlayerProperties.experience, null } });
-        
-        SetTitle(result);
-        SetScore(experience);
-        GetComponent<ExperienceBarManager>().AddExperienceAndAnimate(experience);
-    }
-
-    void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
-    {
-        if (PhotonNetwork.isMasterClient && PhotonNetwork.playerList.Length == 1)
-            PhotonNetwork.LeaveRoom();
-    }*/
 
     void SetTitle(PlayerProperties.GameResult result)
     {

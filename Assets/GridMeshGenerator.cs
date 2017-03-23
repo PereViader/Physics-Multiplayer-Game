@@ -6,6 +6,7 @@ using System.Linq;
 [System.Serializable]
 public class GridMeshGenerator
 {
+    /*
     // constructor parameters
     [SerializeField]
     private int numberOfCellsToFill;
@@ -46,7 +47,7 @@ public class GridMeshGenerator
         up = new Vector3(0, 0, cellSize / 2f);
         right = new Vector3(cellSize / 2f, 0, 0);
         height = new Vector3(0, sideHeight, 0);
-    }*/
+    }
 
     public float getMeshWidth()
     {
@@ -138,7 +139,7 @@ public class GridMeshGenerator
                 Debug.LogError("No more pieces can be placed when generating map"); // TODO make a sistem to try again
             }
         }
-
+        /*
         //omplim els espais en blanc
         bool trobat = true;
         while (trobat)
@@ -182,7 +183,6 @@ public class GridMeshGenerator
         }
         Debug.Log(s);
     }
-
 
     private void generateGeometry()
     {
@@ -483,7 +483,8 @@ public class GridMeshGenerator
     {
         return getCenterAtMatrixPosition(x, z) - up + right - height;
     }
-
+    */
+    /*
     private void occupyPosition(List<Vector2> validPositions, Vector2 position)
     {
         removeValidPositions(validPositions, position);
@@ -495,11 +496,13 @@ public class GridMeshGenerator
     {
         return validPositions[Random.Range(0, validPositions.Count)];
     }
+    
 
     private void removeValidPositions(List<Vector2> validPositions, Vector2 position)
     {
         validPositions.RemoveAll(x => x.Equals(position));
     }
+    
 
     private void addValidAdjacentPositions(List<Vector2> validPositions, Vector2 position)
     {
@@ -520,6 +523,6 @@ public class GridMeshGenerator
     {
         return position.x >= 0 && position.x < numberOfCellsToFill * 2 + 1 && position.y >= 0 && position.y < numberOfCellsToFill * 2 + 1;
     }
+    */
 }
- 
- 
+

@@ -29,11 +29,14 @@ public class UI_ExperienceManager : MonoBehaviour {
         PhotonPlayer player = playerAndUpdatedProps[0] as PhotonPlayer;
         ExitGames.Client.Photon.Hashtable props = (ExitGames.Client.Photon.Hashtable)playerAndUpdatedProps[1];
 
-        int experience = (int)props[PlayerProperties.experience];
-        if (PhotonNetwork.player == player && previousExperience < experience)
+        if ( props.ContainsKey(PlayerProperties.experience))
         {
-            DisplayAddedExperience(experience - previousExperience);
-            previousExperience = experience;
+            int experience = (int)props[PlayerProperties.experience];
+            if (PhotonNetwork.player == player && previousExperience < experience)
+            {
+                DisplayAddedExperience(experience - previousExperience);
+                previousExperience = experience;
+            }
         }
     }
 
