@@ -1,48 +1,51 @@
 ﻿using UnityEngine;
 using System.Collections;
-public class Capture_GameManager : GameManager, IScorable, IKillManager {
+using System;
+
+public class Capture_GameManager : GameEventManager {
 
     Capture_PlayerManager playerManager;
     Capture_ScoreManager scoreManager;
     Capture_ExperienceManager experienceManager;
-    Capture_AreaManager areaManager;
 
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
         playerManager = GetComponent<Capture_PlayerManager>();
         experienceManager = GetComponent<Capture_ExperienceManager>();
         scoreManager = GetComponent<Capture_ScoreManager>();
-        areaManager = GetComponent<Capture_AreaManager>();
     }
 
     public void Score(int team, int value)
     {
         experienceManager.AddExperienceToTeam(team, experienceManager.experienceValues.score*value);
-        ((IScorable)scoreManager).Score(team, value);
+        scoreManager.Score(team, value);
         if ( scoreManager.HasGameEnded() )
         {
             int winnerTeam = scoreManager.GetWinnerTeam();
             experienceManager.AddExperienceToTeam(winnerTeam, experienceManager.experienceValues.winGame);
             OnGameEnd();
-        } else 
-            areaManager.InstantiateNewRandomCapture();
+        }
+        else
+        {
+            OnRoundEnd();
+        }
     }
 
-    public void SetScore(int team, int value)
+    public override void OnPlayerDeath(PhotonPlayer deadPlayer, PhotonPlayer killer)
     {
-        ((IScorable)scoreManager).SetScore(team, value);
-    }
-
-    public void SetScore(int[] score)
-    {
-        ((IScorable)scoreManager).SetScore(score);
-    }
-
-    public void Killed(GameObject killed, PhotonPlayer killer)
-    {
-        playerManager.KillPlayer(killed);
-        if ( killer != null )
+        playerManager.OnPlayerDeath(deadPlayer);
+        if (killer != null)
             experienceManager.AddExperience(killer, experienceManager.experienceValues.kill);
+    }
+
+    public override PlayerProperties.GameResult GetGameResultForPlayer(PhotonPlayer player)
+    {
+        PlayerProperties.GameResult gameResult = PlayerProperties.GameResult.Lose;
+        int playerTeam = (int)player.customProperties[PlayerProperties.team];
+        if (scoreManager.GetWinnerTeam() == playerTeam)
+        {
+            gameResult = PlayerProperties.GameResult.Win;
+        }
+        return gameResult;
     }
 }

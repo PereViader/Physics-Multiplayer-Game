@@ -3021,6 +3021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c407b755d50e1478987bb524699b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOffline: 1
   gameMode: 0
   destroyOnSetup: 0
   displayNetworkStats: 1
@@ -3076,7 +3077,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1beeaa92affe4cb4faadc476932bd455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnTime: 2
   teamsInGame: 2
 --- !u!114 &1343341700
 MonoBehaviour:
@@ -3089,6 +3089,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d20bb94c9520a964db7c7116baa81325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  areaPositions:
+  - {fileID: 874534345}
+  - {fileID: 608751104}
+  - {fileID: 1597007732}
+  - {fileID: 282157503}
+  - {fileID: 1163568203}
+  - {fileID: 1351971545}
+  - {fileID: 557699694}
+  - {fileID: 1925505885}
 --- !u!114 &1343341701
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -21,8 +21,11 @@ public class KingOfTheHill_GameManager : GameEventManager {
     [SerializeField]
     private Transform deadZone;
 
-    void Start()
+    private KingOfTheHill_PlayerManager playerManager;
+
+    void Awake()
     {
+        playerManager = GetComponent<KingOfTheHill_PlayerManager>();
         InputState.ActivateGameInput();
     }
     
@@ -34,8 +37,11 @@ public class KingOfTheHill_GameManager : GameEventManager {
         }
     }
 
-    public void playerDied()
+    public override void OnPlayerDeath(PhotonPlayer deadPlayer, PhotonPlayer killer)
     {
+        // MAYBE en comptes de passar deadPlayer i killer
+        // passar deadPlayer i deathInfo
+        playerManager.OnPlayerDeath(deadPlayer);
         PhotonPlayer winner;
         if (checkEndOfRound(out winner))
         {

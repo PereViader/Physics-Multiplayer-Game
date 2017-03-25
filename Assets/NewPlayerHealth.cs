@@ -3,11 +3,11 @@ using System.Collections;
 
 public class NewPlayerHealth : MonoBehaviour
 {
-    IPlayerDeath killManager;
+    GameEventManager gameManager;
 
     void Awake()
     {
-        killManager = (IPlayerDeath)Component.FindObjectOfType<NewPlayerManager>();
+        gameManager = Component.FindObjectOfType<GameEventManager>();
     }
 
     // Matar el jugador
@@ -22,6 +22,6 @@ public class NewPlayerHealth : MonoBehaviour
     void KillPlayer()
     {
         PhotonPlayer player = GetComponent<PhotonRemoteOwner>().GetPlayer();
-        killManager.OnPlayerDeath(player);
+        gameManager.OnPlayerDeath(player,null); // TODO fer que el jugador el mati algu
     }
 }

@@ -39,7 +39,7 @@ public class NetworkRoomController : MonoBehaviour {
         roomPanelController.DisplaySearchingText();
 
         expectedProperties.Clear();
-        expectedProperties.Add(RoomProperty.GameMode, gameMode);
+        expectedProperties.Add(RoomProperties.GameMode, gameMode);
 
 
         currentRetryCount = 0;
@@ -79,7 +79,7 @@ public class NetworkRoomController : MonoBehaviour {
     {
         RoomOptions roomOptions = new RoomOptions();
 
-        roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // Properties visible of the room from the lobby used for matchmaking
+        roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomProperties.GameMode }; // Properties visible of the room from the lobby used for matchmaking
         roomOptions.CustomRoomProperties = expectedProperties; // Properties of the room 
 
         PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
@@ -89,7 +89,7 @@ public class NetworkRoomController : MonoBehaviour {
     {
         if (PhotonNetwork.isMasterClient && PhotonNetwork.playerList.Length == 2)
         {
-            SceneManager.LoadScene(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]));
+            SceneManager.LoadScene(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperties.GameMode]));
         } 
     }
 

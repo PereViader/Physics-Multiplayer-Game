@@ -45,7 +45,7 @@ public class GameLobyManager : MonoBehaviour {
         if ( desiredGameModes != null )
         {
             TypedLobby sqlLobby = GameModeFabric.ConstructTyppedLobby();
-            string[] sqlLobbyGameModeOptions = desiredGameModes.Select(x => RoomProperty.GameMode + "=" + (int)x).ToArray();
+            string[] sqlLobbyGameModeOptions = desiredGameModes.Select(x => RoomProperties.GameMode + "=" + (int)x).ToArray();
             string sqlLobbyFilter = string.Join(" OR ", sqlLobbyGameModeOptions);
             PhotonNetwork.JoinRandomRoom(null, 0, MatchmakingMode.FillRoom, sqlLobby, sqlLobbyFilter);
         } else
@@ -78,7 +78,7 @@ public class GameLobyManager : MonoBehaviour {
     {
         PhotonNetwork.room.open = true;
         PhotonNetwork.room.visible = true;
-        if (PhotonNetwork.playerList.Length == GameModeFabric.GetPlayersForGameMode((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]))
+        if (PhotonNetwork.playerList.Length == GameModeFabric.GetPlayersForGameMode((GameMode)PhotonNetwork.room.customProperties[RoomProperties.GameMode]))
             lobbyState.text = startingGameText;
         else
             lobbyState.text = waitingForUsersText;
@@ -89,7 +89,7 @@ public class GameLobyManager : MonoBehaviour {
 
     void updatePlayerUI()
     {
-        roomUsersText.text = "Players " + PhotonNetwork.playerList.Length + " / "+ GameModeFabric.GetPlayersForGameMode((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]);
+        roomUsersText.text = "Players " + PhotonNetwork.playerList.Length + " / "+ GameModeFabric.GetPlayersForGameMode((GameMode)PhotonNetwork.room.customProperties[RoomProperties.GameMode]);
         List<Transform> tags = new List<Transform>();
         for (int child = 0; child < userDisplay.childCount; child++)
         {
@@ -108,7 +108,7 @@ public class GameLobyManager : MonoBehaviour {
     void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
     {
         updatePlayerUI();
-        if (PhotonNetwork.playerList.Length == GameModeFabric.GetPlayersForGameMode((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]))
+        if (PhotonNetwork.playerList.Length == GameModeFabric.GetPlayersForGameMode((GameMode)PhotonNetwork.room.customProperties[RoomProperties.GameMode]))
         {
             CancelInvoke();
             lobbyState.text = startingGameText;
@@ -133,7 +133,7 @@ public class GameLobyManager : MonoBehaviour {
     {
         if(PhotonNetwork.isMasterClient)
         {
-            SceneManager.LoadScene(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperty.GameMode]));
+            SceneManager.LoadScene(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperties.GameMode]));
         }
     }
 }

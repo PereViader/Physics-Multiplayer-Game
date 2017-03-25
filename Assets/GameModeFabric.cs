@@ -19,8 +19,8 @@ public static class GameModeFabric {
     {
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = (byte)GetPlayersForGameMode(gameMode);
-        roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { RoomProperty.GameMode, (int)gameMode } }; // C0 es el nom de la taula sql es fa servir en el matchmaking sql
-        roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // this makes RoomProperty.GameMode available in the lobby
+        roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { RoomProperties.GameMode, (int)gameMode } }; // C0 es el nom de la taula sql es fa servir en el matchmaking sql
+        roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomProperties.GameMode }; // this makes RoomProperty.GameMode available in the lobby
         return roomOptions;
     }
 

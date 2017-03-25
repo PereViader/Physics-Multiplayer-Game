@@ -75,5 +75,10 @@ public abstract class GameEventManager : MonoBehaviour, IGame
         SceneManager.LoadScene("EndGameScene");
     }
 
+    public abstract void OnPlayerDeath(PhotonPlayer deadPlayer, PhotonPlayer killer);
+    /*{
+        GetComponent<NewPlayerManager>().OnPlayerDeath(deadPlayer);
+    }*/
+
     public abstract PlayerProperties.GameResult GetGameResultForPlayer(PhotonPlayer player);
 }

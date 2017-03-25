@@ -57,16 +57,6 @@ public class KingOfTheHill_PlayerManager : NewPlayerManager, IPlayerDeath
         PhotonNetwork.Instantiate("GameMode/KingOfTheHill/NewPlayer", new Vector3(0, 1, 0), Quaternion.identity, 0, new object[] { player.ID });
         // TODO spawn player in game  at good spawn location  
     }
-
-    public void OnPlayerDeath(PhotonPlayer player)
-    {
-        if (player.TagObject == null)
-            Debug.LogError("For some reason player " + player + " is null");
-        PhotonNetwork.Destroy((GameObject)player.TagObject);
-        player.TagObject = null;
-
-        GetComponent<KingOfTheHill_GameManager>().playerDied();
-    }
     
     public override void OnPhotonPlayerDisconnected(PhotonPlayer player)
     {

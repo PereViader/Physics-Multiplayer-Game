@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public abstract class NewPlayerManager : MonoBehaviour, IGame
+public abstract class NewPlayerManager : MonoBehaviour, IGame, IPlayerDeath
 {
     public abstract void OnGameSetup();
 
@@ -53,9 +54,18 @@ public abstract class NewPlayerManager : MonoBehaviour, IGame
 
     protected abstract void SpawnPlayer(PhotonPlayer player);
 
-    public virtual void KillPlayer(GameObject playerObject)
+    /*public virtual void OnPlayerDeath(GameObject playerObject)
     {
         //int playerID = playerObject.GetComponent<PhotonRemoteOwner>().GetPlayer().ID;
         PhotonNetwork.Destroy(playerObject);
+    }*/
+
+    
+    public void OnPlayerDeath(PhotonPlayer player)
+    {
+        if (player.TagObject == null)
+            Debug.LogError("For some reason player " + player + " is null");
+        PhotonNetwork.Destroy((GameObject)player.TagObject);
+        player.TagObject = null;
     }
 }

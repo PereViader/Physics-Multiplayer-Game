@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Capture_ScoreManager : Photon.MonoBehaviour, IScorable {
+public class Capture_ScoreManager : Photon.MonoBehaviour, IGame {
 
     [SerializeField]
     int teamsInGame;
@@ -12,7 +12,6 @@ public class Capture_ScoreManager : Photon.MonoBehaviour, IScorable {
 
     int[] score;
 
-    CaptureUI_ScoreManager scoreManagerUI;
     bool hasGameEnded;
     int winnerTeam;
 
@@ -20,68 +19,52 @@ public class Capture_ScoreManager : Photon.MonoBehaviour, IScorable {
     {
         winnerTeam = -1;
         score = new int[teamsInGame];
-        scoreManagerUI = Component.FindObjectOfType<CaptureUI_ScoreManager>();
     }
 
-    public void OnPhotonPlayerConnected(PhotonPlayer player)
+    public void OnGameSetup()
     {
-        photonView.RPC("RPC_SetScore", PhotonTargets.All, score);
+        if(PhotonNetwork.isMasterClient)
+        {
+            InitializeGameScore();
+        }
     }
 
-    //---------------------------------------
+    public void InitializeGameScore()
+    {
+        for (int team = 0; team < teamsInGame; team++)
+        {
+            ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.room.customProperties;
+            customProperties[RoomProperties.Score+team] = new int[teamsInGame];
+            PhotonNetwork.room.SetCustomProperties(customProperties);
+        }
+    }
+
+    public void OnGameStart()
+    {
+    }
+
+    public void OnRoundSetup()
+    {
+    }
+
+    public void OnRoundStart()
+    {
+    }
+
+    public void OnRoundEnd()
+    {
+    }
+
+    public void OnGameEnd()
+    {
+    }
 
     public void Score(int team, int value = 1)
     {
-        if ( !hasGameEnded )
-            photonView.RPC("RPC_Score", PhotonTargets.All, team, value);
-    }
-
-    [PunRPC]
-    void RPC_Score(int team, int value)
-    {
-        score[team] += value;
-        scoreManagerUI.SetScore(team, score[team]);
+        int currentScore = (int)PhotonNetwork.room.customProperties[RoomProperties.Score + team];
+        PhotonNetwork.room.customProperties[RoomProperties.Score + team] = currentScore + value;
         if (score[team] >= endGameScore)
             SetEndGame(team);
-    }
-    //---------------------------------------
-
-    public void SetScore(int team, int score)
-    {
-        if (!hasGameEnded)
-            photonView.RPC("RPC_SetScore", PhotonTargets.All, team, score);
-    }
-
-    [PunRPC]
-    void RPC_SetScore(int team, int score)
-    {
-        this.score[team] = score;
-        scoreManagerUI.SetScore(team, score);
-        if ( score >= endGameScore)
-            SetEndGame(team);
-    }
-
-    //---------------------------------------
-
-    public void SetScore(int[] score)
-    {
-        if (!hasGameEnded)
-            photonView.RPC("RPC_SetScore", PhotonTargets.All, score);
-    }
-
-    [PunRPC]
-    void RPC_SetScore(int[] score)
-    {
-        score.CopyTo(this.score, 0);
-        scoreManagerUI.SetScore(score);
-        for (int i = 0; i < teamsInGame; i++)
-        {
-            if (score[i] >= endGameScore)
-            {
-                SetEndGame(i);
-                break;
-            }
-        }
     }
 
     void SetEndGame(int winner)
@@ -99,4 +82,6 @@ public class Capture_ScoreManager : Photon.MonoBehaviour, IScorable {
     {
         return winnerTeam;
     }
+
+
 }

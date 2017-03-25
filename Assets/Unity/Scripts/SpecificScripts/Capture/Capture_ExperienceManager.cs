@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
-public class Capture_ExperienceManager : Photon.MonoBehaviour, IEnd {
+public class Capture_ExperienceManager : Photon.MonoBehaviour, IGame {
     [System.Serializable]
     public class ExperienceType {
         public int score;
@@ -14,84 +15,57 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour, IEnd {
     [SerializeField]
     public ExperienceType experienceValues;
 
-    Dictionary<int, int> experience;
-    CaptureUI_ExperienceManager experienceManagerUI;
-
-    void Awake()
+    public void OnGameSetup()
     {
-        experience = new Dictionary<int, int>();
-        experienceManagerUI = Component.FindObjectOfType<CaptureUI_ExperienceManager>();
+        foreach (var player in PhotonNetwork.playerList)
+        {
+            ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
+            customProperties[PlayerProperties.experience] = 0;
+        }
+    }
+
+    public void OnGameStart()
+    {
+    }
+
+    public void OnRoundSetup()
+    {
+    }
+
+    public void OnRoundStart()
+    {
+    }
+
+    public void OnRoundEnd()
+    {
     }
 
     public void OnGameEnd()
     {
-        if (PhotonNetwork.isMasterClient)
-            foreach (var playerExperience in experience)
-            {
-                PhotonPlayer player = PhotonPlayer.Find(playerExperience.Key);
-                player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PlayerProperties.experience, playerExperience.Value } });
-            }
     }
 
     public void OnPhotonPlayerConnected(PhotonPlayer player)
     {
-        photonView.RPC("RPC_SetExperience", player, experience);
-        AddExperience(player, experienceValues.joinGameAlreadyStarted);
-    }
-
-    public void OnPhotonPlayerDisconnected(PhotonPlayer player)
-    {
-        experience.Remove(player.ID);
-    }
-
-    [PunRPC]
-    void RPC_SetExperience(Dictionary<int,int> newExperience)
-    {
-        experience = newExperience;
+        if ( PhotonNetwork.isMasterClient )
+            AddExperience(player, experienceValues.joinGameAlreadyStarted);
     }
 
     public void AddExperience(PhotonPlayer player, int amount)
     {
-        photonView.RPC("RPC_AddExperience", PhotonTargets.All, player.ID, amount);
-    }
-
-    [PunRPC]
-    void RPC_AddExperience(int playerID, int amount )
-    {
-        int previousExperience = 0;
-        if (!experience.TryGetValue(playerID, out previousExperience)){
-            experience.Add(playerID, 0);
-        }
-        experience[playerID] = previousExperience + amount;
-
-        if ( PhotonNetwork.player.ID == playerID)
-            experienceManagerUI.DisplayAddedExperience(amount);
+        ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
+        customProperties[PlayerProperties.experience] = amount + (int)customProperties[PlayerProperties.experience];
+        player.SetCustomProperties(customProperties);
     }
 
     public void AddExperienceToTeam(int team, int amount)
     {
-        photonView.RPC("RPC_AddExperienceToTeam", PhotonTargets.All, team, amount);
-    }
-
-    [PunRPC]
-    public void RPC_AddExperienceToTeam(int team, int amount)
-    {
-        foreach( PhotonPlayer player in PhotonNetwork.playerList)
+        foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
             int playerTeam = (int)player.customProperties[PlayerProperties.team];
-            if ( playerTeam == team )
+            if (playerTeam == team)
             {
-                RPC_AddExperience(player.ID, amount);
+                AddExperience(player, amount);
             }
         }
-    }
-
-    void OnGUI()
-    {
-        try
-        {
-            GUI.Box(new Rect(0, 70, 150, 30), "Experience: " + experience[PhotonNetwork.player.ID]);
-        }
-        catch(System.Exception){}
     }
 }

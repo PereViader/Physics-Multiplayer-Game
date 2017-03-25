@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.Events;
 
 public class ConnexionStarter : MonoBehaviour {
+    [SerializeField]
+    bool isOffline;
 
     [SerializeField]
     GameMode gameMode;
@@ -15,15 +17,20 @@ public class ConnexionStarter : MonoBehaviour {
 
     void Start()
     {
-
-        PhotonNetwork.automaticallySyncScene = true;
-        if (!PhotonNetwork.connected)
-        {        // obrir la escena directament per fer proves rapidament
-            InitializePlayerForFastDevelopment();
-            PhotonNetwork.ConnectUsingSettings(GamePreferences.GAME_VERSION);
+        if ( isOffline )
+        {
+            PhotonNetwork.offlineMode = isOffline;
+        } else
+        {
+            PhotonNetwork.automaticallySyncScene = true;
+            if (!PhotonNetwork.connected)
+            {        // obrir la escena directament per fer proves rapidament
+                InitializePlayerForFastDevelopment();
+                PhotonNetwork.ConnectUsingSettings(GamePreferences.GAME_VERSION);
+            }
+            else if (PhotonNetwork.isMasterClient) // obrir la escena des del menu principal on ja ens haviem connectat
+                InitializeGame();
         }
-        else if (PhotonNetwork.isMasterClient) // obrir la escena des del menu principal on ja ens haviem connectat
-            InitializeGame();
     }
 
     void InitializePlayerForFastDevelopment()
@@ -54,8 +61,11 @@ public class ConnexionStarter : MonoBehaviour {
 
     void OnJoinedRoom()
     {
-        PhotonNetwork.room.visible = true;
-        PhotonNetwork.room.open = true;
+        if (!isOffline)
+        {
+            PhotonNetwork.room.visible = true;
+            PhotonNetwork.room.open = true;
+        }
         InitializeGame();
     }
 

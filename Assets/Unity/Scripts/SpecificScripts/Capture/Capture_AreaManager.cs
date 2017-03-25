@@ -1,43 +1,52 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class Capture_AreaManager : MonoBehaviour, ISetup {
+public class Capture_AreaManager : MonoBehaviour, IGame {
 
-    Transform[] areaPositions;
-
-    void Awake()
-    {
-        GameObject container = GameObject.Find("Map/CapturePositions");
-        areaPositions = new Transform[container.transform.childCount];
-        for (int i = 0; i < container.transform.childCount; i++)
-        {
-            areaPositions[i] = container.transform.GetChild(i);
-        }
-    } 
-
+    // Transform de les posicions on es poden crear areas de captura
+    [SerializeField] private Transform[] areaPositions;
 
     public void OnGameSetup()
     {
-        if ( PhotonNetwork.isMasterClient )
+    }
+
+    public void OnGameStart()
+    {
+    }
+
+    public void OnRoundSetup()
+    {
+        if (PhotonNetwork.isMasterClient)
             InstantiateNewRandomCapture();
     }
 
-    void OnAreaCaptured()
+    public void OnRoundStart()
     {
-        InstantiateNewRandomCapture();
+    }
+
+    public void OnRoundEnd()
+    {
+        if (PhotonNetwork.isMasterClient)
+            RemoveOldArea();
+    }
+
+    public void OnGameEnd()
+    {
+    }
+
+    public void RemoveOldArea()
+    {
+        Capture_AreaController currentArea = Component.FindObjectOfType<Capture_AreaController>();
+        if (currentArea != null)
+        {
+            PhotonNetwork.Destroy(currentArea.gameObject);
+        }
     }
 
     public void InstantiateNewRandomCapture()
     {
-        Capture_AreaController currentArea = Component.FindObjectOfType<Capture_AreaController>();
-        Transform currentAreaTransform = null;
-        if (currentArea != null)
-        {
-            currentAreaTransform = currentArea.transform;
-            PhotonNetwork.Destroy(currentArea.gameObject);
-        }
-
-        Transform newTransform = getDiferentRandomAreaPosition(currentAreaTransform);
+        Transform newTransform = getDiferentRandomAreaPosition(null);
         PhotonNetwork.InstantiateSceneObject("GameMode/Capture/Area", newTransform.position, newTransform.rotation, 0, new object[0]);
     }
 
@@ -53,6 +62,8 @@ public class Capture_AreaManager : MonoBehaviour, ISetup {
 
     public Transform GetRandomCapturePosition()
     {
-        return areaPositions[Random.Range(0, areaPositions.Length)];
+        return areaPositions[UnityEngine.Random.Range(0, areaPositions.Length)];
     }
+
+
 }
