@@ -3,6 +3,7 @@ using System.Collections;
 
 public class KingOfTheHill_PlayerManager : NewPlayerManager, IPlayerDeath
 {
+
     public override void OnGameSetup()
     {
         if (PhotonNetwork.isMasterClient)

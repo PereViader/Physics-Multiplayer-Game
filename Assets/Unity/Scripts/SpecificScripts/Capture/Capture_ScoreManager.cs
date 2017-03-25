@@ -10,32 +10,11 @@ public class Capture_ScoreManager : Photon.MonoBehaviour, IGame {
     [SerializeField]
     int endGameScore;
 
-    int[] score;
-
-    bool hasGameEnded;
-    int winnerTeam;
-
-    void Awake()
-    {
-        winnerTeam = -1;
-        score = new int[teamsInGame];
-    }
-
     public void OnGameSetup()
     {
         if(PhotonNetwork.isMasterClient)
         {
             InitializeGameScore();
-        }
-    }
-
-    public void InitializeGameScore()
-    {
-        for (int team = 0; team < teamsInGame; team++)
-        {
-            ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.room.customProperties;
-            customProperties[RoomProperties.Score+team] = new int[teamsInGame];
-            PhotonNetwork.room.SetCustomProperties(customProperties);
         }
     }
 
@@ -59,29 +38,36 @@ public class Capture_ScoreManager : Photon.MonoBehaviour, IGame {
     {
     }
 
+    public void InitializeGameScore()
+    {
+        ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.room.customProperties;
+        for (int team = 0; team < teamsInGame; team++)
+        {
+            customProperties[RoomProperties.Score + team] = 0;
+        }
+        PhotonNetwork.room.SetCustomProperties(customProperties);
+    }
+
     public void Score(int team, int value = 1)
     {
         int currentScore = (int)PhotonNetwork.room.customProperties[RoomProperties.Score + team];
         PhotonNetwork.room.customProperties[RoomProperties.Score + team] = currentScore + value;
-        if (score[team] >= endGameScore)
-            SetEndGame(team);
-    }
-
-    void SetEndGame(int winner)
-    {
-        hasGameEnded = true;
-        winnerTeam = winner;
+        PhotonNetwork.room.SetCustomProperties(PhotonNetwork.room.customProperties);
     }
 
     public bool HasGameEnded()
     {
-        return hasGameEnded;
+        return GetWinnerTeam() >= 0;
     }
  
     public int GetWinnerTeam()
     {
-        return winnerTeam;
+        for (int team = 0; team < this.teamsInGame; team++)
+        {
+            int teamScore = (int)PhotonNetwork.room.customProperties[RoomProperties.Score + team];
+            if (teamScore >= this.endGameScore)
+                return team;
+        }
+        return -1;
     }
-
-
 }

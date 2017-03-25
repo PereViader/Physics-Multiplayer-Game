@@ -23,11 +23,14 @@ public class Capture_GameManager : GameEventManager {
         {
             int winnerTeam = scoreManager.GetWinnerTeam();
             experienceManager.AddExperienceToTeam(winnerTeam, experienceManager.experienceValues.winGame);
+            OnRoundEnd();
             OnGameEnd();
         }
         else
         {
             OnRoundEnd();
+            OnRoundSetup();
+            OnRoundStart();
         }
     }
 

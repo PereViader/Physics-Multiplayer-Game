@@ -5110,10 +5110,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioClips:
-  - {fileID: 8300000, guid: 086b3515d08cfba4cbb6c832b0db0e5b, type: 3}
-  - {fileID: 8300000, guid: 69595fbe5392c124b956115496dc86b8, type: 3}
-  - {fileID: 8300000, guid: 250548ee33c2c1e42bb6831bf8ee7933, type: 3}
-  - {fileID: 8300000, guid: 086b3515d08cfba4cbb6c832b0db0e5b, type: 3}
+  - destinazione_altrove_-_Reckless
+  - Psykick_-_Another_Way
+  - Psykick_-_Completely
+  - Psykick_-_Endless
 --- !u!4 &1464660783
 Transform:
   m_ObjectHideFlags: 0

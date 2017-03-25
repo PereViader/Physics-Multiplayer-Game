@@ -24,7 +24,7 @@ public class Capture_AreaController : MonoBehaviour {
     List<GameObject> playersInside;
 
     CaptureUI_CaptureBars captureBars;
-    IScorable gameManager;
+    Capture_GameManager gameManager;
 
     void Awake()
     {
@@ -33,13 +33,7 @@ public class Capture_AreaController : MonoBehaviour {
         captureDone = new float[teamsInGame];
         lastCaptureValue = new float[teamsInGame];
         captureBars = Component.FindObjectOfType<CaptureUI_CaptureBars>();
-        try
-        {
-            gameManager = (IScorable)Component.FindObjectOfType<GameManager>();
-        } catch(System.Exception)
-        {
-            Debug.Log("There has to be an IScorable GameManager in the scene for the area to work");
-        }
+        gameManager = Component.FindObjectOfType<Capture_GameManager>();
     }
 	
 	// Update is called once per frame

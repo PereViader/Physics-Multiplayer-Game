@@ -34,6 +34,9 @@ public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
     [SerializeField]
     private Transform westWall;
 
+    [SerializeField]
+    private PhysicMaterial floorPhysicMaterial;
+
 
     public void OnGameSetup() { }
 
@@ -73,6 +76,7 @@ public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
         meshCollider.sharedMesh = null;
         meshFilter.mesh = mapMesh;
         meshCollider.sharedMesh = mapMesh;
+        meshCollider.material = this.floorPhysicMaterial;
 
 
         Vector3 floorCeilingScale = new Vector3(

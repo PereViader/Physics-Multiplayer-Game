@@ -7,9 +7,9 @@ public static class GameModeFabric {
         switch (gameMode)
         {
             case GameMode.Capture:
-                return 6;
+                return 2;
             case GameMode.KingOfTheHill:
-                return 4;
+                return 2;
             default:
                 return 0;
         }

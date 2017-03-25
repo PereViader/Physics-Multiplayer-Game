@@ -1770,7 +1770,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 422620, guid: 0769a3d67c8a3b4438b30a0563e746dc, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0769a3d67c8a3b4438b30a0563e746dc, type: 2}
@@ -2124,7 +2124,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2060234458}
+      - m_Target: {fileID: 0}
         m_MethodName: OnMainMenuButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -3021,7 +3021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c407b755d50e1478987bb524699b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOffline: 1
+  isOffline: 0
   gameMode: 0
   destroyOnSetup: 0
   displayNetworkStats: 1
@@ -3053,7 +3053,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamsInGame: 2
-  endGameScore: 5
+  endGameScore: 2
 --- !u!114 &1343341698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4234,7 +4234,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 452838, guid: f1a91bff0aebcfd4ebc2bd24338d3dc3, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2031746, guid: f1a91bff0aebcfd4ebc2bd24338d3dc3, type: 2}
       propertyPath: m_OcclusionCulling
@@ -4338,6 +4338,11 @@ GameObject:
   m_Component:
   - 224: {fileID: 1868324713}
   - 114: {fileID: 1868324714}
+  - 114: {fileID: 1868324715}
+  - 114: {fileID: 1868324716}
+  - 114: {fileID: 1868324719}
+  - 114: {fileID: 1868324718}
+  - 114: {fileID: 1868324717}
   m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
@@ -4387,6 +4392,68 @@ MonoBehaviour:
     cooldownText: {fileID: 1689383156}
   - nameText: {fileID: 1155153768}
     cooldownText: {fileID: 1077280155}
+--- !u!114 &1868324715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1868324712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd4d7c39a617cf146b07c235d316bf85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bar: {fileID: 1428974447}
+  powerBar: {fileID: 334419167}
+--- !u!114 &1868324716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1868324712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da300a94d2fdc0440aace0889dd2c082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  experienceUI: {fileID: 1422806971}
+  delayBetweenDisplays: 0.75
+  displayTimeForEach: 0.2
+--- !u!114 &1868324717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1868324712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cff436876bd70a43beddd8818aeec52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1868324718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1868324712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0971d902b8991b543bd1e0ca084a20ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamsInGame: 2
+--- !u!114 &1868324719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1868324712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b9bb8c9f771a74785dd26f75d750e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamsInGame: 2
 --- !u!1 &1910129122
 GameObject:
   m_ObjectHideFlags: 0
@@ -4558,148 +4625,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2043387601}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &2060234449
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 2060234451}
-  - 114: {fileID: 2060234450}
-  - 114: {fileID: 2060234452}
-  - 114: {fileID: 2060234455}
-  - 114: {fileID: 2060234454}
-  - 114: {fileID: 2060234453}
-  - 114: {fileID: 2060234456}
-  - 114: {fileID: 2060234457}
-  - 114: {fileID: 2060234458}
-  m_Layer: 0
-  m_Name: CaptureUIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
---- !u!114 &2060234450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060234449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ownerId: 0
-  group: 0
-  prefixBackup: -1
-  observed: {fileID: 0}
-  synchronization: 0
-  onSerializeTransformOption: 3
-  onSerializeRigidBodyOption: 2
-  ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
-  ObservedComponentsFoldoutOpen: 1
-  viewIdField: 2
-  instantiationId: 2
-  isRuntimeInstantiated: 0
---- !u!4 &2060234451
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060234449}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
---- !u!114 &2060234452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060234449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0971d902b8991b543bd1e0ca084a20ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  teamsInGame: 2
---- !u!114 &2060234453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060234449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02f6ad77536d9cd429cacedda8f17409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2060234454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060234449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 234d9cc9cbe731444a534c0449c4e4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2060234455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060234449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6f6d3fa01545744280b5a54e33f524a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayTime: 0.75
-  delayTime: 0.2
---- !u!114 &2060234456
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060234449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01b9bb8c9f771a74785dd26f75d750e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  teamsInGame: 2
---- !u!114 &2060234457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060234449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 901adc4d7551a984aae197d440d247aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2060234458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060234449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cff436876bd70a43beddd8818aeec52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2122626224
 GameObject:
   m_ObjectHideFlags: 0

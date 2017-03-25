@@ -63,6 +63,7 @@ public class KingOfTheHill_GameManager : GameEventManager {
                 OnGameEnd();
             } else
             {
+                OnRoundEnd();
                 OnRoundSetup();
                 OnRoundStart();
             }

@@ -20,6 +20,18 @@ public class CaptureUI_ScoreManager : MonoBehaviour, IScorable {
         }
     }
 
+    void OnPhotonCustomRoomPropertiesChanged(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        for (int team = 0; team < teamsInGame; team++)
+        {
+            if (propertiesThatChanged.ContainsKey(RoomProperties.Score + team))
+            {
+                int score = (int)propertiesThatChanged[RoomProperties.Score + team];
+                scoreUI[team].text = score.ToString();
+            }
+        }
+    }
+
     public void SetScore(int[] score)
     {
         if (score.Length != teamsInGame)

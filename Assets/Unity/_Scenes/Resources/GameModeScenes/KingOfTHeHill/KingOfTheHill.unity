@@ -103,7 +103,6 @@ GameObject:
   - 114: {fileID: 85754183}
   - 114: {fileID: 85754187}
   - 114: {fileID: 85754188}
-  - 114: {fileID: 85754189}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -176,7 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c407b755d50e1478987bb524699b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOffline: 1
+  isOffline: 0
   gameMode: 1
   destroyOnSetup: 0
   displayNetworkStats: 1
@@ -205,6 +204,8 @@ MonoBehaviour:
   southWall: {fileID: 1351239695}
   eastWall: {fileID: 357864185}
   westWall: {fileID: 1285991218}
+  floorPhysicMaterial: {fileID: 13400000, guid: 333c2cebbf8c30146a55c77219ca0967,
+    type: 2}
 --- !u!114 &85754188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,20 +217,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17dc69a0bfb29184d9db2d5e7a1e973c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &85754189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 85754182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da300a94d2fdc0440aace0889dd2c082, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  experienceUI: {fileID: 130188815}
-  delayBetweenDisplays: 0.2
-  displayTimeForEach: 0.9
 --- !u!1 &103207898
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,6 +1361,7 @@ GameObject:
   - 114: {fileID: 1053955301}
   - 114: {fileID: 1053955300}
   - 114: {fileID: 1053955302}
+  - 114: {fileID: 1053955303}
   m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
@@ -1447,6 +1435,20 @@ MonoBehaviour:
   playerParent: {fileID: 521342756}
   playerLabelPrefab: {fileID: 1000012107840388, guid: c44b14ed0466cb745a04dcd15e21d7e5,
     type: 2}
+--- !u!114 &1053955303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1053955298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da300a94d2fdc0440aace0889dd2c082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  experienceUI: {fileID: 130188815}
+  delayBetweenDisplays: 0.2
+  displayTimeForEach: 0.9
 --- !u!1 &1194309131
 GameObject:
   m_ObjectHideFlags: 0

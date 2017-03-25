@@ -18,10 +18,7 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour, IGame {
     public void OnGameSetup()
     {
         foreach (var player in PhotonNetwork.playerList)
-        {
-            ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
-            customProperties[PlayerProperties.experience] = 0;
-        }
+            InitializePlayer(player);
     }
 
     public void OnGameStart()
@@ -44,10 +41,19 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour, IGame {
     {
     }
 
+    void InitializePlayer(PhotonPlayer player)
+    {
+        ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
+        customProperties[PlayerProperties.experience] = 0;
+    }
+
     public void OnPhotonPlayerConnected(PhotonPlayer player)
     {
         if ( PhotonNetwork.isMasterClient )
+        {
+            InitializePlayer(player);
             AddExperience(player, experienceValues.joinGameAlreadyStarted);
+        }
     }
 
     public void AddExperience(PhotonPlayer player, int amount)
