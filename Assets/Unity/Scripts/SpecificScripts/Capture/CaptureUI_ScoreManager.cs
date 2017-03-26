@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 
-public class CaptureUI_ScoreManager : MonoBehaviour, IScorable {
+public class CaptureUI_ScoreManager : MonoBehaviour {
 
     [SerializeField]
     int teamsInGame;
