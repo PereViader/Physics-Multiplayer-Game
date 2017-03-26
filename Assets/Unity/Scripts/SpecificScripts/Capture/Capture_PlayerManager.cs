@@ -5,7 +5,10 @@ using System;
 
 public class Capture_PlayerManager : NewPlayerManager, IPlayerDeath {
     [SerializeField]
-    int teamsInGame;
+    private int teamsInGame;
+
+    [SerializeField]
+    private float playerRespawnDelay;
 
     Capture_SpawnManager spawnManager;
 
@@ -79,5 +82,20 @@ public class Capture_PlayerManager : NewPlayerManager, IPlayerDeath {
         int player1Team = (int)gameObject1.GetComponent<PhotonRemoteOwner>().GetPlayer().customProperties[PlayerProperties.team];
         int player2Team = (int)gameObject2.GetComponent<PhotonRemoteOwner>().GetPlayer().customProperties[PlayerProperties.team];
         return player1Team == player2Team;
+    }
+
+    public override void OnPlayerDeath(PhotonPlayer player)
+    {
+        base.OnPlayerDeath(player);
+        StartCoroutine(RespawnPlayer(player));
+    }
+
+    IEnumerator RespawnPlayer(PhotonPlayer player)
+    {
+        yield return new WaitForSeconds(playerRespawnDelay);
+        if ( !player.isInactive )
+        {
+            SpawnPlayer(player);
+        }
     }
 }

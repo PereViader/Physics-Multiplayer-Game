@@ -59,9 +59,8 @@ public abstract class NewPlayerManager : MonoBehaviour, IGame, IPlayerDeath
         //int playerID = playerObject.GetComponent<PhotonRemoteOwner>().GetPlayer().ID;
         PhotonNetwork.Destroy(playerObject);
     }*/
-
     
-    public void OnPlayerDeath(PhotonPlayer player)
+    public virtual void OnPlayerDeath(PhotonPlayer player)
     {
         if (player.TagObject == null)
             Debug.LogError("For some reason player " + player + " is null");

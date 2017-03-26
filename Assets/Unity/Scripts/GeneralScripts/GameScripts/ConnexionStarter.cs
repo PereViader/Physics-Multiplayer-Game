@@ -17,7 +17,7 @@ public class ConnexionStarter : MonoBehaviour {
 
     void Start()
     {
-        if ( isOffline )
+        if ( isOffline && Application.isEditor )
         {
             PhotonNetwork.offlineMode = isOffline;
         } else
@@ -61,7 +61,7 @@ public class ConnexionStarter : MonoBehaviour {
 
     void OnJoinedRoom()
     {
-        if (!isOffline)
+        if (!PhotonNetwork.offlineMode)
         {
             PhotonNetwork.room.visible = true;
             PhotonNetwork.room.open = true;

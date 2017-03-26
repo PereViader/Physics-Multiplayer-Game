@@ -42,15 +42,9 @@ public class BackgroundMusicManager : MonoBehaviour {
         {
             nextClip = GetRandomMusicIndex(nextClip);
             ResourceRequest musicRequest = Resources.LoadAsync<AudioClip>("backgroundMusic/" + audioClips[nextClip]);
-            Debug.Log("Waiting until music request finishes");
-            yield return new WaitUntil(() => musicRequest.isDone);
-            Debug.Log("Music request finished");
-            AudioClip audioClip = (AudioClip)musicRequest.asset;
-            Debug.Log("Waiting until audio ends reproducing");
             yield return new WaitWhile(() => audioSource.isPlaying);
-            Debug.Log("Audio ended reproducing");
-            audioSource.PlayOneShot(audioClip);
-            yield return new WaitForSeconds(audioClip.length-10);
+            yield return new WaitUntil(() => musicRequest.isDone);
+            audioSource.PlayOneShot((AudioClip)musicRequest.asset);
         }
     }
 }

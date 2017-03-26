@@ -7,13 +7,11 @@ using UnityEngine.Events;
 public class PauseMenuManager : MonoBehaviour {
 
     GameObject pausePanel;
-    ExitGameManager exitGameManager;
     bool isPausePanelActive;
 
     void Awake()
     {
         pausePanel = GameObject.Find("Canvas").transform.Find("PauseUI").gameObject;
-        exitGameManager = Component.FindObjectOfType<ExitGameManager>();
         InputState.ActivateGameInput();
     }
 
@@ -33,8 +31,6 @@ public class PauseMenuManager : MonoBehaviour {
     public void OnMainMenuButtonPressed()
     {
         Debug.Log("Main Menu Button pressed");
-        exitGameManager.ExitGame();
+        Component.FindObjectOfType<ExitGameManager>().ExitGame();
     }
-
-    
 }

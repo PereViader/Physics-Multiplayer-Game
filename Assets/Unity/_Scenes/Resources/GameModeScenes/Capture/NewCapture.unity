@@ -2124,8 +2124,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: OnMainMenuButtonPressed
+      - m_Target: {fileID: 1343341701}
+        m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2955,7 +2955,7 @@ GameObject:
   - 114: {fileID: 1343341700}
   - 114: {fileID: 1343341701}
   m_Layer: 0
-  m_Name: CaptureGameManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3021,7 +3021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c407b755d50e1478987bb524699b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOffline: 0
+  isOffline: 1
   gameMode: 0
   destroyOnSetup: 0
   displayNetworkStats: 1
@@ -3078,6 +3078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamsInGame: 2
+  playerRespawnDelay: 5
 --- !u!114 &1343341700
 MonoBehaviour:
   m_ObjectHideFlags: 0

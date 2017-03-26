@@ -1093,6 +1093,8 @@ GameObject:
   - 114: {fileID: 263389223}
   - 114: {fileID: 263389224}
   - 114: {fileID: 263389225}
+  - 114: {fileID: 263389226}
+  - 114: {fileID: 263389220}
   m_Layer: 0
   m_Name: Menu Manager
   m_TagString: Untagged
@@ -1139,6 +1141,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5674ff23520e74aab759ddf3120e88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &263389220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 263389216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24d9a120e9f7bfc4da4905a2fc72f368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cleanOnAwake: 1
+  cleanOnDestroy: 0
 --- !u!114 &263389221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1207,6 +1222,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57ffde3dc492580429745b7a98697425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &263389226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 263389216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6f8298c222cf744ba5bbf9c9249c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menu: {fileID: 1496425212}
+  networkConnectingPanel: {fileID: 742794269}
+  message: {fileID: 375738606}
+  wait: {fileID: 1499121175}
+  onFailedToConnect: Could Not Connect To Server
+  timeToCloseOnFailToConnect: 2
 --- !u!1 &287807514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,7 +1347,7 @@ GameObject:
   - 222: {fileID: 375738607}
   - 114: {fileID: 375738606}
   m_Layer: 5
-  m_Name: Loading
+  m_Name: Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1452,62 +1484,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 376460361}
---- !u!1 &435768944
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 435768946}
-  - 114: {fileID: 435768945}
-  - 114: {fileID: 435768948}
-  m_Layer: 0
-  m_Name: Network Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
---- !u!114 &435768945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 435768944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c6f8298c222cf744ba5bbf9c9249c74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menu: {fileID: 1496425212}
-  loading: {fileID: 742794269}
---- !u!4 &435768946
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 435768944}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.8163962, y: 6.6961594, z: -26.46715}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 805601123}
-  m_RootOrder: 1
---- !u!114 &435768948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 435768944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24d9a120e9f7bfc4da4905a2fc72f368, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cleanOnAwake: 1
-  cleanOnDestroy: 0
 --- !u!1 &437217702
 GameObject:
   m_ObjectHideFlags: 0
@@ -3182,7 +3158,6 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 263389218}
-  - {fileID: 435768946}
   - {fileID: 1839939834}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -7987,7 +7962,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 805601123}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!1 &1883867498
 GameObject:
   m_ObjectHideFlags: 0
