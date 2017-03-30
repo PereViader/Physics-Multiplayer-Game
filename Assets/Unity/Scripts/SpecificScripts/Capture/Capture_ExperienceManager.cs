@@ -43,8 +43,8 @@ public class Capture_ExperienceManager : Photon.MonoBehaviour, IGame {
 
     void InitializePlayer(PhotonPlayer player)
     {
-        ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
-        customProperties[PlayerProperties.experience] = 0;
+        player.customProperties[PlayerProperties.experience] = 0;
+        player.SetCustomProperties(player.customProperties);
     }
 
     public void OnPhotonPlayerConnected(PhotonPlayer player)

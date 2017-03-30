@@ -14,15 +14,13 @@ public class PlayerSkinLoader {
         int playerLevel = PlayerExperience.GetLevel();
         Material[] aviableSkins = Resources.LoadAll<Material>("PlayerTextures");
         List<Material> skins = new List<Material>();
-
+        Debug.Log("len" + aviableSkins.Length);
         foreach(Material skin in aviableSkins)
         {
-            if (int.Parse(skin.name.Split('.')[0]) <= playerLevel)
+            int skinLevel = int.Parse(skin.name.Split('.')[0]);
+            if (skinLevel <= playerLevel)
             {
                 skins.Add(skin);
-            } else
-            {
-                break;
             }
         }
         return skins.ToArray();

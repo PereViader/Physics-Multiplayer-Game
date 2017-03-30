@@ -11,10 +11,7 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
     Material[] playerSkins;
 
     [SerializeField]
-    RectTransform customizeButtonParent;
-
-    [SerializeField]
-    
+    RectTransform customizeButtonParent;    
 
     void Start()
     {

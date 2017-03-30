@@ -12,16 +12,6 @@ public abstract class GameEventManager : MonoBehaviour, IGame
         OnRoundStart();
     }
 
-    public virtual void OnGameEnd()
-    {
-        foreach(IGame component in GetComponents<IGame>() )
-        {
-            if( (object) component != this )
-                component.OnGameEnd();
-        }
-        GetComponent<PhotonView>().RPC("RPC_EndGame", PhotonTargets.All);
-    }
-
     public virtual void OnGameSetup()
     {
         foreach (IGame component in GetComponents<IGame>())
@@ -40,20 +30,11 @@ public abstract class GameEventManager : MonoBehaviour, IGame
         }
     }
 
-    public virtual void OnRoundEnd()
-    {
-        foreach (IGame component in GetComponents<IGame>())
-        {
-            if( (object) component != this )
-                component.OnRoundEnd();
-        }
-    }
-
     public virtual void OnRoundSetup()
     {
         foreach (IGame component in GetComponents<IGame>())
         {
-            if( (object) component != this )
+            if ((object)component != this)
                 component.OnRoundSetup();
         }
     }
@@ -62,9 +43,28 @@ public abstract class GameEventManager : MonoBehaviour, IGame
     {
         foreach (IGame component in GetComponents<IGame>())
         {
-            if( (object) component != this )
+            if ((object)component != this)
                 component.OnRoundStart();
         }
+    }
+
+    public virtual void OnRoundEnd()
+    {
+        foreach (IGame component in GetComponents<IGame>())
+        {
+            if ((object)component != this)
+                component.OnRoundEnd();
+        }
+    }
+
+    public virtual void OnGameEnd()
+    {
+        foreach(IGame component in GetComponents<IGame>() )
+        {
+            if( (object) component != this )
+                component.OnGameEnd();
+        }
+        GetComponent<PhotonView>().RPC("RPC_EndGame", PhotonTargets.All);
     }
 
     [PunRPC]
@@ -76,9 +76,6 @@ public abstract class GameEventManager : MonoBehaviour, IGame
     }
 
     public abstract void OnPlayerDeath(PhotonPlayer deadPlayer, PhotonPlayer killer);
-    /*{
-        GetComponent<NewPlayerManager>().OnPlayerDeath(deadPlayer);
-    }*/
 
     public abstract PlayerProperties.GameResult GetGameResultForPlayer(PhotonPlayer player);
 }

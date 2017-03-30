@@ -35,5 +35,5 @@ public class UI_LeaderBoardManager : MonoBehaviour {
                 }
             }
         } catch { }
-    }	
+    }
 }

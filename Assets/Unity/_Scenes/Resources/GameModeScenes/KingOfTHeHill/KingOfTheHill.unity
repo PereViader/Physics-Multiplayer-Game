@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c407b755d50e1478987bb524699b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOffline: 1
+  isOffline: 0
   gameMode: 1
   destroyOnSetup: 0
   displayNetworkStats: 1
