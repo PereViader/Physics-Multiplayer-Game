@@ -25,14 +25,15 @@ GameObject:
   - 54: {fileID: 54000013771474944}
   - 114: {fileID: 114000012892328428}
   - 114: {fileID: 114000011434540256}
-  - 114: {fileID: 114000013379957310}
   - 114: {fileID: 114000012808770446}
   - 114: {fileID: 114000013082327498}
   - 114: {fileID: 114000011188994238}
   - 114: {fileID: 114000013419812112}
   - 114: {fileID: 114000011387214460}
+  - 114: {fileID: 114000011377207594}
+  - 114: {fileID: 114000013313360074}
   m_Layer: 0
-  m_Name: NewPlayer
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,6 +115,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfHabilities: 2
+--- !u!114 &114000011377207594
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013963928104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
 --- !u!114 &114000011387214460
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -137,9 +151,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingForce: 10
-  forceIncrementPerSecond: 15
   maxForce: 20
+  timeToGetFullForce: 0.9
   chargeCooldown: 0.7
+  currentPercentage: 0
+  isChargingMove: 0
 --- !u!114 &114000012808770446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -171,7 +187,8 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 1
   ObservedComponents:
-  - {fileID: 114000013379957310}
+  - {fileID: 114000011377207594}
+  - {fileID: 114000013313360074}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -187,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f66bbaa614433a4ebe51b9969942ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114000013379957310
+--- !u!114 &114000013313360074
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -195,10 +212,59 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000013963928104}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f56dd9223b5a57f448dce7b72a064966, type: 3}
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  correctingLerp: 17
+  m_PositionModel:
+    SynchronizeEnabled: 1
+    TeleportEnabled: 1
+    TeleportIfDistanceGreaterThan: 5
+    InterpolateOption: 4
+    InterpolateMoveTowardsSpeed: 1
+    InterpolateLerpSpeed: 3
+    InterpolateMoveTowardsAcceleration: 2
+    InterpolateMoveTowardsDeceleration: 2
+    InterpolateSpeedCurve:
+      serializedVersion: 2
+      m_Curve:
+      - time: -1
+        value: 0
+        inSlope: 0
+        outSlope: Infinity
+        tangentMode: 0
+      - time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+      - time: 4
+        value: 4
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ExtrapolateOption: 0
+    ExtrapolateSpeed: 1
+    ExtrapolateIncludingRoundTripTime: 1
+    ExtrapolateNumberOfStoredPositions: 1
+    DrawErrorGizmo: 1
+  m_RotationModel:
+    SynchronizeEnabled: 0
+    InterpolateOption: 1
+    InterpolateRotateTowardsSpeed: 180
+    InterpolateLerpSpeed: 5
+  m_ScaleModel:
+    SynchronizeEnabled: 0
+    InterpolateOption: 0
+    InterpolateMoveTowardsSpeed: 1
+    InterpolateLerpSpeed: 0
 --- !u!114 &114000013419812112
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -5,7 +5,10 @@ using System;
 public class Capture_AreaManager : MonoBehaviour, IGame {
 
     // Transform de les posicions on es poden crear areas de captura
-    [SerializeField] private Transform[] areaPositions;
+    [SerializeField]
+    private Transform captureAreaParent;
+
+    private Transform previousArea;
 
     public void OnGameSetup()
     {
@@ -42,28 +45,27 @@ public class Capture_AreaManager : MonoBehaviour, IGame {
         {
             PhotonNetwork.Destroy(currentArea.gameObject);
         }
+        previousArea = currentArea.transform;
     }
 
     public void InstantiateNewRandomCapture()
     {
-        Transform newTransform = getDiferentRandomAreaPosition(null);
-        PhotonNetwork.InstantiateSceneObject("GameMode/Capture/Area", newTransform.position, newTransform.rotation, 0, new object[0]);
+        Transform newTransform = getDiferentRandomAreaPosition(previousArea);
+        PhotonNetwork.InstantiateSceneObject("GameMode/Area", newTransform.position, newTransform.rotation, 0, new object[0]);
     }
 
-    public Transform getDiferentRandomAreaPosition(Transform current)
+    public Transform getDiferentRandomAreaPosition(Transform previousArea)
     {
         Transform newCapturePosition;
         do
         {
             newCapturePosition = GetRandomCapturePosition();
-        } while (newCapturePosition == current);
+        } while (newCapturePosition == previousArea);
         return newCapturePosition;
     }
 
     public Transform GetRandomCapturePosition()
     {
-        return areaPositions[UnityEngine.Random.Range(0, areaPositions.Length)];
+        return captureAreaParent.GetChild(UnityEngine.Random.Range(0, captureAreaParent.childCount));
     }
-
-
 }

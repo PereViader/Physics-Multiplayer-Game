@@ -3,42 +3,37 @@ using System.Collections;
 
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovementController : MonoBehaviour {
+public class PlayerMovementController : Photon.MonoBehaviour {
 
     [SerializeField]
     private float startingForce;
 
     [SerializeField]
-    private float forceIncrementPerSecond;
+    private float maxForce;
 
     [SerializeField]
-    private float maxForce;
+    private float timeToGetFullForce;
 
     [SerializeField]
     private float chargeCooldown;
 
-    private float currentForce;
-    private bool isChargingMove;
+    [HideInInspector]
+    public float currentPercentage;
+    [HideInInspector]
+    public bool isChargingMove;
 
-    private Vector3 surfaceVector;
 
     private Rigidbody rb;
-    private PhotonView photonView;
-    private UI_PowerBarManager powerBar;
     
 
     void Awake()
     {
-        isChargingMove = false;
         rb = GetComponent<Rigidbody>();
-        photonView = GetComponent<PhotonView>();
-        surfaceVector = Quaternion.Euler(new Vector3(0, 0, 45)) * Vector3.right * transform.localScale.x;
-        powerBar = GameObject.FindObjectOfType<UI_PowerBarManager>();
     }
 
     void Update()
     {
-        if (!isChargingMove && Input.GetAxis("Fire1") > 0)
+        if (Input.GetAxis("Fire1") > 0)
         {
             StartCoroutine(ExecutePlayerMovement());
         }
@@ -46,58 +41,40 @@ public class PlayerMovementController : MonoBehaviour {
 
     IEnumerator ExecutePlayerMovement()
     {
+        enabled = false;
         isChargingMove = true;
-        currentForce = startingForce-forceIncrementPerSecond;
-        // send event to notify UI that it has to start to display
-        // set its value
-        powerBar.setDisplay(true);
+        currentPercentage = 0;
+        float percentageIncrementPerSecond = 1/timeToGetFullForce;
 
+        // mentre es carrega i no es cancela
         while(Input.GetAxis("Fire1") > 0 && Input.GetAxis("Fire2") == 0)
         {
-            currentForce = Mathf.Clamp(currentForce + forceIncrementPerSecond * Time.deltaTime, startingForce, maxForce);
-            powerBar.setFill(currentChargePercentage());
+            currentPercentage = Mathf.Clamp01(currentPercentage + percentageIncrementPerSecond * Time.deltaTime);
             yield return null;
         }
         
-
-        if (Input.GetAxis("Fire2") > 0)
-        {
-            powerBar.setDisplay(false);
-            // move has been canceled
-            // wait until the button has been released to not start charging at the start of the next frame
-            while (Input.GetAxis("Fire1") > 0)
-            {
-                yield return null;
-            }
-        } else
+        // si no s'ha cancelat vol dir que s'ha disparat
+        if (Input.GetAxis("Fire2") == 0)
         {
             // move has been charged and has to execute
-            Vector3 force = InputGetter.GetDirection() * currentForce;
+            //Vector3 force = InputGetter.GetDirection() * currentForce;
+            Vector3 force = Camera.main.transform.forward * maxForce*currentPercentage;
             photonView.RPC("ShootPlayer", PhotonTargets.MasterClient, force);
-            yield return new WaitForSeconds(chargeCooldown);
-            powerBar.setDisplay(false);
         }
+        yield return new WaitForSeconds(chargeCooldown);
         isChargingMove = false;
-    }
-
-    float currentChargePercentage()
-    {
-        return (currentForce - startingForce) / (maxForce - startingForce);
+        enabled = true;
     }
 
     [PunRPC]
     public void ShootPlayer(Vector3 force)
     {
-        Vector2 forceDirection = new Vector2(force.normalized.x, force.normalized.z).normalized;
-        float angleBetween = Vector2.Angle(Vector2.right, forceDirection);
-        Quaternion rotationToSurface = Quaternion.Euler(0f, angleBetween, 0f);
-        Vector3 surfacePosition = rotationToSurface * surfaceVector;
-        rb.angularVelocity = Vector3.zero;
-        rb.AddForceAtPosition(force, transform.position + surfacePosition, ForceMode.Impulse);
+        GetComponent<PhotonTransformView>().SetSynchronizedValues(transform.position,0);
+        rb.AddForce(force, ForceMode.Impulse);
     }
 
     void OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        enabled = PhotonNetwork.player.ID == (int)GetComponent<PhotonView>().instantiationData[0];
+        enabled = PhotonNetwork.player.ID == (int)photonView.instantiationData[0];
     }
 }

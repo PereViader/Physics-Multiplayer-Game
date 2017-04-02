@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
 
@@ -35,8 +36,10 @@ public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
     private Transform westWall;
 
     [SerializeField]
-    private PhysicMaterial floorPhysicMaterial;
+    private Transform spawnParent;
 
+    [SerializeField]
+    private PhysicMaterial floorPhysicMaterial;
 
     public void OnGameSetup() { }
 
@@ -52,7 +55,6 @@ public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
     public void OnRoundEnd() { }
 
     public void OnGameEnd() { }
-
 
     public void prepareNewMap()
     {
@@ -70,6 +72,9 @@ public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
 
         MeshFilter meshFilter = map.GetComponent<MeshFilter>();
         MeshCollider meshCollider = map.GetComponent<MeshCollider>();
+
+        List<Vector3> newSpawns = mapMeshGenerator.GenerateSpawns(mapMatrix);
+        GetComponent<SpawnProvider>().UpdateSpawns(newSpawns);
 
         // unity recomana posar a null primer ja que internament fa unes optimitzacions
         meshFilter.mesh = null;

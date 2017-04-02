@@ -328,4 +328,17 @@ public class MapMeshGenerator {
     {
         return getSouthEastAtFloorLevel(matrixOcupation,x,z) - height;
     }
+
+    public List<Vector3> GenerateSpawns(bool[,] mapMatrix)
+    {
+        List<Vector3> spawns = new List<Vector3>();
+        for (int x = 0; x < mapMatrix.GetLength(0); x++)
+            for (int z = 0; z < mapMatrix.GetLength(1); z++)
+                if (mapMatrix[x, z])
+                {
+                    Vector3 newSpawnPosition = getCenterAtMatrixPosition(mapMatrix, x, z);
+                    spawns.Add(newSpawnPosition);
+                }
+        return spawns;
+    }
 }

@@ -15,6 +15,7 @@ public class PhotonRemoteOwner : Photon.MonoBehaviour {
         int playerID = (int)photonView.instantiationData[0];
         player = PhotonPlayer.Find(playerID);
         player.TagObject = gameObject;
+        gameObject.name = player.name;
     }
 
     void OnDestroy()

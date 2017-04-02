@@ -14,7 +14,6 @@ public class PlayerSkinLoader {
         int playerLevel = PlayerExperience.GetLevel();
         Material[] aviableSkins = Resources.LoadAll<Material>("PlayerTextures");
         List<Material> skins = new List<Material>();
-        Debug.Log("len" + aviableSkins.Length);
         foreach(Material skin in aviableSkins)
         {
             int skinLevel = int.Parse(skin.name.Split('.')[0]);

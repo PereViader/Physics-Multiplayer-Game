@@ -10,11 +10,11 @@ public class Capture_PlayerManager : NewPlayerManager, IPlayerDeath {
     [SerializeField]
     private float playerRespawnDelay;
 
-    Capture_SpawnManager spawnManager;
+    SpawnProvider spawnProvider;
 
     void Awake()
     {
-        spawnManager = GetComponent<Capture_SpawnManager>();
+        spawnProvider = GetComponent<SpawnProvider>();
     }
 
     public override void OnGameSetup() {
@@ -72,9 +72,8 @@ public class Capture_PlayerManager : NewPlayerManager, IPlayerDeath {
 
     protected override void SpawnPlayer(PhotonPlayer player)
     {
-        int playerTeam = (int)player.customProperties[PlayerProperties.team];
-        Transform spawn = spawnManager.GetRandomSpawn(playerTeam);
-        PhotonNetwork.InstantiateSceneObject("GameMode/KingOfTheHill/NewPlayer", spawn.position, spawn.rotation, 0, new object[] { player.ID });
+        Transform spawn = spawnProvider.GetFreeSpawn();
+        PhotonNetwork.InstantiateSceneObject("GameMode/Player", spawn.position, spawn.rotation, 0, new object[] { player.ID });
     }
 
     public bool IsFriendly(GameObject gameObject1, GameObject gameObject2)

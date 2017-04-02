@@ -4,6 +4,13 @@ using System.Collections;
 public class KingOfTheHill_PlayerManager : NewPlayerManager, IPlayerDeath
 {
 
+    private SpawnProvider spawnProvider;
+
+    void Awake()
+    {
+        spawnProvider = GetComponent<SpawnProvider>();
+    }
+
     public override void OnGameSetup()
     {
         if (PhotonNetwork.isMasterClient)
@@ -14,15 +21,14 @@ public class KingOfTheHill_PlayerManager : NewPlayerManager, IPlayerDeath
 
     public override void OnGameStart() { }
 
-    public override void OnRoundSetup()
-    {
+    public override void OnRoundSetup() { }
+
+    public override void OnRoundStart() {
         if (PhotonNetwork.isMasterClient)
         {
             SpawnPlayers();
         }
     }
-
-    public override void OnRoundStart() { }
 
     public override void OnRoundEnd() {
         if (PhotonNetwork.isMasterClient)
@@ -55,7 +61,9 @@ public class KingOfTheHill_PlayerManager : NewPlayerManager, IPlayerDeath
         ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
         player.SetCustomProperties(customProperties);
 
-        PhotonNetwork.Instantiate("GameMode/KingOfTheHill/NewPlayer", new Vector3(0, 1, 0), Quaternion.identity, 0, new object[] { player.ID });
+        Transform playerSpawn = spawnProvider.GetFreeSpawn();
+        object[] instantiationData = new object[] { player.ID };
+        PhotonNetwork.Instantiate("GameMode/Player", playerSpawn.position, playerSpawn.rotation, 0, instantiationData);
         // TODO spawn player in game  at good spawn location  
     }
     

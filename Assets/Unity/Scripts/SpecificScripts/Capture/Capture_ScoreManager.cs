@@ -40,12 +40,10 @@ public class Capture_ScoreManager : Photon.MonoBehaviour, IGame {
 
     public void InitializeGameScore()
     {
-        ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.room.customProperties;
         for (int team = 0; team < teamsInGame; team++)
-        {
-            customProperties[RoomProperties.Score + team] = 0;
-        }
-        PhotonNetwork.room.SetCustomProperties(customProperties);
+            PhotonNetwork.room.customProperties[RoomProperties.Score + team] = 0;
+
+        PhotonNetwork.room.SetCustomProperties(PhotonNetwork.room.customProperties);
     }
 
     public void Score(int team, int value = 1)

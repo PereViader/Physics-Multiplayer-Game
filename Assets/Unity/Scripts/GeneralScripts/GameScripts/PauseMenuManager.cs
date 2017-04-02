@@ -30,7 +30,6 @@ public class PauseMenuManager : MonoBehaviour {
 
     public void OnMainMenuButtonPressed()
     {
-        Debug.Log("Main Menu Button pressed");
         Component.FindObjectOfType<ExitGameManager>().ExitGame();
     }
 }
