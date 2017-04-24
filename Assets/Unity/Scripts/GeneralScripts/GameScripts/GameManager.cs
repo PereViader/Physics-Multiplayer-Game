@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public abstract class GameEventManager : MonoBehaviour, IGame
+public abstract class GameManager : MonoBehaviour, IGame
 {
     public virtual void TriggerStartingGameEvents()
     {

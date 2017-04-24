@@ -1,45 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class HabilityFabric{
 
-    public static void FillWithRandomHabilityIndex(ref int[] habilities)
-    {
-        for (int i = 0; i < habilities.Length; i++)
-            habilities[i] = -1;
+    private static Type[] AVIABLE_HABILITIES = new Type[]{ typeof(HabilityJump), typeof(HabilityGuard), typeof(HabilityShrink), typeof(HabilityStop) };
 
-        for (int i = 0; i < habilities.Length; i++)
+    public static Type[] GenerateHabilitiesFromSeed(int seed, int nHabilities)
+    {
+        System.Random random = new System.Random(seed);
+        List<Type> habilities = new List<Type>();
+        while (habilities.Count < nHabilities)
         {
-            int newHability;
-            do
-            {
-                newHability = GetRandomHability();
-            } while (Array.IndexOf(habilities, newHability) >= 0);
-            habilities[i] = newHability;
+            Type type = GenerateRandomHability(random);
+            if (!habilities.Contains(type))
+                habilities.Add(type);
         }
+        return habilities.ToArray();
     }
 
-    public static int GetRandomHability()
+    public static Type GenerateRandomHability(System.Random r)
     {
-        return UnityEngine.Random.Range(0, 5);
-    }
-
-    public static Type GethabilityType(int habilityNumber)
-    {
-        switch (habilityNumber)
-        {
-            case 0:
-                return typeof(HabilityJump);
-            case 1:
-                return typeof(HabilityGuard);
-            case 2:
-                return typeof(HabilityPush);
-            case 3:
-                return typeof(HabilityShrink);
-            case 4:
-            default:
-                return typeof(HabilityStop);
-        }
+        int randomIndex = r.Next(0,AVIABLE_HABILITIES.Length);
+        return AVIABLE_HABILITIES[randomIndex];
     }
 }

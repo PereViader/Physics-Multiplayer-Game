@@ -27,6 +27,15 @@ public class MenuManager : MonoBehaviour {
 
     public void OnExitButtonPressed()
     {
+        if (PhotonNetwork.connected)
+            PhotonNetwork.Disconnect();
+        else
+            OnDisconnectedFromPhoton();
+            
+    }
+    public void OnDisconnectedFromPhoton()
+    {
+        Debug.Log("disconnect");
         Application.Quit();
     }
 

@@ -1,43 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class HabilityJump : Hability {
 
     [SerializeField]
-    private float jumpForce = 600f;
-
+    private float jumpForce = 30f;
     private Rigidbody rb;
 
     void Awake()
     {
+        cooldown = 1;
+        habilityName = "Jump";
         rb = GetComponent<Rigidbody>();
-        cooldown = 0.5f;
     }
 
-    protected override void Update()
-    {
-        base.Update();
-        if (!onCooldown && Input.GetButtonDown(virtualKey))
-        {
-            SetOnCooldown();
-            photonView.RPC("ExecuteJumpServer", PhotonTargets.MasterClient);
-        }
-    }
-
-    [PunRPC]
-    void ExecuteJumpServer()
-    {
-        photonView.RPC("ExecuteJump", PhotonTargets.All);
-    }
-
-    [PunRPC]
-    void ExecuteJump()
+    public override void ExecuteHability()
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-    }
-
-    public override string GetHabilityName()
-    {
-        return "Jump";
     }
 }

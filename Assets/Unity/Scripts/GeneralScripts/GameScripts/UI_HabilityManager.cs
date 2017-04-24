@@ -7,15 +7,37 @@ public class UI_HabilityManager : MonoBehaviour {
     private GameObject habilityParent;
 
     [SerializeField]
-    private UI_Hability[] hability;
-	
-	public UI_Hability getHability(int habilityNum)
+    private UI_Hability[] habilities;
+
+    private GameObject player;
+
+    public void OnSetPlayerHabilities(GameObject player)
     {
-        return hability[habilityNum];
+        Hability[] playerHabilities = player.GetComponents<Hability>();
+        habilityParent.SetActive(true);
+        for (int i = 0; i < playerHabilities.Length; i++)
+        {
+            habilities[i].SetHability(playerHabilities[i]);
+        }
+        enabled = true;
+    }
+
+    public void OnPlayerDeath(GameObject player)
+    {
+        habilityParent.SetActive(false);
+        enabled = false;
     }
 
     public void setDisplay(bool state)
     {
         habilityParent.SetActive(state);
+    }
+
+    void Update()
+    {
+        foreach (UI_Hability hability in habilities)
+        {
+            hability.Update();
+        }
     }
 }

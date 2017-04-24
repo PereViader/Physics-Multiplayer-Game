@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 [RequireComponent(typeof(PhotonView))]
-public class KingOfTheHill_GameManager : GameEventManager {
+public class KingOfTheHill_GameManager : GameManager {
 
     [SerializeField]
     private int scoreToWin;

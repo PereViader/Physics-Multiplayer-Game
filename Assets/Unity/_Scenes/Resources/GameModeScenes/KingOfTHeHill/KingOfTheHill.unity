@@ -1454,7 +1454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   habilityParent: {fileID: 1296654121}
-  hability:
+  habilities:
   - nameText: {fileID: 1936560868}
     cooldownText: {fileID: 1194309133}
   - nameText: {fileID: 1769630566}

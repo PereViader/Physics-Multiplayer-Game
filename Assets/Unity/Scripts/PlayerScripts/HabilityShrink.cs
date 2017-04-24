@@ -11,40 +11,25 @@ public class HabilityShrink : Hability {
 
     Vector3 previousScale;
 
-    private bool isBlocked = false;
-
     void Awake()
     {
         cooldown = 5f;
         shrinkDuration = 2f;
         shrinkedDivider = 2f;
+        habilityName = "Shrink";
+        habilityTarget = PhotonTargets.All;
     }
 
-    protected override void Update()
+    public override void ExecuteHability()
     {
-        base.Update();
-        if (!onCooldown && !isBlocked && Input.GetButtonDown(virtualKey))
-        {
-            SetOnCooldown();
-            photonView.RPC("ExecuteShrink", PhotonTargets.AllViaServer);
-        }
+        StartCoroutine(HabilityCoroutine());
     }
 
-    [PunRPC]
-    void ExecuteShrink()
+    IEnumerator HabilityCoroutine()
     {
         previousScale = transform.localScale;
-        transform.localScale = transform.localScale/shrinkedDivider;
-        Invoke("EndShrink", shrinkDuration);
-    }
-
-    void EndShrink()
-    {
+        transform.localScale = transform.localScale / shrinkedDivider;
+        yield return new WaitForSeconds(shrinkDuration);
         transform.localScale = previousScale;
-    }
-
-    public override string GetHabilityName()
-    {
-        return "Shrink";
     }
 }

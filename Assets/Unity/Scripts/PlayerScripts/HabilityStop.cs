@@ -9,27 +9,12 @@ public class HabilityStop : Hability {
     {
         rb = GetComponent<Rigidbody>();
         cooldown = 0.7f;
+        habilityName = "Stop";
     }
 
-    override protected void Update()
-    {
-        base.Update();
-        if (!onCooldown && Input.GetButtonDown(virtualKey))
-        {
-            photonView.RPC("ExecuteStop", PhotonTargets.AllViaServer);
-            SetOnCooldown();
-        }
-    }
-
-    [PunRPC]
-    void ExecuteStop()
+    public override void ExecuteHability()
     {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-    }
-
-    public override string GetHabilityName()
-    {
-        return "Stop";
     }
 }

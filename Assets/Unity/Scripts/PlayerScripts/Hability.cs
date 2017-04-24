@@ -1,64 +1,74 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
 public abstract class Hability : Photon.MonoBehaviour {
 
-    [SerializeField]
     protected float cooldown;
 
-    protected float currentCooldown;
-    protected bool onCooldown;
-    protected string virtualKey;
-    protected int habilityNumber;
-
-    protected UI_Hability habilityUi;
-
-    public void Initialize(UI_Hability habilityUi, int habilityNumber)
+    public float currentCooldown
     {
-        //link hability to it's UI representation
-        this.habilityUi = habilityUi;
-        habilityUi.setName(GetHabilityName());
-
-        // link Hability to it's Input
-        // virtual key starts at one, arrays start at 0
-        this.virtualKey = "Hability" + (habilityNumber + 1);
+        get;
+        private set;
     }
 
-    public float GetCurrentCooldown()
+    public bool onCooldown
     {
-        return currentCooldown;
+        get;
+        private set;
     }
 
-    public void SetCooldown(float cooldown)
+    public string habilityName
     {
-        this.cooldown = cooldown;
+        get;
+        protected set;
+    }
+
+    private string habilityButton;
+    private int habilityNumber;
+
+    protected PhotonTargets habilityTarget = PhotonTargets.MasterClient;
+
+    public void Initialize(int habilityNumber)
+    {
+        this.habilityNumber = habilityNumber;
+        this.habilityButton = "Hability"+habilityNumber;
     }
 
     protected void SetOnCooldown()
     {
-        habilityUi.setCooldown(cooldown);
         currentCooldown = cooldown;
         onCooldown = true;
     }
 
-    protected virtual void Update()
+    protected void UpdateCooldown()
     {
-        if ( onCooldown )
+        currentCooldown -= Time.deltaTime;
+        if (currentCooldown <= 0f)
         {
-            currentCooldown -= Time.deltaTime;
-            if (currentCooldown <= 0f)
-            {
-                onCooldown = false;
-                currentCooldown = 0f;
-            }
-            habilityUi.setCooldown(currentCooldown);
+            onCooldown = false;
+            currentCooldown = 0f;
         }
     }
 
-    public void SetHabilityNumber()
+    public virtual void Update()
     {
-        
+        if ( onCooldown )
+        {
+            UpdateCooldown();
+        } else if (Input.GetButtonDown(habilityButton))
+        {
+            SetOnCooldown();
+            ExecuteHabilityRPC();
+        }
     }
 
-    public abstract string GetHabilityName();
+    public virtual void ExecuteHabilityRPC()
+    {
+        //executat a habilityManager que fa de hub per unificar les crides rpc de totes les habilitats
+        //s'ha de fer aixi per evitar problemes
+        photonView.RPC("ExecuteHability", habilityTarget, habilityNumber);
+    }
+
+    public abstract void ExecuteHability();
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Capture_GameManager : GameEventManager {
+public class Capture_GameManager : GameManager {
 
     Capture_PlayerManager playerManager;
     Capture_ScoreManager scoreManager;

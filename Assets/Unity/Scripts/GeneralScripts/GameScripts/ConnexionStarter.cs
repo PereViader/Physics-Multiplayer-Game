@@ -48,12 +48,6 @@ public class ConnexionStarter : MonoBehaviour {
 
     void CreateRoom()
     {
-        /*RoomOptions roomOptions = new RoomOptions();
-
-        roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomProperty.GameMode }; // Properties visible of the room by other players
-        roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { RoomProperty.GameMode, (int)gameMode} };
-
-        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);*/
         RoomOptions roomOptions = GameModeFabric.ConstructRoomOptionsForGameMode(gameMode);
         TypedLobby sqlLobby = GameModeFabric.ConstructTyppedLobby();
         PhotonNetwork.CreateRoom(null, roomOptions, sqlLobby);
@@ -71,7 +65,7 @@ public class ConnexionStarter : MonoBehaviour {
 
     void InitializeGame()
     {
-        GetComponent<GameEventManager>().TriggerStartingGameEvents();
+        GetComponent<GameManager>().TriggerStartingGameEvents();
         if ( destroyOnSetup )
             Destroy(this);
     }

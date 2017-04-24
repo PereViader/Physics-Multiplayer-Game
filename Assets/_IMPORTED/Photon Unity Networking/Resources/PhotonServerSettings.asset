@@ -55,4 +55,7 @@ MonoBehaviour:
   - createNewMap
   - endGame
   - RPC_EndGame
+  - ExecuteHability
+  - RPC_AddRandomHabilities
+  - ExecuteHabilityBase
   DisableAutoOpenWizard: 1

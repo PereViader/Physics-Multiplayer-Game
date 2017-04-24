@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class HabilityManager : Photon.MonoBehaviour {
 
@@ -9,50 +10,51 @@ public class HabilityManager : Photon.MonoBehaviour {
 
     private Hability[] habilities;
 
-    private bool isLocalPlayer;
-
-    private UI_HabilityManager habilityManagerUI;
-
-
     void Awake () {
-        habilityManagerUI = GameObject.FindObjectOfType<UI_HabilityManager>();
-        habilities = new Hability[numberOfHabilities];
         if (PhotonNetwork.isMasterClient)
         {
             AddRandomHabilities();
         }
-    }    
+    }
 
     public void AddRandomHabilities()
     {
-        int[] sHabilities = new int[numberOfHabilities];
-        HabilityFabric.FillWithRandomHabilityIndex(ref sHabilities);
-        photonView.RPC("RPC_SetHabilities", PhotonTargets.AllBufferedViaServer, sHabilities);
+        int seed =  Mathf.FloorToInt(UnityEngine.Random.Range(Int32.MinValue, Int32.MaxValue));
+        photonView.RPC("RPC_AddRandomHabilities", PhotonTargets.AllBufferedViaServer, seed);
     }
 
     [PunRPC]
-    public void RPC_SetHabilities(int[] sHabilities)
+    public void RPC_AddRandomHabilities(int seed)
     {
-        habilityManagerUI.setDisplay(true);
-
+        Type[] tHabilities = HabilityFabric.GenerateHabilitiesFromSeed(seed, numberOfHabilities);
         int playerID = (int)photonView.instantiationData[0];
-        isLocalPlayer = playerID == PhotonNetwork.player.ID;
-        for ( int i = 0; i < habilities.Length; i++)
+        bool isLocalPlayer = playerID == PhotonNetwork.player.ID;
+        habilities = new Hability[numberOfHabilities];
+        for (int nHability = 0; nHability < tHabilities.Length; nHability++)
         {
-            System.Type habilityType = HabilityFabric.GethabilityType(sHabilities[i]);
-            habilities[i] = (Hability)gameObject.AddComponent(habilityType);
-            habilities[i].enabled = isLocalPlayer;
-            if (isLocalPlayer)
-                habilities[i].Initialize(habilityManagerUI.getHability(i), i);
+            Hability hability = (Hability)gameObject.AddComponent(tHabilities[nHability]);
+            hability.enabled = isLocalPlayer;
+            hability.Initialize(nHability);
+            habilities[nHability] = hability;
         }
+        if ( isLocalPlayer )
+            Component.FindObjectOfType<UI_HabilityManager>().OnSetPlayerHabilities(gameObject);
+    }
+
+    [PunRPC]
+    void ExecuteHability(int nHability)
+    {
+        habilities[nHability].ExecuteHability();
     }
 
     void OnDestroy()
     {
         try
         {
-            if (isLocalPlayer)
-                habilityManagerUI.setDisplay(false);
+            int playerID = (int)photonView.instantiationData[0];
+            bool isLocalPlayer = playerID == PhotonNetwork.player.ID;
+            if ( isLocalPlayer )
+                Component.FindObjectOfType<UI_HabilityManager>().OnPlayerDeath(gameObject);
         }
         catch { }
     }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class HabilityPush : Hability {
 
@@ -13,37 +14,23 @@ public class HabilityPush : Hability {
 
     void Awake()
     {
-        //playerManager = Component.FindObjectOfType<NewPlayerManager>();
         cooldown = 1f;
+        habilityName = "Push";
     }
 
-    protected override void Update () {
-        base.Update();
-        if (!onCooldown && Input.GetButtonDown(virtualKey))
-        {
-            SetOnCooldown();
-            photonView.RPC("ExecutePush", PhotonTargets.AllViaServer);
-        }
-    }
-
-    [PunRPC]
-    void ExecutePush()
+    public override void ExecuteHability()
     {
         Collider[] objects = Physics.OverlapSphere(transform.position, pushRange);
-        foreach( Collider collider in objects) {
-            if ( collider.gameObject != gameObject && collider.tag == "Player" /*&& !playerManager.IsFriendly(collider.gameObject, gameObject)*/)
+        foreach (Collider collider in objects)
+        {
+            if (collider.gameObject != gameObject && collider.tag == "Player" /*&& !playerManager.IsFriendly(collider.gameObject, gameObject)*/)
             {
                 Vector3 pushVector = collider.gameObject.transform.position - transform.position;
                 pushVector.y = 0;
                 pushVector.Normalize();
                 pushVector *= pushForce;
-                collider.GetComponent<Rigidbody>().AddExplosionForce(pushForce, transform.position, pushRange,0f,ForceMode.VelocityChange);
+                collider.GetComponent<Rigidbody>().AddExplosionForce(pushForce, transform.position, pushRange, 0f, ForceMode.VelocityChange);
             }
         }
-    }
-
-    public override string GetHabilityName()
-    {
-        return "Push";
     }
 }

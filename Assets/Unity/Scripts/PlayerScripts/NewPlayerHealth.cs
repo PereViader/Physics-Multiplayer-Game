@@ -3,11 +3,11 @@ using System.Collections;
 
 public class NewPlayerHealth : MonoBehaviour
 {
-    GameEventManager gameManager;
+    GameManager gameManager;
 
     void Awake()
     {
-        gameManager = Component.FindObjectOfType<GameEventManager>();
+        gameManager = Component.FindObjectOfType<GameManager>();
     }
 
     // Matar el jugador

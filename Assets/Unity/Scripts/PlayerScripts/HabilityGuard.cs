@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class HabilityGuard : Hability {
 
@@ -7,39 +8,27 @@ public class HabilityGuard : Hability {
     private float guardDuration = 1.4f;
 
     private Rigidbody rb;
+    private MeshRenderer meshRenderer;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        cooldown = 4f;
+        meshRenderer = gameObject.GetComponent<MeshRenderer>();
+        rb = gameObject.GetComponent<Rigidbody>();
+        habilityName = "Guard";
+        cooldown = 5f;
     }
 
-    override protected void Update()
+    public override void ExecuteHability()
     {
-        base.Update();
-        if (!onCooldown && Input.GetButtonDown(virtualKey))
-        {
-            SetOnCooldown();
-            photonView.RPC("ExecuteGuard", PhotonTargets.AllViaServer);
-        }
+        StartCoroutine(HabilityCoroutine());
     }
 
-    [PunRPC]
-    void ExecuteGuard()
+    IEnumerator HabilityCoroutine()
     {
+        meshRenderer.material.color = Color.black;
         rb.isKinematic = true;
-        GetComponent<MeshRenderer>().material.color = Color.black;
-        Invoke("EndHability", guardDuration);
-    }
-
-    private void EndHability()
-    {
-        GetComponent<MeshRenderer>().material.color = Color.white;
+        yield return new WaitForSeconds(guardDuration);
+        meshRenderer.material.color = Color.white;
         rb.isKinematic = false;
-    }
-
-    public override string GetHabilityName()
-    {
-        return "Guard";
     }
 }

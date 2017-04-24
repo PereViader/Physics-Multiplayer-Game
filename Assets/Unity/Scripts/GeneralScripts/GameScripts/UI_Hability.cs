@@ -12,13 +12,19 @@ public class UI_Hability {
     [SerializeField]
     private Text cooldownText;
 
-    public void setName(string name)
+    private Hability hability;
+
+    public void SetHability(Hability hability)
     {
-        nameText.text = name;
+        this.hability = hability;
+        nameText.text = hability.habilityName;
     }
 
-    public void setCooldown(float cooldown)
+    public void Update()
     {
-        cooldownText.text = cooldown.ToString("0.0");
+        if ( hability != null)
+        {
+            cooldownText.text = hability.currentCooldown.ToString("0.0");
+        }
     }
 }
