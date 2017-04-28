@@ -33,7 +33,7 @@ public class KingOfTheHill_GameManager : GameManager {
     {
         if (Input.GetKeyDown(KeyCode.J))
         {
-            awardExperienceToPlayer(PhotonNetwork.player, 29);
+            AwardExperienceToPlayer(PhotonNetwork.player, 29);
         }
     }
 
@@ -43,23 +43,23 @@ public class KingOfTheHill_GameManager : GameManager {
         // passar deadPlayer i deathInfo
         playerManager.OnPlayerDeath(deadPlayer);
         PhotonPlayer winner;
-        if (checkEndOfRound(out winner))
+        if (CheckEndOfRound(out winner))
         {
             if ( winner != null )
             {
-                increasePlayerScore(winner);
-                awardExperienceToPlayer(winner, roundWinExperience);
+                IncreasePlayerScore(winner);
+                AwardExperienceToPlayer(winner, roundWinExperience);
             }
-            bool hasGameEnded = checkEndOfGame();
+            bool hasGameEnded = CheckEndOfGame();
             if ( winner != null && hasGameEnded)
             {
-                awardExperienceToPlayer(winner, gameWinExperience);
+                AwardExperienceToPlayer(winner, gameWinExperience);
             }
 
             // end round
-            OnRoundEnd();
             if(hasGameEnded)
             {
+                OnRoundEnd();
                 OnGameEnd();
             } else
             {
@@ -80,21 +80,21 @@ public class KingOfTheHill_GameManager : GameManager {
         return gameResult;
     }
 
-    private void awardExperienceToPlayer(PhotonPlayer player, int experience)
+    private void AwardExperienceToPlayer(PhotonPlayer player, int experience)
     {
         ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
         customProperties[PlayerProperties.experience] = experience + (int)customProperties[PlayerProperties.experience];
         player.SetCustomProperties(customProperties);
     }
 
-    private void increasePlayerScore(PhotonPlayer player)
+    private void IncreasePlayerScore(PhotonPlayer player)
     {
         ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
         customProperties[PlayerProperties.score] = 1 + (int)customProperties[PlayerProperties.score];
         player.SetCustomProperties(customProperties);
     }
 
-    private bool checkEndOfRound(out PhotonPlayer roundWinner)
+    private bool CheckEndOfRound(out PhotonPlayer roundWinner)
     {
         int playersAlive = 0;
         roundWinner = null;
@@ -117,7 +117,7 @@ public class KingOfTheHill_GameManager : GameManager {
         return playersAlive <= 1;
     }
 
-    private bool checkEndOfGame()
+    private bool CheckEndOfGame()
     {
         foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
