@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
+public class KingOfTheHill_MapManager : Photon.MonoBehaviour, IGame {
 
     [SerializeField]
     private MapMatrixGenerator mapMatrixGenerator;
@@ -61,14 +61,14 @@ public class KingOfTheHill_MapManager : MonoBehaviour, IGame {
         ExitGames.Client.Photon.Hashtable roomProperties = PhotonNetwork.room.customProperties;
         roomProperties["currentMapSeed"] = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         PhotonNetwork.room.SetCustomProperties(roomProperties);
-        GetComponent<PhotonView>().RPC("createNewMap", PhotonTargets.All);
+        photonView.RPC("createNewMap", PhotonTargets.All);
     }
 
     [PunRPC]
     void createNewMap()
     {
         bool[,] mapMatrix = mapMatrixGenerator.GenerateMatrix((int)PhotonNetwork.room.customProperties["currentMapSeed"]);
-        Mesh mapMesh = mapMeshGenerator.GenerateGeometryFromMesh(mapMatrix);
+        Mesh mapMesh = mapMeshGenerator.GenerateGeometry(mapMatrix);
 
         MeshFilter meshFilter = map.GetComponent<MeshFilter>();
         MeshCollider meshCollider = map.GetComponent<MeshCollider>();

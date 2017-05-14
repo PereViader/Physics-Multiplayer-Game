@@ -38,7 +38,7 @@ public class Capture_AreaManager : MonoBehaviour, IGame {
     {
     }
 
-    public void RemoveOldArea()
+    void RemoveOldArea()
     {
         Capture_AreaController currentArea = Component.FindObjectOfType<Capture_AreaController>();
         if (currentArea != null)
@@ -48,13 +48,13 @@ public class Capture_AreaManager : MonoBehaviour, IGame {
         previousArea = currentArea.transform;
     }
 
-    public void InstantiateNewRandomCapture()
+    void InstantiateNewRandomCapture()
     {
         Transform newTransform = getDiferentRandomAreaPosition(previousArea);
         PhotonNetwork.InstantiateSceneObject("GameMode/Area", newTransform.position, newTransform.rotation, 0, new object[0]);
     }
 
-    public Transform getDiferentRandomAreaPosition(Transform previousArea)
+    Transform getDiferentRandomAreaPosition(Transform previousArea)
     {
         Transform newCapturePosition;
         do
@@ -64,7 +64,7 @@ public class Capture_AreaManager : MonoBehaviour, IGame {
         return newCapturePosition;
     }
 
-    public Transform GetRandomCapturePosition()
+    Transform GetRandomCapturePosition()
     {
         return captureAreaParent.GetChild(UnityEngine.Random.Range(0, captureAreaParent.childCount));
     }

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.Events;
 
-public class ConnexionStarter : MonoBehaviour {
+public class GameStarter : MonoBehaviour {
     [SerializeField]
     bool isOffline;
 
@@ -65,7 +65,7 @@ public class ConnexionStarter : MonoBehaviour {
 
     void InitializeGame()
     {
-        GetComponent<GameManager>().TriggerStartingGameEvents();
+        GetComponent<GameManager>().OnGameSetup();
         if ( destroyOnSetup )
             Destroy(this);
     }

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 
-public class GameLobyManager : MonoBehaviour {
+public class GameLobbyManager : MonoBehaviour {
     // UI elements
     public Text lobbyState;
 
@@ -40,7 +40,7 @@ public class GameLobyManager : MonoBehaviour {
         JoinOrCreateGame();
     }
 
-    public void JoinOrCreateGame()
+    void JoinOrCreateGame()
     {
         if ( desiredGameModes != null )
         {
@@ -135,5 +135,23 @@ public class GameLobyManager : MonoBehaviour {
         {
             SceneManager.LoadScene(LevelProvider.GetRandomMap((GameMode)PhotonNetwork.room.customProperties[RoomProperties.GameMode]));
         }
+    }
+
+    public void ExitGame()
+    {
+        if (PhotonNetwork.connectedAndReady)
+            PhotonNetwork.LeaveRoom();
+        else
+            LoadMainMenu();
+    }
+
+    public void OnLeftRoom()
+    {
+        LoadMainMenu();
+    }
+
+    void LoadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

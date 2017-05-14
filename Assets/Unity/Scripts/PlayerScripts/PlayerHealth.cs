@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NewPlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
     GameManager gameManager;
 

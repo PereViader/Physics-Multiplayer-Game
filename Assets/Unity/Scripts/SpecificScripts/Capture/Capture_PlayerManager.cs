@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Capture_PlayerManager : NewPlayerManager, IPlayerDeath {
+public class Capture_PlayerManager : PlayerManager, IPlayerDeath {
     [SerializeField]
     private int teamsInGame;
 

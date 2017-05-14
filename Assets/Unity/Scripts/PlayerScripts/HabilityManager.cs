@@ -17,14 +17,14 @@ public class HabilityManager : Photon.MonoBehaviour {
         }
     }
 
-    public void AddRandomHabilities()
+    private void AddRandomHabilities()
     {
         int seed =  Mathf.FloorToInt(UnityEngine.Random.Range(Int32.MinValue, Int32.MaxValue));
         photonView.RPC("RPC_AddRandomHabilities", PhotonTargets.AllBufferedViaServer, seed);
     }
 
     [PunRPC]
-    public void RPC_AddRandomHabilities(int seed)
+    void RPC_AddRandomHabilities(int seed)
     {
         Type[] tHabilities = HabilityFabric.GenerateHabilitiesFromSeed(seed, numberOfHabilities);
         int playerID = (int)photonView.instantiationData[0];

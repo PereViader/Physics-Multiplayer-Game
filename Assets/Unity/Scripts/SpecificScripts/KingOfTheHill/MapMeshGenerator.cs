@@ -15,7 +15,7 @@ public class MapMeshGenerator {
     private Vector3 right;
     private Vector3 height;
 
-    public Mesh GenerateGeometryFromMesh(bool[,] matrixOcupation)
+    public Mesh GenerateGeometry(bool[,] matrixOcupation)
     {
         up = new Vector3(0, 0, cellSize / 2f);
         right = new Vector3(cellSize / 2f, 0, 0);

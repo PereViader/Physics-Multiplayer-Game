@@ -10,37 +10,23 @@ public class KingOfTheHill_GameManager : GameManager {
     private int scoreToWin;
 
     [SerializeField]
-    private int roundWinExperience;
-
-    [SerializeField]
-    private int gameWinExperience;
-
-    [SerializeField]
     private float endGameDelay;
 
-    [SerializeField]
-    private Transform deadZone;
-
     private KingOfTheHill_PlayerManager playerManager;
+    private KingOfTheHill_ExperienceManager experienceManager;
 
     void Awake()
     {
         playerManager = GetComponent<KingOfTheHill_PlayerManager>();
+        experienceManager = GetComponent<KingOfTheHill_ExperienceManager>();
         InputState.ActivateGameInput();
-    }
-    
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            AwardExperienceToPlayer(PhotonNetwork.player, 29);
-        }
     }
 
     public override void OnPlayerDeath(PhotonPlayer deadPlayer, PhotonPlayer killer)
     {
-        // MAYBE en comptes de passar deadPlayer i killer
-        // passar deadPlayer i deathInfo
+        if ( killer != null )
+            experienceManager.AddExperience(killer, experienceManager.eliminate);
+
         playerManager.OnPlayerDeath(deadPlayer);
         PhotonPlayer winner;
         if (CheckEndOfRound(out winner))
@@ -48,25 +34,11 @@ public class KingOfTheHill_GameManager : GameManager {
             if ( winner != null )
             {
                 IncreasePlayerScore(winner);
-                AwardExperienceToPlayer(winner, roundWinExperience);
+                experienceManager.AddExperience(winner, experienceManager.winRound);
+                if (HasGameEnded())
+                    experienceManager.AddExperience(winner, experienceManager.winGame);
             }
-            bool hasGameEnded = CheckEndOfGame();
-            if ( winner != null && hasGameEnded)
-            {
-                AwardExperienceToPlayer(winner, gameWinExperience);
-            }
-
-            // end round
-            if(hasGameEnded)
-            {
-                OnRoundEnd();
-                OnGameEnd();
-            } else
-            {
-                OnRoundEnd();
-                OnRoundSetup();
-                OnRoundStart();
-            }
+            OnRoundEnd();
         }
     }
 
@@ -78,13 +50,6 @@ public class KingOfTheHill_GameManager : GameManager {
             gameResult = PlayerProperties.GameResult.Win;
         }
         return gameResult;
-    }
-
-    private void AwardExperienceToPlayer(PhotonPlayer player, int experience)
-    {
-        ExitGames.Client.Photon.Hashtable customProperties = player.customProperties;
-        customProperties[PlayerProperties.experience] = experience + (int)customProperties[PlayerProperties.experience];
-        player.SetCustomProperties(customProperties);
     }
 
     private void IncreasePlayerScore(PhotonPlayer player)
@@ -117,7 +82,7 @@ public class KingOfTheHill_GameManager : GameManager {
         return playersAlive <= 1;
     }
 
-    private bool CheckEndOfGame()
+    public override bool HasGameEnded()
     {
         foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
@@ -126,7 +91,6 @@ public class KingOfTheHill_GameManager : GameManager {
                 return true;
             }
         }
-
         return false;
     }
 }

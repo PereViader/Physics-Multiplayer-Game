@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public abstract class NewPlayerManager : MonoBehaviour, IGame, IPlayerDeath
+public abstract class PlayerManager : MonoBehaviour, IGame, IPlayerDeath
 {
     public abstract void OnGameSetup();
 
@@ -53,12 +53,6 @@ public abstract class NewPlayerManager : MonoBehaviour, IGame, IPlayerDeath
     }
 
     protected abstract void SpawnPlayer(PhotonPlayer player);
-
-    /*public virtual void OnPlayerDeath(GameObject playerObject)
-    {
-        //int playerID = playerObject.GetComponent<PhotonRemoteOwner>().GetPlayer().ID;
-        PhotonNetwork.Destroy(playerObject);
-    }*/
     
     public virtual void OnPlayerDeath(PhotonPlayer player)
     {

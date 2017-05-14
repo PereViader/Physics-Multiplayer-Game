@@ -7,10 +7,10 @@ using System;
 public class MapMatrixGenerator {
 
     [SerializeField]
-    private int numberOfCellsToFill;
+    private int minNumberOfCells;
 
     [SerializeField]
-    private bool closePiecesHavePriority;
+    private bool closeCellsHavePriority;
 
 
     public bool[,] GenerateMatrix(int seed)
@@ -21,14 +21,16 @@ public class MapMatrixGenerator {
 
     private bool[,] generateMatrix()
     {
-        bool[,] matrixOcupation = new bool[numberOfCellsToFill * 2 + 1, numberOfCellsToFill * 2 + 1];
+        if (minNumberOfCells <= 0)
+            Debug.LogError("No pot ser que map matrix generator sigui: " + minNumberOfCells + " hauria de ser > 0");
+        bool[,] matrixOcupation = new bool[minNumberOfCells * 2 + 1, minNumberOfCells * 2 + 1];
         List<Vector2> validPositions = new List<Vector2>();
         // com que hem fet un array de mapSize*2 +1 la casella del mig queda a la posicio escrita
-        Vector2 startingPosition = new Vector2(numberOfCellsToFill + 1, numberOfCellsToFill + 1);
+        Vector2 startingPosition = new Vector2(minNumberOfCells + 1, minNumberOfCells + 1);
         validPositions.Add(startingPosition);
 
         // generem les peces
-        for (int piece = 0; piece < numberOfCellsToFill; piece++)
+        for (int piece = 0; piece < minNumberOfCells; piece++)
         {
             if (validPositions.Count > 0)
             {
@@ -150,12 +152,12 @@ public class MapMatrixGenerator {
     private void addValidPosition(List<Vector2> validPositions, bool[,] matrixOcupation, Vector2 newPosition)
     {
         if (isValid(newPosition) && !matrixOcupation[(int)newPosition.x, (int)newPosition.y])
-            if (!closePiecesHavePriority && !validPositions.Contains(newPosition) || closePiecesHavePriority)
+            if (!closeCellsHavePriority && !validPositions.Contains(newPosition) || closeCellsHavePriority)
                 validPositions.Add(newPosition);
     }
 
     private bool isValid(Vector2 position)
     {
-        return position.x >= 0 && position.x < numberOfCellsToFill * 2 + 1 && position.y >= 0 && position.y < numberOfCellsToFill * 2 + 1;
+        return position.x >= 0 && position.x < minNumberOfCells * 2 + 1 && position.y >= 0 && position.y < minNumberOfCells * 2 + 1;
     }
 }

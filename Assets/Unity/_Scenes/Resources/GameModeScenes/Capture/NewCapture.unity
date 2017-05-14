@@ -2936,11 +2936,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c89591e33babd42b3fc9d10a11abae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  joinGameAlreadyStarted: 100
   experienceValues:
     score: 50
     kill: 25
     winGame: 500
-    joinGameAlreadyStarted: 200
 --- !u!114 &1343341697
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 using UnityEngine.UI;
 
 
-public class MainMenu_OptionsMenuController : MonoBehaviour {
+public class MainMenu_OptionsManager : MonoBehaviour {
 
     [SerializeField]
     AudioMixer masterMixer;

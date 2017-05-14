@@ -2,16 +2,8 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public abstract class GameManager : MonoBehaviour, IGame
+public abstract class GameManager : Photon.MonoBehaviour, IGame
 {
-    public virtual void TriggerStartingGameEvents()
-    {
-        OnGameSetup();
-        OnGameStart();
-        OnRoundSetup();
-        OnRoundStart();
-    }
-
     public virtual void OnGameSetup()
     {
         foreach (IGame component in GetComponents<IGame>())
@@ -19,6 +11,7 @@ public abstract class GameManager : MonoBehaviour, IGame
             if( (object) component != this )
                 component.OnGameSetup();
         }
+        OnGameStart();
     }
 
     public virtual void OnGameStart()
@@ -28,6 +21,7 @@ public abstract class GameManager : MonoBehaviour, IGame
             if( (object) component != this )
                 component.OnGameStart();
         }
+        OnRoundSetup();
     }
 
     public virtual void OnRoundSetup()
@@ -37,6 +31,7 @@ public abstract class GameManager : MonoBehaviour, IGame
             if ((object)component != this)
                 component.OnRoundSetup();
         }
+        OnRoundStart();
     }
 
     public virtual void OnRoundStart()
@@ -55,6 +50,10 @@ public abstract class GameManager : MonoBehaviour, IGame
             if ((object)component != this)
                 component.OnRoundEnd();
         }
+        if (HasGameEnded())
+            OnGameEnd();
+        else
+            OnRoundSetup();
     }
 
     public virtual void OnGameEnd()
@@ -64,7 +63,7 @@ public abstract class GameManager : MonoBehaviour, IGame
             if( (object) component != this )
                 component.OnGameEnd();
         }
-        GetComponent<PhotonView>().RPC("RPC_EndGame", PhotonTargets.All);
+        photonView.RPC("RPC_EndGame", PhotonTargets.All);
     }
 
     [PunRPC]
@@ -74,6 +73,8 @@ public abstract class GameManager : MonoBehaviour, IGame
         EndGameManager.gameResult = GetGameResultForPlayer(PhotonNetwork.player);
         SceneManager.LoadScene("EndGameScene");
     }
+
+    public abstract bool HasGameEnded();
 
     public abstract void OnPlayerDeath(PhotonPlayer deadPlayer, PhotonPlayer killer);
 

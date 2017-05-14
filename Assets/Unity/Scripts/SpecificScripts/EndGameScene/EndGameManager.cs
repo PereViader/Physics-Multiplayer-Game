@@ -6,7 +6,16 @@ using UnityEngine.SceneManagement;
 public class EndGameManager : MonoBehaviour {
 
     [SerializeField]
-    private Text endGameText;
+    private Text endGameMessage;
+
+    [SerializeField]
+    private string loseMessage;
+
+    [SerializeField]
+    private string winMessage;
+
+    [SerializeField]
+    private string tieMessage;
 
     public static int experienceGained;
     public static PlayerProperties.GameResult gameResult;
@@ -17,7 +26,7 @@ public class EndGameManager : MonoBehaviour {
         PhotonNetwork.LeaveRoom();
 
         InputState.ActivateMenuInput();
-        SetTitle(gameResult);
+        SetMessage(gameResult);
         GetComponent<ExperienceBarManager>().AddExperienceAndAnimate(experienceGained);
         ResetEndGameState();
     }
@@ -28,21 +37,21 @@ public class EndGameManager : MonoBehaviour {
         gameResult = PlayerProperties.GameResult.None;
     }
 
-    void SetTitle(PlayerProperties.GameResult result)
+    private void SetMessage(PlayerProperties.GameResult result)
     {
         switch(result)
         {
             case PlayerProperties.GameResult.None:
-                endGameText.text = "None maybe error?";
+                endGameMessage.text = "None maybe error?";
                 break;
             case PlayerProperties.GameResult.Lose:
-                endGameText.text = "You Lose";
+                endGameMessage.text = loseMessage;
                 break;
             case PlayerProperties.GameResult.Tie:
-                endGameText.text = "It's a Tie";
+                endGameMessage.text = tieMessage;
                 break;
             case PlayerProperties.GameResult.Win:
-                endGameText.text = "You Win";
+                endGameMessage.text = winMessage;
                 break;
         }
     }

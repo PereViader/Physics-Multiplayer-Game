@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class PlayerCustomizationMenuController : MonoBehaviour {
+public class MainMenu_CustomizationManager : MonoBehaviour {
 
     [SerializeField]
     MeshRenderer displayDummy;
@@ -108,11 +108,11 @@ public class PlayerCustomizationMenuController : MonoBehaviour {
     {
         try
         {
+            GUILayout.Label("Level: " + PlayerExperience.GetLevel());
+            GUILayout.Label("Nickname: " + PhotonNetwork.player.name);
             foreach (var entry in PhotonNetwork.player.customProperties)
             {
                 GUILayout.Label(entry.Key + " - " + entry.Value);
-                GUILayout.Label("Level: " + PlayerExperience.GetLevel());
-                GUILayout.Label("Nickname: " + PhotonNetwork.player.name);
             }
         }
         catch (System.Exception) { Debug.Log("error"); }

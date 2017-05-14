@@ -6,10 +6,20 @@ public class ObjectRotator : MonoBehaviour {
     [SerializeField]
     float speed;
 
-	// Update is called once per frame
-	void Update () {
-        float horizontal = -Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        transform.Rotate( new Vector3(vertical*speed*Time.deltaTime, horizontal * speed * Time.deltaTime),Space.World);
-	}
+    [SerializeField]
+    float delayBetweenChange;
+
+    private float nextChange;
+    private Vector3 rotation;
+
+
+    void Update()
+    {
+        if (Time.time >= nextChange)
+        {
+            nextChange = Time.time + delayBetweenChange;
+            rotation = Random.onUnitSphere;
+        }
+        transform.Rotate(rotation*speed*Time.deltaTime);
+    }
 }

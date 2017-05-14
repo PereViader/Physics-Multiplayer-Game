@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class MainMenu_PlayMenuController : MonoBehaviour {
-
-    [SerializeField]
-    SQLMatchMaker networkRoomController;
-
+public class MainMenu_PlayManager : MonoBehaviour {
     [SerializeField]
     Toggle captureToggle;
 
     [SerializeField]
     Toggle bombToggle;
 
-    public void OnPlayButtonPressed()
+    public void OnSearchButtonPressed()
     {
         List<GameMode> gameModes = new List<GameMode>();
         if (captureToggle.isOn)
@@ -25,7 +21,7 @@ public class MainMenu_PlayMenuController : MonoBehaviour {
         
         if(gameModes.Count > 0)
         {
-            GameLobyManager.desiredGameModes = gameModes.ToArray();
+            GameLobbyManager.desiredGameModes = gameModes.ToArray();
             SceneManager.LoadScene("GameLobby");
         }
     }

@@ -17,7 +17,7 @@ public class SpawnProvider : MonoBehaviour {
             spawns[child] = spawnParent.GetChild(child);
         }
     }
-
+    
     public void UpdateSpawns(List<Vector3> newSpawnsVector3)
     {
 
@@ -41,7 +41,8 @@ public class SpawnProvider : MonoBehaviour {
         Transform spawn;
         do
         {
-            spawn = spawns[Random.Range(0, spawns.Length)];
+            int index = Random.Range(0, spawns.Length);
+            spawn = spawns[index];
         } while (PlayerInsideSpawn(spawn));
         return spawn;
     }
@@ -50,6 +51,6 @@ public class SpawnProvider : MonoBehaviour {
     {
 
         Collider[] colliders = Physics.OverlapSphere(spawn.position, 1f);    
-        return colliders.Any(collider => collider.gameObject.tag == "Player");
+        return colliders.Any(collider => collider.gameObject.tag.Equals("Player"));
     }
 }

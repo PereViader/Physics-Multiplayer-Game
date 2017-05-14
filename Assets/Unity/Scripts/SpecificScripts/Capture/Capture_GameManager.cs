@@ -19,19 +19,12 @@ public class Capture_GameManager : GameManager {
     {
         experienceManager.AddExperienceToTeam(team, experienceManager.experienceValues.score*value);
         scoreManager.Score(team, value);
-        if ( scoreManager.HasGameEnded() )
+        if (HasGameEnded())
         {
             int winnerTeam = scoreManager.GetWinnerTeam();
             experienceManager.AddExperienceToTeam(winnerTeam, experienceManager.experienceValues.winGame);
-            OnRoundEnd();
-            OnGameEnd();
         }
-        else
-        {
-            OnRoundEnd();
-            OnRoundSetup();
-            OnRoundStart();
-        }
+        OnRoundEnd();
     }
 
     public override void OnPlayerDeath(PhotonPlayer deadPlayer, PhotonPlayer killer)
@@ -50,5 +43,10 @@ public class Capture_GameManager : GameManager {
             gameResult = PlayerProperties.GameResult.Win;
         }
         return gameResult;
+    }
+
+    public override bool HasGameEnded()
+    {
+        return scoreManager.HasGameEnded();
     }
 }

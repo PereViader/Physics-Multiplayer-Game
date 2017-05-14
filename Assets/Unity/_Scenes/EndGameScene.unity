@@ -865,7 +865,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e899694afaf29841b503552adae0f59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingDelay: 0.9
+  startingDelay: 0.7
   levelUpDelay: 0.2
   experienceSpeed: 0.24
 --- !u!114 &1550918265
@@ -879,7 +879,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc7282b63ac3b7d438b286b22f7fd8a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endGameText: {fileID: 1780138949}
+  endGameMessage: {fileID: 0}
+  loseMessage: You Lose
+  winMessage: You Win
+  tieMessage: It's a Tie
 --- !u!1 &1597414520
 GameObject:
   m_ObjectHideFlags: 0

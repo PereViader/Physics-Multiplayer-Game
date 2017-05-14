@@ -4,10 +4,13 @@ using System.Collections;
 using System;
 using UnityEngine.EventSystems;
 
-public class MenuManager : MonoBehaviour {
+public class MainMenu_MainManager : MonoBehaviour {
 
     [SerializeField]
-    GameObject menuPanel;
+    private GameObject loadingPanel;
+
+    [SerializeField]
+    private GameObject menuPanel;
 
     [SerializeField]
     private GameObject optionsPanel;
@@ -25,18 +28,35 @@ public class MenuManager : MonoBehaviour {
         //eventSystem = Component.FindObjectOfType<EventSystem>();
     }
 
+
+
     public void OnExitButtonPressed()
     {
         if (PhotonNetwork.connected)
             PhotonNetwork.Disconnect();
         else
             OnDisconnectedFromPhoton();
-            
     }
+
     public void OnDisconnectedFromPhoton()
     {
         Debug.Log("disconnect");
         Application.Quit();
+    }
+
+    public void OpenMenu()
+    {
+        menuPanel.SetActive(true);
+        loadingPanel.SetActive(false);
+    }
+
+    public void OpenLoadingMenu()
+    {
+        menuPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+        customizationPanel.SetActive(false);
+        playPanel.SetActive(false);
+        loadingPanel.SetActive(true);
     }
 
     //TODO fer que cada vegada que s'entra i es surt de una finestra es canvii l'objecte actiu

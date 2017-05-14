@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class KingOfTheHill_PlayerManager : NewPlayerManager, IPlayerDeath
+public class KingOfTheHill_PlayerManager : PlayerManager, IPlayerDeath
 {
-
     private SpawnProvider spawnProvider;
 
     void Awake()

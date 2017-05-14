@@ -38,7 +38,7 @@ public class Capture_ScoreManager : Photon.MonoBehaviour, IGame {
     {
     }
 
-    public void InitializeGameScore()
+    void InitializeGameScore()
     {
         for (int team = 0; team < teamsInGame; team++)
             PhotonNetwork.room.customProperties[RoomProperties.Score + team] = 0;
