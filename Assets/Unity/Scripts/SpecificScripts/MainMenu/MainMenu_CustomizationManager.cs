@@ -106,7 +106,7 @@ public class MainMenu_CustomizationManager : MonoBehaviour {
 
     void OnGUI()
     {
-        try
+        /*try
         {
             GUILayout.Label("Level: " + PlayerExperience.GetLevel());
             GUILayout.Label("Nickname: " + PhotonNetwork.player.name);
@@ -115,6 +115,6 @@ public class MainMenu_CustomizationManager : MonoBehaviour {
                 GUILayout.Label(entry.Key + " - " + entry.Value);
             }
         }
-        catch (System.Exception) { Debug.Log("error"); }
+        catch (System.Exception) { Debug.Log("error"); }*/
     }
 }

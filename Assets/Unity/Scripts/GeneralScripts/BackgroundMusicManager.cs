@@ -5,14 +5,25 @@ using System.Collections;
 public class BackgroundMusicManager : MonoBehaviour {
 
     [SerializeField]
-    string[] audioClips;
+    private string[] audioClips;
 
-    AudioSource audioSource;
+    private AudioSource audioSource;
 
-    int nextClip;
+    private int nextClip;
+
+    private static GameObject instance;
 
     void Awake()
     {
+        if (instance == null)
+        {
+            instance = gameObject;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+            Destroy(gameObject);
+
+
         audioSource = GetComponent<AudioSource>();
         nextClip = -1;
         if (audioClips.Length == 0)

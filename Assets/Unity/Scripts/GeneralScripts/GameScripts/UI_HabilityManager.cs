@@ -28,7 +28,7 @@ public class UI_HabilityManager : MonoBehaviour {
         enabled = false;
     }
 
-    public void setDisplay(bool state)
+    public void SetDisplay(bool state)
     {
         habilityParent.SetActive(state);
     }

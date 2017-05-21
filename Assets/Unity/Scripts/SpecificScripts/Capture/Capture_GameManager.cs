@@ -21,8 +21,7 @@ public class Capture_GameManager : GameManager {
         scoreManager.Score(team, value);
         if (HasGameEnded())
         {
-            int winnerTeam = scoreManager.GetWinnerTeam();
-            experienceManager.AddExperienceToTeam(winnerTeam, experienceManager.experienceValues.winGame);
+            experienceManager.AddExperienceToTeam(team, experienceManager.experienceValues.winGame);
         }
         OnRoundEnd();
     }

@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.Events;
 
 public class GameStarter : MonoBehaviour {
     [SerializeField]
@@ -19,6 +17,7 @@ public class GameStarter : MonoBehaviour {
     {
         if ( isOffline && Application.isEditor )
         {
+            InitializePlayerForFastDevelopment();
             PhotonNetwork.offlineMode = isOffline;
         } else
         {

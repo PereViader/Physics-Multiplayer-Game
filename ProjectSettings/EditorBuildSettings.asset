@@ -12,6 +12,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Unity/_Scenes/EndGameScene.unity
   - enabled: 1
-    path: Assets/Unity/_Scenes/Resources/GameModeScenes/Capture/NewCapture.unity
+    path: Assets/Unity/_Scenes/Resources/GameModeScenes/Capture/Capture.unity
   - enabled: 1
     path: Assets/Unity/_Scenes/Resources/GameModeScenes/KingOfTHeHill/KingOfTheHill.unity

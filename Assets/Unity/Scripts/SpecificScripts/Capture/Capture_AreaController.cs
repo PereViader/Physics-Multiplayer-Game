@@ -11,7 +11,7 @@ public class Capture_AreaController : MonoBehaviour {
     [SerializeField]
     float uncaptureDecreaseRate;
     [SerializeField]
-    float fillSpeed;
+    float networkLerpSmoothFill;
     [SerializeField]
     int teamsInGame;
     [SerializeField]
@@ -23,7 +23,7 @@ public class Capture_AreaController : MonoBehaviour {
 
     List<GameObject> playersInside;
 
-    CaptureUI_CaptureBars captureBars;
+    CaptureUI_CaptureBarsManager captureBars;
     Capture_GameManager gameManager;
 
     void Awake()
@@ -32,7 +32,7 @@ public class Capture_AreaController : MonoBehaviour {
 
         captureDone = new float[teamsInGame];
         lastCaptureValue = new float[teamsInGame];
-        captureBars = Component.FindObjectOfType<CaptureUI_CaptureBars>();
+        captureBars = Component.FindObjectOfType<CaptureUI_CaptureBarsManager>();
         gameManager = Component.FindObjectOfType<Capture_GameManager>();
     }
 	
@@ -133,7 +133,7 @@ public class Capture_AreaController : MonoBehaviour {
                 //lerp
                 for (int i = 0; i < teamsInGame; i++)
                 {
-                    captureDone[i] = Mathf.Lerp(captureDone[i], lastCaptureValue[i], fillSpeed * Time.deltaTime);
+                    captureDone[i] = Mathf.Lerp(captureDone[i], lastCaptureValue[i], networkLerpSmoothFill * Time.deltaTime);
                 }
             }
             captureBars.SetCaptureValues(captureDone);

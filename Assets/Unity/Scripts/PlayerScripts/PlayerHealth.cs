@@ -3,7 +3,12 @@ using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
-    GameManager gameManager;
+    private GameManager gameManager;
+    
+    private PhotonPlayer killer;
+
+    [SerializeField]
+    private float timeToDeleteKillerAfterContact;
 
     void Awake()
     {
@@ -19,9 +24,26 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if ( collision.gameObject.tag.Equals("Player") )
+        {
+            StopAllCoroutines();
+            StartCoroutine(AddAndRemovePlayerFromBeingKiller(collision.gameObject));
+        }
+    }
+
+    IEnumerator AddAndRemovePlayerFromBeingKiller(GameObject killerGameObject)
+    {
+        this.killer = killerGameObject.GetComponent<PhotonRemoteOwner>().GetPlayer();
+        yield return new WaitForSeconds(timeToDeleteKillerAfterContact);
+        this.killer = null; 
+    }
+
+
     void KillPlayer()
     {
         PhotonPlayer player = GetComponent<PhotonRemoteOwner>().GetPlayer();
-        gameManager.OnPlayerDeath(player,null); // TODO fer que el jugador el mati algu
+        gameManager.OnPlayerDeath(player,killer); // TODO fer que el jugador el mati algu
     }
 }

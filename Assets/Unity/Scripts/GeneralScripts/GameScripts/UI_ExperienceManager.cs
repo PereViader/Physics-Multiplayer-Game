@@ -40,14 +40,14 @@ public class UI_ExperienceManager : MonoBehaviour {
         }
     }
 
-    public void DisplayAddedExperience(int amount)
+    private void DisplayAddedExperience(int amount)
     {
         toDisplay.Add(amount);
         if (!isDisplaying)
             StartCoroutine(DisplayWhileAviable());
     }
 
-    IEnumerator DisplayWhileAviable()
+    private IEnumerator DisplayWhileAviable()
     {
         isDisplaying = true;
         while (toDisplay.Count > 0)

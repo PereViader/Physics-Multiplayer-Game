@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class CaptureUI_CaptureBars : MonoBehaviour {
+public class CaptureUI_CaptureBarsManager : MonoBehaviour {
 
     [SerializeField]
     int teamsInGame;
