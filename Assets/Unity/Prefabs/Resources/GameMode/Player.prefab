@@ -23,7 +23,7 @@ GameObject:
   - 114: {fileID: 114000011071478056}
   - 114: {fileID: 114000012648685338}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: PlayerNameCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,7 +40,7 @@ GameObject:
   - 222: {fileID: 222000013147527302}
   - 114: {fileID: 114000010773856258}
   m_Layer: 0
-  m_Name: Text
+  m_Name: PlayerNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ GameObject:
   - 114: {fileID: 114000010668753032}
   - 114: {fileID: 114000010848714918}
   m_Layer: 0
-  m_Name: Image
+  m_Name: PlayerColorTeam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -536,8 +536,8 @@ RectTransform:
   - {fileID: 224000010796682362}
   m_Father: {fileID: 224000012879264188}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.0000076293945}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

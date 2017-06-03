@@ -43,9 +43,11 @@ public class Capture_AreaManager : MonoBehaviour, IGame {
         Capture_AreaController currentArea = Component.FindObjectOfType<Capture_AreaController>();
         if (currentArea != null)
         {
+            previousArea = currentArea.transform;
             PhotonNetwork.Destroy(currentArea.gameObject);
+        } else {
+            Debug.LogError("No area was found when trying to remove old area");
         }
-        previousArea = currentArea.transform;
     }
 
     void InstantiateNewRandomCapture()

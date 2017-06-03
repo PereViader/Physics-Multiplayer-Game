@@ -33,7 +33,7 @@ public class PlayerMovementController : Photon.MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetAxis("Fire1") > 0)
+        if (InputState.isGameInput && Input.GetAxis("Fire1") > 0)
         {
             StartCoroutine(ExecutePlayerMovement());
         }

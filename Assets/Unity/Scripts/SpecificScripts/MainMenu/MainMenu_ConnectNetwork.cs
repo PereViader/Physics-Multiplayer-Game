@@ -24,8 +24,11 @@ public class MainMenu_ConnectNetwork : MonoBehaviour {
 
     void Awake()
     {
+        Debug.Log("Awake connected" + PhotonNetwork.connected);
         if (!PhotonNetwork.connected)
             PhotonNetwork.ConnectUsingSettings(GamePreferences.GAME_VERSION);
+        else
+            OnConnectedToMaster();
     }
 
     void OnFailedToConnectToPhoton(DisconnectCause cause)
@@ -37,6 +40,7 @@ public class MainMenu_ConnectNetwork : MonoBehaviour {
 
     void OnConnectedToMaster()
     {
+        Debug.Log("OnConnectedToMaster");
         menuManager.OpenMenu();
     }
 

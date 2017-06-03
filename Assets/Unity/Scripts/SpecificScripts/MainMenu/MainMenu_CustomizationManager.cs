@@ -32,7 +32,8 @@ public class MainMenu_CustomizationManager : MonoBehaviour {
             gButton.transform.SetParent(customizeButtonParent,false);
 
             string name = material.name;
-            gButton.GetComponentInChildren<Text>().text = name;
+            string nameNoNumber = name.Split('.')[1].Trim();
+            gButton.GetComponentInChildren<Text>().text = nameNoNumber;
 
             UnityAction onClick = () => this.ChangePlayerMaterial(name);
             gButton.GetComponent<Button>().onClick.AddListener(onClick);
