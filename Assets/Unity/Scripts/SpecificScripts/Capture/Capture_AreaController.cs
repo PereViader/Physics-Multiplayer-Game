@@ -36,8 +36,14 @@ public class Capture_AreaController : MonoBehaviour {
         gameManager = Component.FindObjectOfType<Capture_GameManager>();
     }
 	
-	// Update is called once per frame
 	void Update () {
+        /*if ( !isCaptured && Input.GetKeyDown(KeyCode.L) )
+        {
+            gameManager.Score(1, 0);
+            isCaptured = true;
+            return;
+        }*/
+
         if (PhotonNetwork.isMasterClient && !isCaptured)
         {
             UpdateCapture();

@@ -24,7 +24,7 @@ public static class GameModeFabric {
         return roomOptions;
     }
 
-    public static TypedLobby ConstructTyppedLobby()
+    public static TypedLobby ConstructTypedLobby()
     {
         return new TypedLobby("gameLobby", LobbyType.SqlLobby);
     }

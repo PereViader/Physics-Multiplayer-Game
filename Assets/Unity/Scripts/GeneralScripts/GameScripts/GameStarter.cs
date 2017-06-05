@@ -48,7 +48,7 @@ public class GameStarter : MonoBehaviour {
     void CreateRoom()
     {
         RoomOptions roomOptions = GameModeFabric.ConstructRoomOptionsForGameMode(gameMode);
-        TypedLobby sqlLobby = GameModeFabric.ConstructTyppedLobby();
+        TypedLobby sqlLobby = GameModeFabric.ConstructTypedLobby();
         PhotonNetwork.CreateRoom(null, roomOptions, sqlLobby);
     }
 

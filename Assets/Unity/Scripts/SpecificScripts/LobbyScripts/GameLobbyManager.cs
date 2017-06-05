@@ -44,7 +44,7 @@ public class GameLobbyManager : MonoBehaviour {
     {
         if ( desiredGameModes != null )
         {
-            TypedLobby sqlLobby = GameModeFabric.ConstructTyppedLobby();
+            TypedLobby sqlLobby = GameModeFabric.ConstructTypedLobby();
             string[] sqlLobbyGameModeOptions = desiredGameModes.Select(x => RoomProperties.GameMode + "=" + (int)x).ToArray();
             string sqlLobbyFilter = string.Join(" OR ", sqlLobbyGameModeOptions);
             PhotonNetwork.JoinRandomRoom(null, 0, MatchmakingMode.FillRoom, sqlLobby, sqlLobbyFilter);
@@ -69,7 +69,7 @@ public class GameLobbyManager : MonoBehaviour {
     void CreateRoom(GameMode gameMode)
     {
         RoomOptions roomOptions = GameModeFabric.ConstructRoomOptionsForGameMode(gameMode);
-        TypedLobby sqlLobby = GameModeFabric.ConstructTyppedLobby();
+        TypedLobby sqlLobby = GameModeFabric.ConstructTypedLobby();
         PhotonNetwork.CreateRoom(null, roomOptions, sqlLobby);
     }
 

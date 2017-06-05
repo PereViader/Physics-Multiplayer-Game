@@ -62,7 +62,7 @@ public class Capture_AreaManager : MonoBehaviour, IGame {
         do
         {
             newCapturePosition = GetRandomCapturePosition();
-        } while (newCapturePosition == previousArea);
+        } while (previousArea != null && newCapturePosition.position == previousArea.position);
         return newCapturePosition;
     }
 
